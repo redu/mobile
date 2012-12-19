@@ -1,5 +1,8 @@
-package br.com.redu.mobile;
+package br.com.redu.mobile.activities;
 
+import br.com.redu.mobile.R;
+import br.com.redu.mobile.R.layout;
+import br.com.redu.mobile.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
