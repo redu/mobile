@@ -1,0 +1,3 @@
+[submodule "libs/redu-android"]
+	path = libs/redu-android
+	url = https://github.com/redu/redu-android
