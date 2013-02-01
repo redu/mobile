@@ -1,7 +1,5 @@
-package br.com.luismedeiros.redutest;
+package br.com.redu.redumobile.activities;
 
-import br.com.luismedeiros.redutest.fragments.EnvironmentFragment;
-import br.com.luismedeiros.redutest.fragments.WallFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +8,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.widget.RadioGroup;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.fragments.EnvironmentFragment;
+import br.com.redu.redumobile.fragments.WallFragment;
 
 public class HomeActivity extends FragmentActivity {
 

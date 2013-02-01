@@ -1,9 +1,10 @@
-package br.com.luismedeiros.redutest;
+package br.com.redu.redumobile.activities;
 
-import br.com.developer.redu.models.Subject;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+import br.com.developer.redu.models.Subject;
+import br.com.redu.redumobile.R;
 
 public class SubjectActivity extends Activity {
 	private Subject mSubject;

@@ -1,16 +1,12 @@
-package br.com.luismedeiros.redutest;
+package br.com.redu.redumobile.activities;
 
 import java.util.List;
 
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.Environment;
-import br.com.developer.redu.models.User;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.telephony.TelephonyManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,6 +15,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Environment;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 
 public class MainActivity extends Activity {
 

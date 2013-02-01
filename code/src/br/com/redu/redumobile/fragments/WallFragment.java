@@ -1,11 +1,11 @@
-package br.com.luismedeiros.redutest.fragments;
+package br.com.redu.redumobile.fragments;
 
 import java.util.List;
 
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.User;
-import br.com.luismedeiros.redutest.R;
-import br.com.luismedeiros.redutest.ReduApplication;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

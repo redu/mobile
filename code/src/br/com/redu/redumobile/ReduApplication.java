@@ -1,7 +1,7 @@
-package br.com.luismedeiros.redutest;
+package br.com.redu.redumobile;
 
-import br.com.developer.redu.DefaultReduClient;
 import android.app.Application;
+import br.com.developer.redu.DefaultReduClient;
 
 public class ReduApplication extends Application {
 
