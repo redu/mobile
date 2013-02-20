@@ -31,6 +31,20 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:text="EXPLORAR" />
+
+        <RadioButton
+            android:id="@+id/rb_new_modules"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="NOVAS AULAS" />
+
+        <RadioButton
+            android:id="@+id/rb_last_saw_status"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="ÚLTIMAS VISUALIZAÇÕES" />
     </RadioGroup>
 
     <LinearLayout
