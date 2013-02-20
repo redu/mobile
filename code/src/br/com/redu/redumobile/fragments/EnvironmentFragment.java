@@ -15,14 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ExpandableListView;
+import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class EnvironmentFragment extends Fragment {
 
 	private List<Environment> mEnvironments;
 
-	private ExpandableListView mListView;
+	private ListView mListView;
 	
 	public EnvironmentFragment() {
 	}
@@ -30,8 +31,8 @@ public class EnvironmentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_environment,container, false);
-		mListView = (ExpandableListView) v.findViewById(R.id.list);
+		View v = inflater.inflate(R.layout.activity_main, container, false);
+		mListView = (ListView) v.findViewById(R.id.list);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -46,13 +47,16 @@ public class EnvironmentFragment extends Fragment {
 			@Override
 			protected Void doInBackground(Void... params) {
 				DefaultReduClient redu = ReduApplication.getClient();
-				mEnvironments = redu.getEnvironments();
+				//mEnvironments = redu.getEnvironments();
 				return null;
 			}
 
 			protected void onPostExecute(Void result) {
 
-				//mListView.setAdapter();
+//				mListView.setAdapter(new ArrayAdapter<Environment>(
+//						getActivity(),
+//						android.R.layout.simple_dropdown_item_1line,
+//						mEnvironments));
 			};
 
 		}.execute();
