@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.developer.redu.DefaultReduClient;
@@ -59,6 +60,7 @@ public class WallFragment extends Fragment {
 		@Override
 		protected User doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getClient();
+			//Log.i("Redu", redu.getAuthorizeUrl());
 			return redu.getMe();
 		}
 	
@@ -89,14 +91,21 @@ public class WallFragment extends Fragment {
 
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
 			if(page == 1) {
-				mListView.setAdapter(new ArrayAdapter<br.com.developer.redu.models.Status>(
+				List<String> statusesTexts = new ArrayList<String>(statuses.size());
+				for(br.com.developer.redu.models.Status status : statuses) {
+					statusesTexts.add(status.toString());
+				}
+				
+				mListView.setAdapter(new ArrayAdapter<String>(
 							getActivity(),
 							android.R.layout.simple_dropdown_item_1line,
-							statuses));
+							statusesTexts));
+				
 			} else {
-				ArrayAdapter<br.com.developer.redu.models.Status> adapter = (ArrayAdapter<br.com.developer.redu.models.Status>) mListView.getAdapter();
+				@SuppressWarnings("unchecked")
+				ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView.getAdapter();
 				for(br.com.developer.redu.models.Status status : statuses) {
-					adapter.add(status);
+					adapter.add(status.text);
 				}
 				adapter.notifyDataSetChanged();
 			}

@@ -1,5 +1,8 @@
 package br.com.redu.redumobile.activities;
 
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
+import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +14,7 @@ import android.widget.RadioGroup;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.fragments.EnvironmentFragment;
 import br.com.redu.redumobile.fragments.WallFragment;
+import br.com.redu.redumobile.tasks.RefreshNotificationsTask;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -20,17 +24,32 @@ public class HomeActivity extends FragmentActivity {
 
 	static final int ITEM_WALL = 0;
 	static final int ITEM_ENVIRONMENTS = 1;
+	static final int ITEM_NEW_MODULES = 2;
+	static final int ITEM_LAST_SAW_STATUS = 3;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		// 1. call BuzzBox Analytics
+		int openAppStatus = AnalyticsManager.onOpenApp(this);
+
+		// 2. add the Task to the Scheduler
+		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
+			// register the Task when the App in installed
+			SchedulerManager.getInstance().saveTask(this, "*/15 * * * *", RefreshNotificationsTask.class);
+			SchedulerManager.getInstance().restart(this, RefreshNotificationsTask.class);
+		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
+			// restart on upgrade
+			SchedulerManager.getInstance().restartAll(getApplicationContext());
+		}
+
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
 		final RadioGroup rg = (RadioGroup) findViewById(R.id.rg);
 
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));
-		vp.setOnPageChangeListener( new OnPageChangeListener() {
+		vp.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int page) {
@@ -42,12 +61,19 @@ public class HomeActivity extends FragmentActivity {
 				case ITEM_ENVIRONMENTS:
 					rg.check(R.id.rb_explorar);
 					break;
-
+				case ITEM_NEW_MODULES:
+					rg.check(R.id.rb_new_modules);
+					break;
+					
+				case ITEM_LAST_SAW_STATUS:
+					rg.check(R.id.rb_last_saw_status);
+					break;
 				}
 			}
 
 			@Override
-			public void onPageScrolled(int position, float offset, int offsetPixels) {
+			public void onPageScrolled(int position, float offset,
+					int offsetPixels) {
 			}
 
 			@Override
