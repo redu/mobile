@@ -1,26 +1,27 @@
 package br.com.redu.redumobile.activities;
 
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
-import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
-import com.viewpagerindicator.IconPagerAdapter;
-import com.viewpagerindicator.PageIndicator;
-import com.viewpagerindicator.TitlePageIndicator;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.fragments.EnvironmentFragment;
 import br.com.redu.redumobile.fragments.WallFragment;
 import br.com.redu.redumobile.tasks.RefreshNotificationsTask;
 
-public class HomeActivity extends FragmentActivity implements IconPagerAdapter {
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
+import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;
+
+public class HomeActivity extends FragmentActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
+	private static final String[] titles = new String[]{"Mural", "Ambientes", "Novas aulas"};
+	
 	static final int NUM_ITEMS = 2;
 
 	static final int ITEM_WALL = 0;
@@ -54,7 +55,7 @@ public class HomeActivity extends FragmentActivity implements IconPagerAdapter {
 		mIndicator.setCurrentItem(itemChecked);
 	}
 
-	class MainAdapter extends FragmentStatePagerAdapter {
+	class MainAdapter extends FragmentPagerAdapter {
 		private final Fragment[] items;
 
 		public MainAdapter(FragmentManager fm) {
@@ -66,6 +67,11 @@ public class HomeActivity extends FragmentActivity implements IconPagerAdapter {
 		}
 
 		@Override
+		public CharSequence getPageTitle(int position) {
+			return titles[position];
+		}
+		
+		@Override
 		public int getCount() {
 			return NUM_ITEMS;
 		}
@@ -76,15 +82,4 @@ public class HomeActivity extends FragmentActivity implements IconPagerAdapter {
 		}
 	}
 
-	@Override
-	public int getIconResId(int index) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }
