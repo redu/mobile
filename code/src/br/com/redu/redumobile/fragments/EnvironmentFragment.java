@@ -31,7 +31,7 @@ public class EnvironmentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.activity_main, container, false);
+		View v = inflater.inflate(R.layout.detail, container, false);
 		mListView = (ListView) v.findViewById(R.id.list);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override

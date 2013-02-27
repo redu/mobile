@@ -10,6 +10,7 @@ import br.com.redu.redumobile.ReduApplication;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class WallFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		final View v = inflater.inflate(R.layout.activity_main, container, false);
+		final View v = inflater.inflate(R.layout.detail, container, false);
 		
 		mListView = (ListView) v.findViewById(R.id.list);
 		mListView.setOnScrollListener(new OnScrollListener() {
@@ -60,7 +61,7 @@ public class WallFragment extends Fragment {
 		@Override
 		protected User doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getClient();
-			//Log.i("Redu", redu.getAuthorizeUrl());
+			Log.i("Redu", redu.getAuthorizeUrl());
 			return redu.getMe();
 		}
 	
@@ -90,24 +91,26 @@ public class WallFragment extends Fragment {
 		}
 
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
-			if(page == 1) {
-				List<String> statusesTexts = new ArrayList<String>(statuses.size());
-				for(br.com.developer.redu.models.Status status : statuses) {
-					statusesTexts.add(status.toString());
+			if(statuses != null) {
+				if(page == 1) {
+					List<String> statusesTexts = new ArrayList<String>(statuses.size());
+					for(br.com.developer.redu.models.Status status : statuses) {
+						statusesTexts.add(status.toString());
+					}
+					
+					mListView.setAdapter(new ArrayAdapter<String>(
+								getActivity(),
+								android.R.layout.simple_dropdown_item_1line,
+								statusesTexts));
+					
+				} else {
+					@SuppressWarnings("unchecked")
+					ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView.getAdapter();
+					for(br.com.developer.redu.models.Status status : statuses) {
+						adapter.add(status.text);
+					}
+					adapter.notifyDataSetChanged();
 				}
-				
-				mListView.setAdapter(new ArrayAdapter<String>(
-							getActivity(),
-							android.R.layout.simple_dropdown_item_1line,
-							statusesTexts));
-				
-			} else {
-				@SuppressWarnings("unchecked")
-				ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView.getAdapter();
-				for(br.com.developer.redu.models.Status status : statuses) {
-					adapter.add(status.text);
-				}
-				adapter.notifyDataSetChanged();
 			}
 			
 			mUpdatingList = false;
