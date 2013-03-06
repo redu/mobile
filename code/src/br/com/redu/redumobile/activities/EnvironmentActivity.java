@@ -6,12 +6,8 @@ import java.util.List;
 import org.scribe.exceptions.OAuthConnectionException;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;

@@ -1,12 +1,7 @@
 package br.com.redu.redumobile.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.User;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.ReduApplication;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +13,10 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.User;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 
 public class WallFragment extends Fragment {
 
@@ -93,22 +92,23 @@ public class WallFragment extends Fragment {
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
 			if(statuses != null) {
 				if(page == 1) {
-					List<String> statusesTexts = new ArrayList<String>(statuses.size());
-					for(br.com.developer.redu.models.Status status : statuses) {
-						statusesTexts.add(status.toString());
-					}
-					
 					mListView.setAdapter(new ArrayAdapter<String>(
 								getActivity(),
-								android.R.layout.simple_dropdown_item_1line,
-								statusesTexts));
-					
-				} else {
-					@SuppressWarnings("unchecked")
-					ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView.getAdapter();
-					for(br.com.developer.redu.models.Status status : statuses) {
-						adapter.add(status.text);
+								android.R.layout.simple_dropdown_item_1line));
+				}
+				
+				@SuppressWarnings("unchecked")
+				ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView.getAdapter();
+				for(br.com.developer.redu.models.Status status : statuses) {
+					if(status.type.equals("Log") && status.logeable_type.equals("CourseEnrollment")) {
+						continue;
 					}
+					adapter.add(status.text);
+				}
+				
+				if(adapter.isEmpty()) {
+					new LoadStatusesTask(++mCurrentPage).execute();
+				} else {
 					adapter.notifyDataSetChanged();
 				}
 			}

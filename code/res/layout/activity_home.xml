@@ -3,7 +3,7 @@
     xmlns:vpi="http://schemas.android.com/apk/res/com.viewpagerindicator"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/br.com.redu.redumobile">
 
     <!-- RadioGroup
         android:id="@+id/rg"
@@ -54,6 +54,7 @@
         
 		<com.viewpagerindicator.TitlePageIndicator
 			android:id="@+id/titles"
+			android:textColor="#000"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent" />
         
