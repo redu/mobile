@@ -36,10 +36,9 @@ public class CoursesActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				Intent i = new Intent(getApplicationContext(), SpaceActivity.class);
+				Intent i = new Intent(getApplicationContext(), HomeSpaceActivity.class);
 				i.putExtra(Space.class.getName(), mSpaces.get(position));
 				startActivity(i);
-
 			}
 		});
 

@@ -2,10 +2,9 @@ package br.com.redu.redumobile.adapters;
 
 import java.util.List;
 
-import br.com.developer.redu.models.Course;
-import br.com.developer.redu.models.Space;
-import br.com.redu.redumobile.activities.HomeSpaceActivity;
-import br.com.redu.redumobile.activities.SpaceActivity;
+import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Subject;
+import br.com.redu.redumobile.activities.LectureActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,21 +15,21 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
+public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 
 	Context mContext;
-	List<Course> mCourses;
-	List<List<Space>> mSpaces;
+	List<Subject> mSubjects;
+	List<List<Lecture>> mLectures;
 	
-	public CoursesExpandableListAdapter(Context context, List<Course> courses, List<List<Space>> spaces) {
+	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures) {
 		mContext = context;
-		mCourses = courses;
-		mSpaces = spaces;
+		mSubjects = subjects;
+		mLectures = lectures;
 	}
 	
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		return mSpaces.get(groupPosition).get(childPosition);
+		return mLectures.get(groupPosition).get(childPosition);
 	}
 
 	@Override
@@ -44,16 +43,16 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_expandable_list_item_1, null);
 		}
 		
-		final Space space = (Space) getChild(groupPosition, childPosition);
+		final Lecture lecture = (Lecture) getChild(groupPosition, childPosition);
 		
 		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-		tv.setText(space.name);
+		tv.setText(lecture.name);
 		
 		convertView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(mContext, HomeSpaceActivity.class);
-				i.putExtra(Space.class.getName(), space);
+				Intent i = new Intent(mContext, LectureActivity.class);
+				i.putExtra(Lecture.class.getName(), lecture);
 				mContext.startActivity(i);	
 			}
 		});
@@ -63,17 +62,17 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return mSpaces.get(groupPosition).size();
+		return mLectures.get(groupPosition).size();
 	}
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		return mCourses.get(groupPosition);
+		return mSubjects.get(groupPosition);
 	}
 
 	@Override
 	public int getGroupCount() {
-		return mCourses.size();
+		return mSubjects.size();
 	}
 
 	@Override
@@ -89,7 +88,7 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		
 		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-		tv.setText(mCourses.get(groupPosition).name);
+		tv.setText(mSubjects.get(groupPosition).name);
 		
 		return convertView;
 	}

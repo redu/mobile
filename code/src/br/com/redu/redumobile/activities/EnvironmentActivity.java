@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Course;
@@ -28,8 +29,11 @@ public class EnvironmentActivity extends Activity {
 	private List<List<Space>> mSpaces;
 
 	private Environment mEnvironment;
+	private Space mSpace;
 	
 	private ExpandableListView mListView;
+	
+	private CoursesExpandableListAdapter mAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,18 @@ public class EnvironmentActivity extends Activity {
 
 		mListView = (ExpandableListView) findViewById(R.id.list);
 		
+		/*mListView.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+					mSpace = (Space) mAdapter.getChild(groupPosition, childPosition);
+					Intent it = new Intent(EnvironmentActivity.this, HomeSpaceActivity.class);
+					it.putExtra(Space.class.getName(), mSpace);
+					startActivity(it);
+				return false;
+			}
+		});		*/
 		Bundle extras = getIntent().getExtras();
 		mEnvironment = (Environment) extras.get(Environment.class.getName());
 		
@@ -73,8 +89,8 @@ public class EnvironmentActivity extends Activity {
 
 			protected void onPostExecute(Void result) {
 				((TextView) findViewById(R.id.title)).setText(mEnvironment.name);
-
-				mListView.setAdapter(new CoursesExpandableListAdapter(EnvironmentActivity.this, mEnrollmentedCourses, mSpaces));
+				mAdapter = new CoursesExpandableListAdapter(EnvironmentActivity.this, mEnrollmentedCourses, mSpaces);
+				mListView.setAdapter(mAdapter);
 			
 			};
 

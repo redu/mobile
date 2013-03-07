@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vpi="http://schemas.android.com/apk/res/com.viewpagerindicator"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <!-- RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="HOME" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="1dip"
+            android:layout_marginRight="1dip" />
+
+        <RadioButton
+            android:id="@+id/rb_explorar"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="EXPLORAR" />
+
+        <RadioButton
+            android:id="@+id/rb_new_modules"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="NOVAS AULAS" />
+
+        <RadioButton
+            android:id="@+id/rb_last_saw_status"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="ÚLTIMAS VISUALIZAÇÕES" />
+    </RadioGroup-->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+        
+		<com.viewpagerindicator.TitlePageIndicator
+			android:id="@+id/titles2"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent" />
+        
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp2"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</LinearLayout>

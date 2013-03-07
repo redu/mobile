@@ -47,16 +47,15 @@ public class EnvironmentFragment extends Fragment {
 			@Override
 			protected Void doInBackground(Void... params) {
 				DefaultReduClient redu = ReduApplication.getClient();
-				//mEnvironments = redu.getEnvironments();
+				mEnvironments = redu.getEnvironments();
 				return null;
 			}
 
 			protected void onPostExecute(Void result) {
-
-//				mListView.setAdapter(new ArrayAdapter<Environment>(
-//						getActivity(),
-//						android.R.layout.simple_dropdown_item_1line,
-//						mEnvironments));
+				mListView.setAdapter(new ArrayAdapter<Environment>(
+				getActivity(),
+				android.R.layout.simple_dropdown_item_1line,
+				mEnvironments));
 			};
 
 		}.execute();
