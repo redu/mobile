@@ -2,11 +2,6 @@ package br.com.redu.redumobile.fragments;
 
 import java.util.List;
 
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.Environment;
-import br.com.redu.redumobile.activities.EnvironmentActivity;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.ReduApplication;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,9 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Environment;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.EnvironmentActivity;
 
 public class EnvironmentFragment extends Fragment {
 
