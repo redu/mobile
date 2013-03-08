@@ -6,14 +6,6 @@ import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.Lecture;
-import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.Subject;
-import br.com.developer.redu.models.User;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,8 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ExpandableListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ExpandableListView;
+import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.Subject;
+import br.com.developer.redu.models.User;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 
 public class MorphologyFragment extends Fragment {
 	

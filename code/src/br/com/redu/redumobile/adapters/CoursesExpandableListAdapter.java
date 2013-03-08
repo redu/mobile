@@ -2,11 +2,6 @@ package br.com.redu.redumobile.adapters;
 
 import java.util.List;
 
-import br.com.developer.redu.models.Course;
-import br.com.developer.redu.models.Space;
-import br.com.redu.redumobile.activities.HomeSpaceActivity;
-import br.com.redu.redumobile.activities.SpaceActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,6 +10,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import br.com.developer.redu.models.Course;
+import br.com.developer.redu.models.Space;
+import br.com.redu.redumobile.activities.HomeSpaceActivity;
 
 public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 
