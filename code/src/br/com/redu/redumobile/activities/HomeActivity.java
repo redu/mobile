@@ -2,7 +2,6 @@ package br.com.redu.redumobile.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,7 +15,7 @@ import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends BaseActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
