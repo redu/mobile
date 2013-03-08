@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="5dip" >
+
+    <Button
+        android:id="@+id/b_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Up" />
+
+    <TextView
+        android:id="@+id/tv_title_action_bar"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:paddingLeft="5dip"
+        android:text="Title" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onNotificationsClicked"
+        android:text="N" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onEnvironmentClicked"
+        android:text="E" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSettingsClicked"
+        android:text="S" />
+
+</LinearLayout>
