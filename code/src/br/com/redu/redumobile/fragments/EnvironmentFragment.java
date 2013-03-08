@@ -2,6 +2,7 @@ package br.com.redu.redumobile.fragments;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
@@ -23,6 +25,12 @@ public class EnvironmentFragment extends Fragment {
 	private List<Environment> mEnvironments;
 
 	private ListView mListView;
+
+	private OnEnvironmentSelectedListener mListener;
+	
+	public interface OnEnvironmentSelectedListener {
+        public void onEnvironmentSelected(Environment environment);
+    }
 	
 	public EnvironmentFragment() {
 	}
@@ -30,7 +38,7 @@ public class EnvironmentFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.detail, container, false);
+		View v = inflater.inflate(R.layout.fragment_environment, container, false);
 		mListView = (ListView) v.findViewById(R.id.list);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -61,4 +69,14 @@ public class EnvironmentFragment extends Fragment {
 		
 		return v;
 	}
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnEnvironmentSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnEnvironmentSelectedListener");
+        }
+    }
 }

@@ -1,95 +1,45 @@
 package br.com.redu.redumobile.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.scribe.exceptions.OAuthConnectionException;
-
-import android.app.Activity;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.TextView;
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.Course;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.adapters.CoursesExpandableListAdapter;
+import br.com.redu.redumobile.fragments.CoursesAndSpacesFragment.OnSpaceSelectedListener;
+import br.com.redu.redumobile.fragments.EnvironmentFragment;
+import br.com.redu.redumobile.fragments.EnvironmentFragment.OnEnvironmentSelectedListener;
 
-public class EnvironmentActivity extends Activity {
+public class EnvironmentActivity extends BaseActivity implements OnSpaceSelectedListener, OnEnvironmentSelectedListener {
 
-	private List<Course> mEnrollmentedCourses;
-	private List<List<Space>> mSpaces;
-
-	private Environment mEnvironment;
-	private Space mSpace;
-	
-	private ExpandableListView mListView;
-	
-	private CoursesExpandableListAdapter mAdapter;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_environment);
-
-		mListView = (ExpandableListView) findViewById(R.id.list);
+		super.onCreate(savedInstanceState, R.layout.activity_environment);
 		
-		/*mListView.setOnChildClickListener(new OnChildClickListener() {
-			
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
-					mSpace = (Space) mAdapter.getChild(groupPosition, childPosition);
-					Intent it = new Intent(EnvironmentActivity.this, HomeSpaceActivity.class);
-					it.putExtra(Space.class.getName(), mSpace);
-					startActivity(it);
-				return false;
-			}
-		});		*/
-		Bundle extras = getIntent().getExtras();
-		mEnvironment = (Environment) extras.get(Environment.class.getName());
+		// Create new fragment and transaction
+		Fragment environmentFragment = new EnvironmentFragment();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+		// Replace whatever is in the fragment_container view with this fragment,
+		// and add the transaction to the back stack
+		transaction.replace(R.id.fragment_container, environmentFragment);
+		transaction.addToBackStack(null);
+
+		// Commit the transaction
+		transaction.commit();
+	}
+
+	@Override
+	public void onEnvironmentSelected(Environment environment) {
+		// TODO Auto-generated method stub
 		
-		new AsyncTask<Void, Void, Void>() {
-		
-			@Override
-			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getClient();
+	}
 
-				mEnrollmentedCourses = new ArrayList<Course>();
-				mSpaces = new ArrayList<List<Space>>();
-				
-				List<Course> courses = redu.getCoursesByEnvironment(mEnvironment.path);
-				if(courses != null) {
-					for(Course course : courses) {
-						List<Space> spacesByCourse;
-						try {
-							spacesByCourse = redu.getSpacesByCourse(course.id);
-						} catch(OAuthConnectionException e) {
-							// usuario nao matriculado no curso
-							e.printStackTrace();
-							spacesByCourse = null;
-						}
-
-						if(spacesByCourse != null) {
-							mEnrollmentedCourses.add(course);
-							mSpaces.add(spacesByCourse);
-						}
-					}
-				}
-				return null;
-			}
-
-			protected void onPostExecute(Void result) {
-				((TextView) findViewById(R.id.title)).setText(mEnvironment.name);
-				mAdapter = new CoursesExpandableListAdapter(EnvironmentActivity.this, mEnrollmentedCourses, mSpaces);
-				mListView.setAdapter(mAdapter);
-			
-			};
-
-		}.execute();
+	@Override
+	public void onSpaceSelected(Space space) {
+		Intent it = new Intent(EnvironmentActivity.this, HomeSpaceActivity.class);
+		it.putExtra(Space.class.getName(), space);
+		startActivity(it);
 	}
 }
