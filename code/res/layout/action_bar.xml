@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:paddingBottom="5dip" >
 
-    <Button
+    <ImageButton
         android:id="@+id/b_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,19 +21,19 @@
         android:paddingLeft="5dip"
         android:text="Title" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onNotificationsClicked"
         android:text="N" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onEnvironmentClicked"
         android:text="E" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onSettingsClicked"

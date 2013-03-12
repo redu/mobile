@@ -7,15 +7,19 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.widgets.ActionBar;
 
-public class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
 	private ActionBar mActionBar;
 
 	protected void onCreate(Bundle savedInstanceState, int layoutResID) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(layoutResID);
+		
+		ActionBar ab = getViewById(R.id.actionBar);
+		setActionBar(ab);
 	}
 
 	@Override
@@ -55,6 +59,11 @@ public class BaseActivity extends FragmentActivity {
 		Intent i = new Intent(this, EnvironmentActivity.class);
 		startActivity(i);
 	}
+	
+	@SuppressWarnings("unchecked")
+	<T>T getViewById(int resId) {  
+		return (T) findViewById(resId);
+	} 
 	
 //	@Override
 //	public void onBackPressed() {

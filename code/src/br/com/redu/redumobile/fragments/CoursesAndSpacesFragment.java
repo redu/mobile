@@ -51,7 +51,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final View v = inflater.inflate(R.layout.fragment_environment, container, false);
+		final View v = inflater.inflate(R.layout.fragment_courses, container, false);
 
 		mListView = (ExpandableListView) v.findViewById(R.id.list);
 

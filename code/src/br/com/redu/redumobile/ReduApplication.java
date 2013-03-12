@@ -7,7 +7,8 @@ public class ReduApplication extends Application {
 
 	private static final String CONSUMER_KEY = "YzbH0ulBcOjXSPtmhJuEHNFFf6eZGiamQeOBQhU1";
 	private static final String CONSUMER_SECRET_KEY = "kUdQsrimVZqgS7u1JuCnMGvARWhmiLWcbrZKwYO8";
-	private static final String USER_PIN = "W2JJlqZTeZ8QSmvuQC3z";
+	
+	private static final String USER_PIN = "CnhBMFY3wW3NWbr1aiQ2";
 
 	static private DefaultReduClient redu;
 	

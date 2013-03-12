@@ -3,7 +3,6 @@ package br.com.redu.redumobile.fragments;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.activities.EnvironmentActivity;
 
 public class EnvironmentFragment extends Fragment {
 
@@ -33,6 +31,7 @@ public class EnvironmentFragment extends Fragment {
     }
 	
 	public EnvironmentFragment() {
+		
 	}
 	
 	@Override
@@ -43,9 +42,7 @@ public class EnvironmentFragment extends Fragment {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				Intent i = new Intent(getActivity(), EnvironmentActivity.class);
-				i.putExtra(Environment.class.getName(), mEnvironments.get(position));
-				startActivity(i);
+				mListener.onEnvironmentSelected(mEnvironments.get(position));
 			}
 		});
 		
