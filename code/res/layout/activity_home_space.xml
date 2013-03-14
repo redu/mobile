@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:vpi="http://schemas.android.com/apk/res/com.viewpagerindicator"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.redu.redumobile"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+    
+	<br.com.redu.redumobile.widgets.ActionBar
+        android:id="@+id/actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/action_bar"
+        app:showCaret="false"
+        app:title="DISCIPLINA" />
+	
     <!-- RadioGroup
         android:id="@+id/rg"
         android:layout_width="fill_parent"
