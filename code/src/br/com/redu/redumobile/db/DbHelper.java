@@ -19,20 +19,26 @@ public class DbHelper extends SQLiteOpenHelper {
 	public static final String TABLE_STATUS = "Status";
 	public static final String TABLE_USER = "User";
 
-	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_TYPE = "type";
-	public static final String COLUMN_CREATE_AT = "createAt";
+	public static final String COLUMN_LOGEABLE_TYPE = "logeable_type";
+	public static final String COLUMN_CREATE_AT = "create_at";
 	public static final String COLUMN_TEXT = "text";
+	public static final String COLUMN_LECTURE_ALREADY_SEEN = "lecture_already_seen";
+	public static final String COLUMN_LAST_SEEN = "last_seen";
 
 	private SQLiteDatabase db;  
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_STATUS = "CREATE TABLE "
 			+ TABLE_STATUS + "(" 
-			+ COLUMN_ID + " integer primary key autoincrement, " 
-			+ COLUMN_TYPE + " text not null, " 
-			+ COLUMN_CREATE_AT + " text not null, "
-			+ COLUMN_TEXT + "text not null);";
+			+ COLUMN_ID + " TEXT PRIMARY KEY , " 
+			+ COLUMN_TYPE + " TEXT NOT NULL, " 
+			+ COLUMN_LOGEABLE_TYPE + " TEXT NOT NULL, " 
+			+ COLUMN_CREATE_AT + " TEXT NOT NULL, "
+			+ COLUMN_LECTURE_ALREADY_SEEN + " TEXT NOT NULL, "
+			+ COLUMN_LAST_SEEN + " INTEGER NOT NULL, "
+			+ COLUMN_TEXT + " INTEGER NOT NULL);";
 	
 	// TODO
 //	private static final String CREATE_TABLE_USER = "CREATE TABLE "
@@ -63,16 +69,26 @@ public class DbHelper extends SQLiteOpenHelper {
 		List<Status> statuses = new ArrayList<Status>(count);  
         Cursor cursor;  
   
-        cursor = this.db.query(TABLE_STATUS, new String[] {  
-                COLUMN_TYPE, COLUMN_CREATE_AT, COLUMN_TEXT},     
-                                null, null, null, null, null, String.valueOf(count));  
+        cursor = this.db.query(TABLE_STATUS, null, null, null, null, null, null, String.valueOf(count));  
   
         if (cursor.moveToFirst()) {  
         	while(cursor.moveToNext()) {
         		Status status = new Status();
+        		status.id = cursor.getColumnName(cursor.getColumnIndex(COLUMN_ID));
         		status.type = cursor.getColumnName(cursor.getColumnIndex(COLUMN_TYPE));
+        		status.logeable_type = cursor.getColumnName(cursor.getColumnIndex(COLUMN_LOGEABLE_TYPE));
         		status.created_at = cursor.getColumnName(cursor.getColumnIndex(COLUMN_CREATE_AT));
         		status.text = cursor.getColumnName(cursor.getColumnIndex(COLUMN_TEXT));
+        		
+        		String lectureAreadySeen = cursor.getColumnName(cursor.getColumnIndex(COLUMN_TEXT));
+        		if(lectureAreadySeen != null) {
+        			status.lectureAreadySeen = lectureAreadySeen.equals("0") ? false : true;
+        		}
+        		
+        		String lastSeen = cursor.getColumnName(cursor.getColumnIndex(COLUMN_TEXT));
+        		if(lastSeen != null) {
+        			status.lastSeen = lastSeen.equals("0") ? false : true;
+        		}
         		
         		statuses.add(status);
         	}
