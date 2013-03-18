@@ -56,10 +56,13 @@ public class EnvironmentFragment extends Fragment {
 			}
 
 			protected void onPostExecute(Void result) {
-				mListView.setAdapter(new ArrayAdapter<Environment>(
-				getActivity(),
-				android.R.layout.simple_dropdown_item_1line,
-				mEnvironments));
+				Activity activity = getActivity();
+				if(activity != null && mEnvironments != null) {
+					mListView.setAdapter(new ArrayAdapter<Environment>(
+					activity,
+					android.R.layout.simple_dropdown_item_1line,
+					mEnvironments));
+				}
 			};
 
 		}.execute();
