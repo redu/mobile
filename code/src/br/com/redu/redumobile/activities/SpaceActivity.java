@@ -47,7 +47,7 @@ public class SpaceActivity extends Activity {
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getClient();
+				DefaultReduClient redu = ReduApplication.getReduClient();
 				mSubjects = redu.getSubjectsBySpace(mSpace.id);
 				return null;
 			}

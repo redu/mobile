@@ -66,7 +66,7 @@ public class SpaceWallFragment extends Fragment {
 	class LoadUserTask extends AsyncTask<Void, Void, User> {
 		@Override
 		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			Log.i("Redu", redu.getAuthorizeUrl());
 			return redu.getMe();
 		}
@@ -92,7 +92,7 @@ public class SpaceWallFragment extends Fragment {
 		};
 		
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			//List<br.com.developer.redu.models.Status> status = new ArrayList<br.com.developer.redu.models.Status>();
 			mStatus = redu.getStatusesBySpace(mSpace.id, br.com.developer.redu.models.Status.ACTIVITY , Integer.toString(page));
 			return null;
