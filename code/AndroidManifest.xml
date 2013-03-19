@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".activities.SubjectActivity" >
         </activity>
+        <activity android:name=".activities.LectureActivity" >
+        </activity>
         <activity android:name=".activities.HomeActivity" >
              <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
