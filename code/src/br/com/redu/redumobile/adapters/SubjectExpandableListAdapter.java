@@ -44,6 +44,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		
 		final Lecture lecture = (Lecture) getChild(groupPosition, childPosition);
+		final Subject subject = (Subject) getGroup(groupPosition);
 		
 		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
 		tv.setText(lecture.name);
@@ -53,6 +54,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			public void onClick(View v) {
 				Intent i = new Intent(mContext, LectureActivity.class);
 				i.putExtra(Lecture.class.getName(), lecture);
+				i.putExtra(Subject.class.getName(), subject);
 				mContext.startActivity(i);	
 			}
 		});

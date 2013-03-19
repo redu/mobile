@@ -14,7 +14,7 @@ import br.com.redu.redumobile.fragments.space.SupportMaterialFragment;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class HomeSpaceActivity extends FragmentActivity {
+public class HomeSpaceActivity extends BaseActivity {
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
 	private static final String[] titles = new String[]{"Morfologia", "Mural", "Apoio"};
