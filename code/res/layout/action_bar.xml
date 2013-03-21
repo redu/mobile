@@ -4,13 +4,16 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="5dip" >
+    android:paddingBottom="5dip"
+    android:background="@drawable/bg_actionbar" >
 
     <ImageButton
         android:id="@+id/b_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Up" />
+        android:text="Up"  
+        android:src="@drawable/ic_logo_redu"
+        android:background="@null" />
 
     <TextView
         android:id="@+id/tv_title_action_bar"
@@ -19,24 +22,30 @@
         android:layout_weight="1"
         android:gravity="left"
         android:paddingLeft="5dip"
-        android:text="Title" />
+        android:text="Redu" />
 
-    <ImageButton
+    <!-- <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onNotificationsClicked"
-        android:text="N" />
+        android:text="N" 
+        android:src="@drawable/ic_notifications"
+        android:background="@null" /> -->
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onEnvironmentClicked"
-        android:text="E" />
+        android:text="E" 
+        android:src="@drawable/btn_enviroments_selector"
+        android:background="@null" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onSettingsClicked"
-        android:text="S" />
+        android:text="S" 
+        android:src="@drawable/btn_settings_selector"
+        android:background="@null" />
 
 </LinearLayout>
