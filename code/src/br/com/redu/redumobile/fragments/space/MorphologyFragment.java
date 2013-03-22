@@ -50,6 +50,7 @@ public class MorphologyFragment extends Fragment {
 		final View v = inflater.inflate(R.layout.fragment_mophology, container, false);
 		
 		mSpace = (Space)getActivity().getIntent().getExtras().get(Space.class.getName());
+		Log.i("Disciplina","id: "+mSpace.id);
 		
 		mExpListView = (ExpandableListView) v.findViewById(R.id.elvSubject);
 		mExpListView.setOnScrollListener(new OnScrollListener() {
