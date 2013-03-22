@@ -21,18 +21,18 @@
             android:key="@string/new_courses_key"
             android:summary="@string/new_courses_summary"
             android:title="@string/new_courses_title" />
+<!--         <CheckBoxPreference -->
+<!--             android:defaultValue="true" -->
+<!--             android:dependency="@string/activate_notifications_key" -->
+<!--             android:key="@string/new_spaces_key" -->
+<!--             android:summary="@string/new_spaces_summary" -->
+<!--             android:title="@string/new_spaces_title" /> -->
         <CheckBoxPreference
             android:defaultValue="true"
             android:dependency="@string/activate_notifications_key"
-            android:key="@string/new_spaces_key"
-            android:summary="@string/new_spaces_summary"
-            android:title="@string/new_spaces_title" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:dependency="@string/activate_notifications_key"
-            android:key="@string/new_modules_key"
-            android:summary="@string/new_modules_summary"
-            android:title="@string/new_modules_title" />
+            android:key="@string/new_subject_key"
+            android:summary="@string/new_subject_summary"
+            android:title="@string/new_subject_title" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:dependency="@string/activate_notifications_key"
