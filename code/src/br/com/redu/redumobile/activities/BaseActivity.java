@@ -47,10 +47,6 @@ public abstract class BaseActivity extends FragmentActivity {
 		mActionBar.setTitle(title);
 	}
 
-	public void onNotificationsClicked(View v) {
-		
-	}
-	
 	public void onSettingsClicked(View v) {
 		Intent i = new Intent(this, SettingsActivity.class);
 		startActivity(i);
