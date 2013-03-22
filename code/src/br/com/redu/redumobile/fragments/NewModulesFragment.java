@@ -7,9 +7,12 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class NewModulesFragment extends Fragment {
+public class NewModulesFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
 	private ListView mListView;
 
@@ -59,7 +62,7 @@ public class NewModulesFragment extends Fragment {
 	class LoadUserTask extends AsyncTask<Void, Void, User> {
 		@Override
 		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			return redu.getMe();
 		}
 	
@@ -84,7 +87,7 @@ public class NewModulesFragment extends Fragment {
 		};
 		
 		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			return redu.getStatusesTimelineByUser(String.valueOf(mUser.id), null, String.valueOf(page));
 		}
 
@@ -112,6 +115,24 @@ public class NewModulesFragment extends Fragment {
 			mUpdatingList = false;
 		};
 
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

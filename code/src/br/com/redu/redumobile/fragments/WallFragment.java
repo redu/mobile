@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 
@@ -23,7 +20,6 @@ public class WallFragment extends Fragment {
 
 	private ListView mListView;
 
-	private User mUser;
 	private int mCurrentPage;
 	private boolean mUpdatingList;
 
@@ -32,8 +28,7 @@ public class WallFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final View v = inflater.inflate(R.layout.detail, container, false);
 
@@ -55,30 +50,12 @@ public class WallFragment extends Fragment {
 			}
 		});
 
-		new LoadUserTask().execute();
+		new LoadStatusesTask(mCurrentPage).execute();
 
 		return v;
 	}
 
-	class LoadUserTask extends AsyncTask<Void, Void, User> {
-		@Override
-		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
-			Log.i("Redu", redu.getAuthorizeUrl());
-			return redu.getMe();
-		}
-
-		protected void onPostExecute(User user) {
-			// ((TextView) v.findViewById(R.id.details)).setText(user.first_name
-			// + " " + user.last_name + ", ");
-			mUser = user;
-
-			new LoadStatusesTask(mCurrentPage).execute();
-		};
-	}
-
-	class LoadStatusesTask extends
-			AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
+	class LoadStatusesTask extends AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
 
 		private int page;
 
@@ -90,15 +67,11 @@ public class WallFragment extends Fragment {
 			mUpdatingList = true;
 		};
 
-		protected List<br.com.developer.redu.models.Status> doInBackground(
-				Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
-			return redu.getStatusesTimelineByUser(String.valueOf(mUser.id),
-					null, String.valueOf(page));
+		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
+			return ReduApplication.getReduClient().getStatusesTimelineByUser(String.valueOf(ReduApplication.getUser().id), null, String.valueOf(page));
 		}
 
-		protected void onPostExecute(
-				List<br.com.developer.redu.models.Status> statuses) {
+		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
 			Activity activity = getActivity();
 			if (statuses != null && activity != null) {
 				if (page == 1) {
@@ -106,11 +79,9 @@ public class WallFragment extends Fragment {
 				}
 
 				@SuppressWarnings("unchecked")
-				ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView
-						.getAdapter();
+				ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListView.getAdapter();
 				for (br.com.developer.redu.models.Status status : statuses) {
-					if (status.type.equals("Log")
-							&& status.logeable_type.equals("CourseEnrollment")) {
+					if (status.type.equals("Log") && status.logeable_type.equals("CourseEnrollment")) {
 						continue;
 					}
 					adapter.add(status.text);

@@ -50,7 +50,7 @@ public class EnvironmentFragment extends Fragment {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getClient();
+				DefaultReduClient redu = ReduApplication.getReduClient();
 				mEnvironments = redu.getEnvironments();
 				return null;
 			}

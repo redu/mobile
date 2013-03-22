@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.fragments.LastSawStatusFragment;
+import br.com.redu.redumobile.fragments.NewModulesFragment;
 import br.com.redu.redumobile.fragments.WallFragment;
 import br.com.redu.redumobile.tasks.RefreshNotificationsTask;
 
@@ -18,13 +20,13 @@ public class HomeActivity extends BaseActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
-	private static final String[] titles = new String[]{"Mural", "Ambientes", "Novas aulas"};
+	static final int NUM_ITEMS = 3;
 	
-	static final int NUM_ITEMS = 1;
+	private static final String[] titles = new String[]{"Mural", "Novas aulas", "Últimos visualizados"};
 
 	static final int ITEM_WALL = 0;
-	static final int ITEM_NEW_MODULES = 2;
-	static final int ITEM_LAST_SAW_STATUS = 3;
+	static final int ITEM_NEW_MODULES = 1;
+	static final int ITEM_LAST_SAW_STATUS = 2;
 
     private PageIndicator mIndicator;
 	
@@ -61,6 +63,8 @@ public class HomeActivity extends BaseActivity {
 
 			items = new Fragment[NUM_ITEMS];
 			items[ITEM_WALL] = new WallFragment();
+			items[ITEM_NEW_MODULES] = new NewModulesFragment();
+			items[ITEM_LAST_SAW_STATUS] = new LastSawStatusFragment();
 		}
 
 		@Override

@@ -2,6 +2,7 @@ package br.com.redu.redumobile;
 
 import android.app.Application;
 import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.User;
 
 public class ReduApplication extends Application {
 
@@ -10,13 +11,21 @@ public class ReduApplication extends Application {
 	
 	private static final String USER_PIN = "hxEhgW4RY2WOI0q8Gcfh";
 
-	static private DefaultReduClient redu;
+	static private DefaultReduClient reduClient;
+	static private User user;
 	
-	static public DefaultReduClient getClient() {
-		if(redu == null) {
-			redu = new DefaultReduClient(CONSUMER_KEY, CONSUMER_SECRET_KEY);
-			redu.initClient(USER_PIN);
+	static public DefaultReduClient getReduClient() {
+		if(reduClient == null) {
+			reduClient = new DefaultReduClient(CONSUMER_KEY, CONSUMER_SECRET_KEY);
+			reduClient.initClient(USER_PIN);
 		}
-		return redu;
+		return reduClient;
+	}
+	
+	static public User getUser() {
+		if(user == null) {
+			user = getReduClient().getMe();
+		}
+		return user;
 	}
 }

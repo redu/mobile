@@ -75,7 +75,7 @@ public class MorphologyFragment extends Fragment {
 	class LoadUserTask extends AsyncTask<Void, Void, User> {
 		@Override
 		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			Log.i("Redu", redu.getAuthorizeUrl());
 			return redu.getMe();
 		}
@@ -116,7 +116,7 @@ public class MorphologyFragment extends Fragment {
 		};
 		
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			mEnrollmentedSubjects = new ArrayList<Subject>();
 			List<Subject> subjects = new ArrayList<Subject>();
 			subjects = redu.getSubjectsBySpace(mSpace.id);

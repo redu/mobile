@@ -59,7 +59,7 @@ public class LastSawStatusFragment extends Fragment {
 	class LoadUserTask extends AsyncTask<Void, Void, User> {
 		@Override
 		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			return redu.getMe();
 		}
 	
@@ -84,7 +84,7 @@ public class LastSawStatusFragment extends Fragment {
 		};
 		
 		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			return redu.getStatusesTimelineByUser(String.valueOf(mUser.id), null, String.valueOf(page));
 		}
 

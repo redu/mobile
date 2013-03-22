@@ -52,7 +52,8 @@ public abstract class BaseActivity extends FragmentActivity {
 	}
 	
 	public void onSettingsClicked(View v) {
-		
+		Intent i = new Intent(this, SettingsActivity.class);
+		startActivity(i);
 	}
 	
 	public void onEnvironmentClicked(View v) {

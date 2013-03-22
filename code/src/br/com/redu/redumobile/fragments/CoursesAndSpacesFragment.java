@@ -70,7 +70,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 		
 			@Override
 			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getClient();
+				DefaultReduClient redu = ReduApplication.getReduClient();
 
 				mEnrollmentedCourses = new ArrayList<Course>();
 				mSpaces = new ArrayList<List<Space>>();
