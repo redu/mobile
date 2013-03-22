@@ -12,13 +12,13 @@ public class SubjectActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail);
+		setContentView(R.layout.fragment_listview);
 		
 		((TextView) findViewById(R.id.title)).setText("Módulo");
 
 		Bundle extras = getIntent().getExtras();
 		mSubject = (Subject) extras.get(Subject.class.getName());
 
-		((TextView) findViewById(R.id.details)).setText(mSubject.name);
+//		((TextView) findViewById(R.id.details)).setText(mSubject.name);
 	}
 }
