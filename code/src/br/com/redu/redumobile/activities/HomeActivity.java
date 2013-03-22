@@ -6,9 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.fragments.LastSawStatusFragment;
-import br.com.redu.redumobile.fragments.NewModulesFragment;
-import br.com.redu.redumobile.fragments.WallFragment;
+import br.com.redu.redumobile.fragments.HomeFragment;
+import br.com.redu.redumobile.fragments.HomeFragment.Type;
 import br.com.redu.redumobile.tasks.RefreshNotificationsTask;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
@@ -22,24 +21,20 @@ public class HomeActivity extends BaseActivity {
 
 	static final int NUM_ITEMS = 3;
 	
-	private static final String[] titles = new String[]{"Mural", "Novas aulas", "Últimos visualizados"};
+	static final int ITEM_NEW_LECTURES = 0;
+	static final int ITEM_WALL = 1;
+	static final int ITEM_LAST_SEEN_STATUS = 2;
 
-	static final int ITEM_WALL = 0;
-	static final int ITEM_NEW_MODULES = 1;
-	static final int ITEM_LAST_SAW_STATUS = 2;
-
-    private PageIndicator mIndicator;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_home);
 
-		setActionBarTitle("Home");
+		setActionBarTitle("Redu");
 		
 		// BuzzNotify
 		int openAppStatus = AnalyticsManager.onOpenApp(this);
 		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
-			SchedulerManager.getInstance().saveTask(this, "*/15 * * * *", RefreshNotificationsTask.class);
+			SchedulerManager.getInstance().saveTask(this, "*/30 * * * *", RefreshNotificationsTask.class);
 			SchedulerManager.getInstance().restart(this, RefreshNotificationsTask.class);
 		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
 			SchedulerManager.getInstance().restartAll(getApplicationContext());
@@ -48,28 +43,42 @@ public class HomeActivity extends BaseActivity {
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));
 		
-		mIndicator = (TitlePageIndicator) findViewById(R.id.titles);
-		mIndicator.setViewPager(vp);
+		PageIndicator indicator = (TitlePageIndicator) findViewById(R.id.titles);
+		indicator.setViewPager(vp);
 		
 		int itemChecked = getIntent().getIntExtra(ITEM_EXTRA_PARAM, ITEM_WALL);
-		mIndicator.setCurrentItem(itemChecked);
+		indicator.setCurrentItem(itemChecked);
 	}
 
 	class MainAdapter extends FragmentPagerAdapter {
-		private final Fragment[] items;
+		private final HomeFragment[] fragments;
 
 		public MainAdapter(FragmentManager fm) {
 			super(fm);
 
-			items = new Fragment[NUM_ITEMS];
-			items[ITEM_WALL] = new WallFragment();
-			items[ITEM_NEW_MODULES] = new NewModulesFragment();
-			items[ITEM_LAST_SAW_STATUS] = new LastSawStatusFragment();
+			fragments = new HomeFragment[NUM_ITEMS];
+
+			Bundle b;
+			
+			fragments[ITEM_WALL] = new HomeFragment();
+			b = new Bundle();
+			b.putSerializable(Type.class.getName(), Type.Wall);
+			fragments[ITEM_WALL].setArguments(b);
+			
+			fragments[ITEM_NEW_LECTURES] = new HomeFragment();
+			b = new Bundle();
+			b.putSerializable(Type.class.getName(), Type.NewLectures);
+			fragments[ITEM_NEW_LECTURES].setArguments(b);
+
+			fragments[ITEM_LAST_SEEN_STATUS] = new HomeFragment();
+			b = new Bundle();
+			b.putSerializable(Type.class.getName(), Type.LastSeen);
+			fragments[ITEM_LAST_SEEN_STATUS].setArguments(b);
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return titles[position];
+			return fragments[position].getTitle();
 		}
 		
 		@Override
@@ -79,7 +88,7 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return items[position];
+			return fragments[position];
 		}
 	}
 
