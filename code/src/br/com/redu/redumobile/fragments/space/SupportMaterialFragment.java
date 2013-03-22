@@ -50,7 +50,7 @@ public class SupportMaterialFragment extends Fragment {
 	
 	class LoadFoldersAndFilesTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getClient();
+			DefaultReduClient redu = ReduApplication.getReduClient();
 			
 			String folderRaizID = redu.getFolderID(mSpace.id);
 			folders = redu.getFolders(folderRaizID);
