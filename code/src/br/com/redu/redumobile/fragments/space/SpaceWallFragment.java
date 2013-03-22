@@ -94,7 +94,7 @@ public class SpaceWallFragment extends Fragment {
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient();
 			//List<br.com.developer.redu.models.Status> status = new ArrayList<br.com.developer.redu.models.Status>();
-			mStatus = redu.getStatusesBySpace(mSpace.id, br.com.developer.redu.models.Status.ACTIVITY , Integer.toString(page));
+			mStatus = redu.getStatusesBySpace(mSpace.id, br.com.developer.redu.models.Status.TYPE_ACTIVITY , Integer.toString(page));
 			return null;
 		}
 

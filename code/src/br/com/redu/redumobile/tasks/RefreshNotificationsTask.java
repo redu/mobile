@@ -1,9 +1,7 @@
 package br.com.redu.redumobile.tasks;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -12,7 +10,7 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeActivity;
 import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.util.NotificationRefreshingHelper;
+import br.com.redu.redumobile.util.DataUtil;
 
 import com.buzzbox.mob.android.scheduler.NotificationMessage;
 import com.buzzbox.mob.android.scheduler.Task;
@@ -20,8 +18,6 @@ import com.buzzbox.mob.android.scheduler.TaskResult;
 
 public class RefreshNotificationsTask implements Task {
 
-	static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", new Locale("pt-BR"));
-	
 	@Override
 	public String getTitle() {
 		return "Reminder";
@@ -65,8 +61,7 @@ public class RefreshNotificationsTask implements Task {
 			DefaultReduClient redu = ReduApplication.getReduClient();
 			String userId = String.valueOf(ReduApplication.getUser().id);
 			
-			long lastSavedTimestamp = NotificationRefreshingHelper.getLastStatusTimestamp(mContext);
-			long lastTimestamp = 0;
+			long dbTimestamp = dbHelper.getTimestamp();
 			
 			boolean loadNextPage = true;
 			
@@ -75,36 +70,28 @@ public class RefreshNotificationsTask implements Task {
 				
 				if (statuses != null) {
 					for (br.com.developer.redu.models.Status status : statuses) {
-						long timestamp;
-						
 						try {
-							timestamp = df.parse(status.created_at).getTime();
+							status.created_at_in_millis = DataUtil.df.parse(status.created_at).getTime();
 						} catch (ParseException e) {
 							e.printStackTrace();
-							timestamp = 0;
+							status.created_at_in_millis = 0;
 						}
 						
-						if(timestamp > lastSavedTimestamp) {
-							if (status.type.equals("Log") && status.logeable_type.equals("CourseEnrollment")) {
+						if(status.created_at_in_millis <= dbTimestamp) {
+							loadNextPage = false;
+							break;
+							
+						} else {
+							// filtering
+							if (status.type.equals(br.com.developer.redu.models.Status.TYPE_LOG) &&
+									status.logeable_type.equals("CourseEnrollment")) {
 								continue;
 							}
 							
 							dbHelper.putStatus(status);
-							
-							if(timestamp > lastTimestamp) {
-								lastTimestamp = timestamp;
-							}
-							
-						} else {
-							loadNextPage = false;
-							break;
 						}
 					}
 				}
-			}
-			
-			if(lastTimestamp > 0) {
-				NotificationRefreshingHelper.setLastStatusTimestamp(mContext, lastTimestamp);
 			}
 			
 			return null;
