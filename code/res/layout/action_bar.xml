@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_action_bar"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingBottom="5dip" >
@@ -10,6 +11,8 @@
         android:id="@+id/b_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/logo_redu"
         android:text="Up" />
 
     <TextView
@@ -18,25 +21,25 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
-        android:paddingLeft="5dip"
-        android:text="Title" />
+        android:paddingLeft="7dip"
+        android:text="Redu"
+        android:textColor="#858585"
+        android:textSize="20dip" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onNotificationsClicked"
-        android:text="N" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@null"
         android:onClick="onEnvironmentClicked"
-        android:text="E" />
+        android:padding="7dip"
+        android:src="@drawable/bt_ambientes" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:onClick="onSettingsClicked"
-        android:text="S" />
+        android:padding="7dip"
+        android:src="@drawable/bt_config" />
 
 </LinearLayout>
