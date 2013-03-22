@@ -26,6 +26,10 @@ public class StatusAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
+		if(mStatuses == null) {
+			return 0;
+		}
+		
 		return mStatuses.size();
 	}
 
