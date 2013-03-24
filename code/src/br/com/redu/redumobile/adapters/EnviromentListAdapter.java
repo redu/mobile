@@ -24,7 +24,6 @@ public class EnviromentListAdapter extends BaseAdapter {
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		mEnviroment = enviroments; 
-		
 	}
 	
 	@Override

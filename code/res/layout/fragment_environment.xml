@@ -5,10 +5,11 @@
     android:orientation="vertical">
 	 
 	<ListView
-        android:id="@+id/list"
+        android:id="@+id/lvEnviroment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:divider="#e7e7e7" />
+        android:divider="#E7E7E7"
+        android:dividerHeight="1dp"
+        android:background="#F7F7F7" />
 
 </LinearLayout>
