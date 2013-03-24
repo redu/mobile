@@ -27,7 +27,7 @@ public class CoursesActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail);
+		setContentView(R.layout.fragment_listview);
 
 		((TextView) findViewById(R.id.title)).setText("Disciplinas");
 
@@ -54,7 +54,7 @@ public class CoursesActivity extends Activity {
 			}
 
 			protected void onPostExecute(Void result) {
-				((TextView) findViewById(R.id.details)).setText(mCourse.name);
+//				((TextView) findViewById(R.id.details)).setText(mCourse.name);
 
 				mListView.setAdapter(new ArrayAdapter<Space>(
 						getApplicationContext(),

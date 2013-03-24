@@ -27,7 +27,7 @@ public class SpaceActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail);
+		setContentView(R.layout.fragment_listview);
 		
 		((TextView) findViewById(R.id.title)).setText("Módulos");
 
@@ -53,7 +53,7 @@ public class SpaceActivity extends Activity {
 			}
 
 			protected void onPostExecute(Void result) {
-				((TextView) findViewById(R.id.details)).setText(mSpace.name);
+//				((TextView) findViewById(R.id.details)).setText(mSpace.name);
 
 				mListView.setAdapter(new ArrayAdapter<Subject>(
 								getApplicationContext(),

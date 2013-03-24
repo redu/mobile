@@ -6,6 +6,7 @@
         <attr name="showCaret" format="boolean" />
     </declare-styleable>
     <declare-styleable name="LazyLoadingImageView">
+        <attr name="src" format="reference" />
         <attr name="scaleType">
             <enum name="matrix" value="0" />
             <enum name="fitXY" value="1" />

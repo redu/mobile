@@ -1,16 +1,18 @@
 package br.com.redu.redumobile.tasks;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.os.AsyncTask;
 import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeActivity;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.DataUtil;
+import br.com.redu.redumobile.util.SettingsHelper;
 
 import com.buzzbox.mob.android.scheduler.NotificationMessage;
 import com.buzzbox.mob.android.scheduler.Task;
@@ -20,82 +22,110 @@ public class RefreshNotificationsTask implements Task {
 
 	@Override
 	public String getTitle() {
-		return "Reminder";
+		return "Redu Mobile";
 	}
 
 	@Override
 	public String getId() {
-		return "reminder"; // give it an ID
+		return "Redu Mobile"; // give it an ID
 	}
 
 	@Override
 	public TaskResult doWork(ContextWrapper ctx) {
 		TaskResult res = new TaskResult();
 
-		// TODO implement your business logic here
-		// i.e. query the DB, connect to a web service using HttpUtils, etc..
+		List<Status> notifiableStatues = loadStatuses(ctx);
 
-		NotificationMessage notification = new NotificationMessage(
-				"Redu Mobile", "You have new notifications in Redu");
-		// notification.notificationIconResource =
-		// R.drawable.icon_notification_cards_clubs;
-		notification.setNotificationClickIntentClass(HomeActivity.class);
-
-		res.addMessage(notification);
+		for (Status status : notifiableStatues) {
+			NotificationMessage notification = new NotificationMessage("Redu Mobile", status.text);
+			notification.setNotificationId(Integer.valueOf(status.id));
+			// notification.notificationIconResource = R.drawable.icon_notification_cards_clubs;
+			notification.setNotificationClickIntentClass(HomeActivity.class);
+			res.addMessage(notification);
+		}
 
 		return res;
 	}
 
-	class LoadStatusesTask extends
-			AsyncTask<Void, Void, Void> {
+	private List<Status> loadStatuses(Context context) {
+		List<Status> notifiableStatuses = new ArrayList<Status>();
 
-		private Context mContext;
+		DbHelper dbHelper = DbHelper.getInstance(context);
 
-		public LoadStatusesTask(Context context) {
-			mContext = context;
-		}
-		
-		protected Void doInBackground(Void... params) {
-			DbHelper dbHelper = new DbHelper(mContext);
-			
-			DefaultReduClient redu = ReduApplication.getReduClient();
-			String userId = String.valueOf(ReduApplication.getUser().id);
-			
-			long dbTimestamp = dbHelper.getTimestamp();
-			
-			boolean loadNextPage = true;
-			
-			for(int page = 1; loadNextPage; page++) {
-				List<br.com.developer.redu.models.Status> statuses = redu.getStatusesTimelineByUser(userId, null, String.valueOf(page));
-				
-				if (statuses != null) {
-					for (br.com.developer.redu.models.Status status : statuses) {
-						try {
-							status.created_at_in_millis = DataUtil.df.parse(status.created_at).getTime();
-						} catch (ParseException e) {
-							e.printStackTrace();
-							status.created_at_in_millis = 0;
-						}
-						
-						if(status.created_at_in_millis <= dbTimestamp) {
-							loadNextPage = false;
-							break;
-							
-						} else {
-							// filtering
-							if (status.type.equals(br.com.developer.redu.models.Status.TYPE_LOG) &&
-									status.logeable_type.equals("CourseEnrollment")) {
+		DefaultReduClient redu = ReduApplication.getReduClient();
+		String userId = String.valueOf(ReduApplication.getUser().id);
+
+		long dbTimestamp = dbHelper.getTimestamp();
+
+		boolean loadNextPage = true;
+
+		for (int page = 1; loadNextPage; page++) {
+			List<Status> statuses = redu.getStatusesTimelineByUser(userId,
+					null, String.valueOf(page));
+
+			if (statuses != null) {
+				for (Status status : statuses) {
+					try {
+						status.created_at_in_millis = DataUtil.df.parse(status.created_at).getTime();
+					} catch (ParseException e) {
+						e.printStackTrace();
+						status.created_at_in_millis = 0;
+					}
+
+					if (status.created_at_in_millis <= dbTimestamp) {
+						loadNextPage = false;
+						break;
+
+					} else {
+						// ignoring unused Status on mobile device
+						if (status.type.equals(Status.TYPE_LOG)) {
+							if (!status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE)
+									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE)
+									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
 								continue;
 							}
-							
-							dbHelper.putStatus(status);
 						}
+
+						if(checkNotifiable(context, status)) {
+							notifiableStatuses.add(status);
+						}
+						
+						dbHelper.putStatus(status);
 					}
 				}
 			}
-			
-			return null;
 		}
+
+		return notifiableStatuses;
 	}
 
+	private boolean checkNotifiable(Context ctx, Status status) {
+		if(SettingsHelper.get(ctx, SettingsHelper.KEY_ACTIVATED_NOTIFICATIONS)) {
+			
+			if (status.type.equals(Status.TYPE_LOG)) {
+				if(status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE) 
+						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_LECTURES)) {
+					return true;
+					
+				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE) 
+						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_COURSES)) {
+					return true;
+					
+				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)
+						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
+					return true;
+					
+				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)
+						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
+					return true;
+				}
+				
+			} else if (status.type.equals(Status.TYPE_ACTIVITY) 
+					&& SettingsHelper.get(ctx, SettingsHelper.KEY_WHEN_ANSWER_ME)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

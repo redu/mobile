@@ -7,11 +7,11 @@
 
     <br.com.redu.redumobile.widgets.ActionBar
         android:id="@+id/actionBar"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         layout="@layout/action_bar"
         app:showCaret="false"
-        app:title="Ambientes" />
+        app:title="Redu" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -22,7 +22,16 @@
             android:id="@+id/titles"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000" />
+            android:textColor="@color/azul"
+            android:textSize="22dip"
+            app:footerPadding="10dip"
+            app:footerColor="@color/azul"
+            app:footerIndicatorHeight="3dip"
+            app:footerIndicatorStyle="underline"
+            app:footerLineHeight="1dip"
+            app:selectedBold="false"
+            app:selectedColor="@color/azul"
+            app:titlePadding="80dip" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vp"

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_action_bar"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingBottom="5dip"
@@ -15,15 +16,17 @@
         android:src="@drawable/ic_logo_redu"
         android:background="@null" />
 
+
     <TextView
         android:id="@+id/tv_title_action_bar"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
-        android:paddingLeft="5dip"
-        android:text="Redu" />
-
+        android:paddingLeft="7dip"
+        android:text="Redu"
+        android:textColor="#858585"
+        android:textSize="20dip" />
     <!-- <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,17 +38,17 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:onClick="onEnvironmentClicked"
-        android:text="E" 
-        android:src="@drawable/btn_enviroments_selector"
-        android:background="@null" />
-
+        android:padding="7dip"
+        android:src="@drawable/btn_enviroments_selector" />
+        
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:onClick="onSettingsClicked"
-        android:text="S" 
-        android:src="@drawable/btn_settings_selector"
-        android:background="@null" />
+        android:padding="7dip"
+        android:src="@drawable/btn_settings_selector" />
 
 </LinearLayout>

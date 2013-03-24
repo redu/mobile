@@ -8,6 +8,7 @@ import br.com.redu.redumobile.util.ImageLoader;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -38,9 +39,14 @@ public class LazyLoadingImageView extends FrameLayout {
 			ScaleType.CENTER_INSIDE };
 	
 	private Context mContext;
+	
 	private ProgressBar mSpinner;
 	private ImageView mImageView;
+	
 	private int mScaleTypeIndex;
+	private Drawable mDefaultSrc;
+	
+	private boolean existDefaultImage;
 
 	/**
 	 * This is used when creating the view in XML To have an image load in XML
@@ -57,6 +63,10 @@ public class LazyLoadingImageView extends FrameLayout {
 
 		TypedArray styledAttrs = context.obtainStyledAttributes(attrSet, R.styleable.LazyLoadingImageView);
 		mScaleTypeIndex = styledAttrs.getInt(R.styleable.LazyLoadingImageView_scaleType, -1);
+		mDefaultSrc = styledAttrs.getDrawable(R.styleable.LazyLoadingImageView_src);
+		
+		existDefaultImage = (mDefaultSrc != null);
+		
 		styledAttrs.recycle();
 		
 		instantiate(context, null);
@@ -92,15 +102,19 @@ public class LazyLoadingImageView extends FrameLayout {
 			mImageView.setScaleType(mScaleTypeArray[mScaleTypeIndex]);
 		}
 		
-		mSpinner = new ProgressBar(mContext);
-		mSpinner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-		mSpinner.setIndeterminate(true);
-
-		addView(mSpinner);
+		if(existDefaultImage) {
+			mImageView.setImageDrawable(mDefaultSrc);
+		} else {
+			mSpinner = new ProgressBar(mContext);
+			mSpinner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+			mSpinner.setIndeterminate(true);
+			addView(mSpinner);
+		}
+		
 		addView(mImageView);
 
 		if (imageUrl != null) {
-			setImageUrl(imageUrl);
+			this.setImageUrl(imageUrl);
 		}
 	}
 
@@ -109,23 +123,17 @@ public class LazyLoadingImageView extends FrameLayout {
 	}
 
 	public void setImageResource(int drawableResource) {
-        mImageView.setImageResource(drawableResource);
-        mImageView.setVisibility(View.VISIBLE);
-        mSpinner.setVisibility(View.GONE);
-        LazyLoadingImageView.this.invalidate();
+        setImage(drawableResource);
 	}
 	
 	class ImageViewLoader extends AsyncTask<String, Void, Bitmap> {
-
 		@Override
 		protected void onPreExecute() {
-			mSpinner.setVisibility(View.VISIBLE);
-			mImageView.setVisibility(View.GONE);
+	        setImageDefault();
 		}
 		
 		@Override
 		protected Bitmap doInBackground(String... params) {
-
 			Bitmap bmp;
 			String urlImagem = params[0];
 			try {
@@ -145,19 +153,45 @@ public class LazyLoadingImageView extends FrameLayout {
 		@Override
 		protected void onPostExecute(Bitmap result) {
 			if(result != null) {
-				mImageView.setImageBitmap(result);
-
-				mImageView.setVisibility(View.VISIBLE);
-				mSpinner.setVisibility(View.GONE);
-
-				LazyLoadingImageView.this.invalidate();
-
+				setImage(result);
 			} else {
 				setVisibility(View.INVISIBLE);
 			}
 		}
-
 	}
-
+	
+	private void setImageDefault() {
+		if(existDefaultImage) {
+			mImageView.setImageDrawable(mDefaultSrc);
+			mImageView.setVisibility(View.VISIBLE);
+		} else {
+			mSpinner.setVisibility(View.VISIBLE);
+			mImageView.setVisibility(View.GONE);
+		}		
+		
+		LazyLoadingImageView.this.invalidate();
+	}
+	
+	private void setImage(Bitmap bmp) {
+		mImageView.setImageBitmap(bmp);
+		mImageView.setVisibility(View.VISIBLE);
+		
+		if(!existDefaultImage) {
+			mSpinner.setVisibility(View.GONE);
+		}
+		
+		LazyLoadingImageView.this.invalidate();
+	}
+	
+	private void setImage(int resId) {
+		mImageView.setImageResource(resId);
+		mImageView.setVisibility(View.VISIBLE);
+		
+		if(!existDefaultImage) {
+			mSpinner.setVisibility(View.GONE);
+		}
+		
+		LazyLoadingImageView.this.invalidate();
+	}
 
 }
