@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import br.com.developer.redu.models.Status;
+import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.util.DataUtil;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -18,21 +19,22 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "redu.db";
 	private static final int DATABASE_VERSION = 1;
 
-	public static final String TABLE_STATUS = "Status";
-	public static final String TABLE_USER = "User";
+	private static final String TABLE_STATUS = "Status";
 
-	public static final String COLUMN_ID = "id";
-	public static final String COLUMN_TYPE = "type";
-	public static final String COLUMN_LOGEABLE_TYPE = "logeable_type";
-	public static final String COLUMN_CREATE_AT_IN_MILLIS = "create_at_in_millis";
-	public static final String COLUMN_TEXT = "text";
-	public static final String COLUMN_LECTURE_ALREADY_SEEN = "lecture_already_seen";
-	public static final String COLUMN_LAST_SEEN = "last_seen";
+	private static final String COLUMN_ID = "id";
+	private static final String COLUMN_USER_ID = "user_id";
+	private static final String COLUMN_TYPE = "type";
+	private static final String COLUMN_LOGEABLE_TYPE = "logeable_type";
+	private static final String COLUMN_CREATE_AT_IN_MILLIS = "create_at_in_millis";
+	private static final String COLUMN_TEXT = "text";
+	private static final String COLUMN_LECTURE_ALREADY_SEEN = "lecture_already_seen";
+	private static final String COLUMN_LAST_SEEN = "last_seen";
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_STATUS = "CREATE TABLE "
 			+ TABLE_STATUS + "(" 
-			+ COLUMN_ID + " TEXT PRIMARY KEY , " 
+			+ COLUMN_ID + " TEXT PRIMARY KEY, " 
+			+ COLUMN_USER_ID + " INTEGER, " 
 			+ COLUMN_TYPE + " TEXT NOT NULL, " 
 			+ COLUMN_LOGEABLE_TYPE + " TEXT, " 
 			+ COLUMN_CREATE_AT_IN_MILLIS + " INTEGER, "
@@ -46,16 +48,10 @@ public class DbHelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }  
 
-	public static DbHelper newInstance(Context context) {
-		instance = new DbHelper(context);
-		return instance;
-	}
-
 	public static DbHelper getInstance(Context context) {
 		if(instance == null) {
 			instance = new DbHelper(context);
 		}
-		
 		return instance;
 	}
 	
@@ -135,7 +131,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			statuses.add(getCurrentStatusInCursor(cursor));
 		}
 		
-		cursor.close();  
+		cursor.close();
 		db.close();
 		
 		return statuses;  
@@ -143,6 +139,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	private Status getCurrentStatusInCursor(Cursor cursor) {
 		Status status = new Status();
+
 		status.id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
 		status.type = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE));
 		status.logeable_type = cursor.getString(cursor.getColumnIndex(COLUMN_LOGEABLE_TYPE));
@@ -155,6 +152,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		int lastSeen = cursor.getInt(cursor.getColumnIndex(COLUMN_TEXT));
 		status.lastSeen = (lastSeen == 0) ? false : true;
 		
+		status.user = new User();
+		status.user.id = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_ID));
+		
 		return status;
 	}
 	
@@ -164,6 +164,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TEXT, status.text);
         values.put(COLUMN_ID, status.id);
+        values.put(COLUMN_USER_ID, status.user.id);
         values.put(COLUMN_TYPE, status.type);
         values.put(COLUMN_LOGEABLE_TYPE, status.logeable_type);
         
@@ -213,5 +214,11 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         
         return timestamp;
+	}
+	
+	@Override
+	public synchronized void close() {
+		super.close();
+		instance = null;
 	}
 }

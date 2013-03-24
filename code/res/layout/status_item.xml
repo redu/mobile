@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <br.com.redu.redumobile.LazyLoadingImageView
+            <br.com.redu.redumobile.widgets.LazyLoadingImageView
                 android:id="@+id/iv_photo"
                 android:layout_width="48dip"
                 android:layout_height="48dip"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dip"
             android:ellipsize="end"
-            android:maxLines="4"
+            android:maxLines="6"
             android:text="A menina tinha dois olhos ,um nariz e uma boca, mas pra nao ficar cansativo eu vou agora ter jons ahhblhBDA IBIBA IH AFSL BNHAKBHKSCB LAB KLBNibalhbfiab ibaj"
             android:textColor="#000" />
 

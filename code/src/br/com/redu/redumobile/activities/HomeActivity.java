@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.fragments.HomeFragment;
 import br.com.redu.redumobile.fragments.HomeFragment.Type;
 import br.com.redu.redumobile.tasks.RefreshNotificationsTask;
@@ -15,7 +17,7 @@ import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
@@ -25,16 +27,18 @@ public class HomeActivity extends BaseActivity {
 	static final int ITEM_WALL = 1;
 	static final int ITEM_LAST_SEEN_STATUS = 2;
 
+	private DbHelper mDbHelper;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_home);
 
 		setActionBarTitle("Redu");
-		
+
 		// BuzzNotify
 		int openAppStatus = AnalyticsManager.onOpenApp(this);
 		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
-			SchedulerManager.getInstance().saveTask(this, "*/30 * * * *", RefreshNotificationsTask.class);
+			SchedulerManager.getInstance().saveTask(this, "*/1 * * * *", RefreshNotificationsTask.class);
 			SchedulerManager.getInstance().restart(this, RefreshNotificationsTask.class);
 		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
 			SchedulerManager.getInstance().restartAll(getApplicationContext());
@@ -91,5 +95,21 @@ public class HomeActivity extends BaseActivity {
 			return fragments[position];
 		}
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mDbHelper = DbHelper.getInstance(this);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mDbHelper.close();
+	}
 
+	@Override
+	public DbHelper getDbHelper() {
+		return mDbHelper;
+	}
 }
