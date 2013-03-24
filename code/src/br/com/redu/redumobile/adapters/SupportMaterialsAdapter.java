@@ -47,7 +47,7 @@ public class SupportMaterialsAdapter extends BaseAdapter {
 		if(mFolders.size() > position){
 			return mFolders.get(position);
 		} else {
-			return mFiles.get(position);
+			return mFiles.get(position-(mFolders.size()));
 		}
 		
 	}
@@ -73,7 +73,7 @@ public class SupportMaterialsAdapter extends BaseAdapter {
 			v.setText(mFolders.get(position).name);
 		} else {
 			v= (TextView) mInflater.inflate(R.layout.support_material_files, null);
-			v.setText(mFiles.get(position).name);
+			v.setText(mFiles.get(position-(mFolders.size())).name);
 		}
 		
 		return v;

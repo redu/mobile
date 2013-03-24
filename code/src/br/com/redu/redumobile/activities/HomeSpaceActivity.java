@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
@@ -25,7 +26,7 @@ public class HomeSpaceActivity extends BaseActivity {
 	static final int ITEM_MORPHOLOGY = 0;
 	static final int ITEM_WALL = 1;
 	static final int ITEM_SUPPORT_MATERIAL = 2;
-
+	
     private PageIndicator mIndicator;
 	
 	@Override
@@ -33,9 +34,11 @@ public class HomeSpaceActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_space);
 		
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp2);
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));
+		
 		
 		mIndicator = (TitlePageIndicator) findViewById(R.id.titles2);
 		mIndicator.setViewPager(vp);
@@ -73,6 +76,18 @@ public class HomeSpaceActivity extends BaseActivity {
 		@Override
 		public Fragment getItem(int position) {
 			return items[position];
+		}
+		
+		@Override
+		public void notifyDataSetChanged() {
+			// TODO Auto-generated method stub
+			super.notifyDataSetChanged();
+		}
+		
+		@Override
+		public int getItemPosition(Object object) {
+			// TODO Auto-generated method stub
+			return super.getItemPosition(object);
 		}
 	}
 	
