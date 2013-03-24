@@ -9,5 +9,4 @@
     android:text="Protótipo 2.psd"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:textColor="#cccccc"
-    android:textSize="16dp" 
-    android:background="#F7F7F7"/>
+    android:textSize="16dp" />

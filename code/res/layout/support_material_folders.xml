@@ -10,5 +10,4 @@
     android:text="Pasta Qualquer"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:textColor="#36ACD5"
-    android:textSize="20dp" 
-    android:background="#ffffff" />
+    android:textSize="20dp"  />
