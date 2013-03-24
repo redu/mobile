@@ -25,6 +25,7 @@
             android:textColor="@color/azul"
             android:textSize="22dip"
             app:footerPadding="10dip"
+            android:background="#F7F7F7"
             app:footerColor="@color/azul"
             app:footerIndicatorHeight="3dip"
             app:footerIndicatorStyle="underline"
