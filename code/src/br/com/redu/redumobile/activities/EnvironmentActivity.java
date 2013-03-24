@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
@@ -31,6 +32,18 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 
 		// Commit the transaction
 		transaction.commit();
+	}
+	
+	// metodo para não chamar outros ambientes.
+	@Override
+	public void onEnvironmentClicked(View v) {
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		finish();
 	}
 
 	@Override

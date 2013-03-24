@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.fragments.space;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.developer.redu.DefaultReduClient;
@@ -12,6 +13,7 @@ import br.com.redu.redumobile.ReduApplication;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ public class SupportMaterialFragment extends Fragment {
 	private List<Folder> folders;
 	private List<File> files;
 	
-	private ArrayAdapter mAdapter;
 	
 	ListView lvFiles;
 	
@@ -41,7 +42,6 @@ public class SupportMaterialFragment extends Fragment {
 		mSpace = (Space)getActivity().getIntent().getExtras().get(Space.class.getName());
 		
 		lvFiles = (ListView) v.findViewById(R.id.lvFiles);
-		lvFiles.setAdapter(mAdapter);
 		
 		new LoadFoldersAndFilesTask().execute();
 		
@@ -58,13 +58,10 @@ public class SupportMaterialFragment extends Fragment {
 			/*files = redu.getFilesByFolder(mSpace.)*/
 			return null;
 		}
-	
-		protected void onPostExecute(Void... params) {
-//			((TextView) v.findViewById(R.id.details)).setText(user.first_name + " " + user.last_name + ", ");
-			/*mUser = user;
-			
-			new LoadSubjectsTask(mCurrentPage).execute();*/
-			
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
 			List<String> array = new ArrayList<String>();
 			for (int i = 0; i < folders.size()	; i++) {
 				array.add(folders.get(i).name);
@@ -72,9 +69,9 @@ public class SupportMaterialFragment extends Fragment {
 			for (int i = 0; i < files.size(); i++) {
 				array.add(files.get(i).name);
 			}
-			
+			array.removeAll(Collections.singleton(null));
 			mAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_2, array);
-			
+			Log.i("THIAGO", "MSG1");
 		};
 	}
 }
