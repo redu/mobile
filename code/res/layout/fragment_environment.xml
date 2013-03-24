@@ -3,17 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-    <ListView
-        android:id="@+id/list"
+	 
+	<ListView
+        android:id="@+id/lvEnviroment"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:divider="#E7E7E7"
+        android:dividerHeight="1dp"
+        android:background="#F7F7F7" />
 
 </LinearLayout>

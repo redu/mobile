@@ -33,7 +33,7 @@ public class LectureActivity extends BaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lecture);
 		
-		mTvSubject = (TextView) findViewById(R.id.tvSubject);
+		//mTvSubject = (TextView) findViewById(R.id.tvSubject);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
 		mBtEdit = (Button) findViewById(R.id.btEdit);
 		mBtRemove = (Button) findViewById(R.id.btRemove);

@@ -17,6 +17,7 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.adapters.EnviromentListAdapter;
 
 public class EnvironmentFragment extends Fragment {
 
@@ -38,7 +39,7 @@ public class EnvironmentFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_environment, container, false);
-		mListView = (ListView) v.findViewById(R.id.list);
+		mListView = (ListView) v.findViewById(R.id.lvEnviroment);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -58,10 +59,7 @@ public class EnvironmentFragment extends Fragment {
 			protected void onPostExecute(Void result) {
 				Activity activity = getActivity();
 				if(activity != null && mEnvironments != null) {
-					mListView.setAdapter(new ArrayAdapter<Environment>(
-					activity,
-					android.R.layout.simple_dropdown_item_1line,
-					mEnvironments));
+					mListView.setAdapter(new EnviromentListAdapter(activity, mEnvironments));
 				}
 			};
 
