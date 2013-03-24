@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:divider="#E7E7E7"
+        android:dividerHeight="1dip"
         android:layout_weight="1" >
     </ListView>
 
