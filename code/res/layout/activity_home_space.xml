@@ -62,10 +62,20 @@
         android:orientation="vertical" >
         
 		<com.viewpagerindicator.TitlePageIndicator
-			android:id="@+id/titles2"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent" />
-        
+            android:id="@+id/titles2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/azul"
+            android:textSize="22dip"
+            app:footerPadding="10dip"
+            app:footerColor="@color/azul"
+            app:footerIndicatorHeight="3dip"
+            app:footerIndicatorStyle="underline"
+            app:footerLineHeight="1dip"
+            app:selectedBold="false"
+            app:selectedColor="@color/azul"
+            app:titlePadding="80dip" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/vp2"
             android:layout_width="fill_parent"

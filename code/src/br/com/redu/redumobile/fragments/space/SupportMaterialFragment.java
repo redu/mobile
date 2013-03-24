@@ -66,7 +66,7 @@ public class SupportMaterialFragment extends Fragment {
 			new LoadSubjectsTask(mCurrentPage).execute();*/
 			
 			List<String> array = new ArrayList<String>();
-			for (int i = 0; i < folders.size(); i++) {
+			for (int i = 0; i < folders.size()	; i++) {
 				array.add(folders.get(i).name);
 			}
 			for (int i = 0; i < files.size(); i++) {
