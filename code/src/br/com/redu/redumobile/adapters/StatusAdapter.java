@@ -44,11 +44,13 @@ public class StatusAdapter extends BaseAdapter {
 	}
 	
 	public void add(Status status) {
-		mStatuses.add(status);
+		if(mStatuses != null)
+			mStatuses.add(status);
 	}
 
 	public void add(List<Status> statuses) {
-		mStatuses.addAll(statuses);
+		if(mStatuses != null)
+			mStatuses.addAll(statuses);
 	}
 
 	@Override
