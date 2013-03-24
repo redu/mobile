@@ -6,6 +6,7 @@
     android:id="@+id/tvSupportFiles"
     android:layout_alignParentLeft="true"
     android:gravity="center_vertical"
+    android:padding="7dp"
     android:text="Protótipo 2.psd"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:textColor="#cccccc"
