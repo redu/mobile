@@ -32,7 +32,8 @@
         </activity>
         <activity android:name=".activities.SubjectActivity" >
         </activity>
-        <activity android:name=".activities.SettingsActivity" >
+        <activity android:name=".activities.SettingsActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
         <activity android:name=".activities.LectureActivity" >
         </activity>

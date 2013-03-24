@@ -2,6 +2,7 @@ package br.com.redu.redumobile.fragments;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.adapters.StatusAdapter;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.db.DbHelperHolder;
 
 public class HomeFragment extends Fragment {
 
@@ -94,27 +96,40 @@ public class HomeFragment extends Fragment {
 		};
 
 		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
-			DbHelper dbHelper = DbHelper.getInstance(getActivity());
+			List<br.com.developer.redu.models.Status> statuses = null;
 			
-			switch (mType) {
-				case LastSeen:
-					return dbHelper.getLastSeenStatus(mTimestamp, NUM_STATUS_BY_PAGE);
+			Activity activity = getActivity();
+			
+			if(activity != null && activity instanceof DbHelperHolder && mType != null) {
+				DbHelper dbHelper = ((DbHelperHolder) activity).getDbHelper();
 				
-				case Wall:
-					return dbHelper.getStatus(mTimestamp, NUM_STATUS_BY_PAGE);
+				switch (mType) {
+					case LastSeen:
+						statuses = dbHelper.getLastSeenStatus(mTimestamp, NUM_STATUS_BY_PAGE);
+						break;
 					
-				case NewLectures:
-					return dbHelper.getNewLecturesStatus(mTimestamp, NUM_STATUS_BY_PAGE);
+					case Wall:
+						statuses = dbHelper.getStatus(mTimestamp, NUM_STATUS_BY_PAGE);
+						break;
+						
+					case NewLectures:
+						statuses = dbHelper.getNewLecturesStatus(mTimestamp, NUM_STATUS_BY_PAGE);
+						break;
 				
-				default:
-					return null;
+					default:
+						statuses = null;
+						break;
+				}
 			}
+			
+			return statuses;
 		}
 
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
 			if (statuses != null && statuses.size() > 0) {
-				mAdapter.add(statuses);
+				mAdapter.addAll(statuses);
 				mAdapter.notifyDataSetChanged();
+				
 				mTimestamp = statuses.get(statuses.size()-1).created_at_in_millis;
 			}
 

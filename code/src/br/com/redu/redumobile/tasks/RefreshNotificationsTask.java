@@ -60,8 +60,7 @@ public class RefreshNotificationsTask implements Task {
 		boolean loadNextPage = true;
 
 		for (int page = 1; loadNextPage; page++) {
-			List<Status> statuses = redu.getStatusesTimelineByUser(userId,
-					null, String.valueOf(page));
+			List<Status> statuses = redu.getStatusesTimelineByUser(userId, null, String.valueOf(page));
 
 			if (statuses != null) {
 				for (Status status : statuses) {
@@ -77,7 +76,7 @@ public class RefreshNotificationsTask implements Task {
 						break;
 
 					} else {
-						// ignoring unused Status on mobile device
+						// ignoring unused Status on mobile app
 						if (status.type.equals(Status.TYPE_LOG)) {
 							if (!status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE)
 									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE)
@@ -128,4 +127,5 @@ public class RefreshNotificationsTask implements Task {
 		
 		return false;
 	}
+
 }
