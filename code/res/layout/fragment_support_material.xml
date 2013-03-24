@@ -5,18 +5,40 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity" >
-
-    <TextView
-        android:id="@+id/tvFolder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pasta01"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <RelativeLayout  
+        android:layout_width="match_parent"
+   		android:layout_height="wrap_content"
+   		android:padding="5dp" >
+        
+	    <TextView
+	        android:id="@+id/tvIndice"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:gravity="center_vertical"
+	        android:drawableLeft="@drawable/ic_file"
+	        android:text="Índice"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="#cccccc"
+	        android:textSize="20dp" />
+	    
+	    <ImageButton 
+	        android:id="@+id/ibMore"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="end"
+	        android:src="@drawable/ic_add"
+	        android:background="null"
+	        android:layout_alignParentRight="true"
+	        />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/lvFiles"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:divider="@drawable/img_divider" >
     </ListView>
 
 </LinearLayout>
