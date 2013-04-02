@@ -17,12 +17,12 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
-public class StatusAdapter extends BaseAdapter {
+public class StatusWallAdapter extends BaseAdapter {
 
 	final private LayoutInflater mInflater;
 	private List<Status> mStatuses;
 	
-	public StatusAdapter(Context context) {
+	public StatusWallAdapter(Context context) {
 		mInflater = LayoutInflater.from(context);
 	}
 	
@@ -62,7 +62,7 @@ public class StatusAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = mInflater.inflate(R.layout.status_item, null);
+			convertView = mInflater.inflate(R.layout.status_wall_item, null);
 		}
 		
 		Status status = mStatuses.get(position);

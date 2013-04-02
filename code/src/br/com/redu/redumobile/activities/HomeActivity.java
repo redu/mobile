@@ -1,10 +1,14 @@
 package br.com.redu.redumobile.activities;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
@@ -21,6 +25,8 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
+	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 1;
+	
 	static final int NUM_ITEMS = 3;
 	
 	static final int ITEM_NEW_LECTURES = 0;
@@ -35,14 +41,17 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 		setActionBarTitle("Redu");
 
-		// BuzzNotify
+		startService(new Intent(this, RefreshNotificationsTask.class));
+		
+		// START BuzzNotify
 		int openAppStatus = AnalyticsManager.onOpenApp(this);
 		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
-			SchedulerManager.getInstance().saveTask(this, "*/1 * * * *", RefreshNotificationsTask.class);
+			SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", RefreshNotificationsTask.class);
 			SchedulerManager.getInstance().restart(this, RefreshNotificationsTask.class);
 		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
 			SchedulerManager.getInstance().restartAll(getApplicationContext());
 		}
+		// END BuzzNotify
 
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));
@@ -52,6 +61,30 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		
 		int itemChecked = getIntent().getIntExtra(ITEM_EXTRA_PARAM, ITEM_WALL);
 		indicator.setCurrentItem(itemChecked);
+		
+//		showWebDialog("Redu Mobile", "http://redu.com.br/#modal-sign-up");
+	}
+	
+	private void showWebDialog(String title, String url) {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle(title);
+		WebView wv = new WebView(this);
+		wv.getSettings().setJavaScriptEnabled(true);
+//		wv.setHorizontalScrollBarEnabled(false);
+		wv.loadUrl(url);
+
+		wv.setWebViewClient(new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				view.loadUrl(url);
+				return true;
+			}
+		});
+
+		alert.setView(wv);
+
+		alert.show();
 	}
 
 	class MainAdapter extends FragmentPagerAdapter {
