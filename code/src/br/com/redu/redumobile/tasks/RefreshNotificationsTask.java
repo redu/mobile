@@ -27,7 +27,7 @@ public class RefreshNotificationsTask implements Task {
 
 	@Override
 	public String getId() {
-		return "Redu Mobile"; // give it an ID
+		return "redumobile"; // give it an ID
 	}
 
 	@Override
