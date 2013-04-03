@@ -11,7 +11,7 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeActivity;
 import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.util.DataUtil;
+import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.util.SettingsHelper;
 
 import com.buzzbox.mob.android.scheduler.NotificationMessage;
@@ -65,7 +65,7 @@ public class RefreshNotificationsTask implements Task {
 			if (statuses != null) {
 				for (Status status : statuses) {
 					try {
-						status.created_at_in_millis = DataUtil.df.parse(status.created_at).getTime();
+						status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
 					} catch (ParseException e) {
 						e.printStackTrace();
 						status.created_at_in_millis = 0;

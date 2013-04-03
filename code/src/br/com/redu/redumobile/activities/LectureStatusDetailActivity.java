@@ -14,6 +14,7 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.StatusDetailAdapter;
+import br.com.redu.redumobile.util.DateUtil;
 
 public class LectureStatusDetailActivity extends BaseActivity {
 
@@ -54,7 +55,7 @@ public class LectureStatusDetailActivity extends BaseActivity {
 		if(!status.type.equals(Status.TYPE_HELP)) {
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.GONE);
 		}
-		((TextView) v.findViewById(R.id.tv_date)).setText(status.getFormattedCreatedAt());
+		((TextView) v.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 //		((TextView) v.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
 		((TextView) v.findViewById(R.id.tv_text)).setText(status.text);
 		

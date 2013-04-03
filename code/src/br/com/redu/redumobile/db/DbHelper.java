@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import br.com.developer.redu.models.Status;
 import br.com.developer.redu.models.User;
-import br.com.redu.redumobile.util.DataUtil;
+import br.com.redu.redumobile.util.DateUtil;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -170,7 +170,7 @@ public class DbHelper extends SQLiteOpenHelper {
         
         if(status.created_at_in_millis == 0) {
         	try {
-        		status.created_at_in_millis = DataUtil.df.parse(status.created_at).getTime();
+        		status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

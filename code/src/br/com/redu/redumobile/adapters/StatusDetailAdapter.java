@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusDetailAdapter extends BaseAdapter {
@@ -50,7 +51,7 @@ public class StatusDetailAdapter extends BaseAdapter {
 		
 		((LazyLoadingImageView) convertView.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
 		((TextView) convertView.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
-		((TextView) convertView.findViewById(R.id.tv_date)).setText(status.getFormattedCreatedAt());
+		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 		((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 		
 		return convertView;
