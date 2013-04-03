@@ -77,10 +77,10 @@ public class RefreshNotificationsTask implements Task {
 
 					} else {
 						// ignoring unused Status on mobile app
-						if (status.type.equals(Status.TYPE_LOG)) {
-							if (!status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE)
-									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE)
-									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
+						if (status.isTypeLog()) {
+							if (!status.isLogeableTypeLecture() 
+									&& !status.isLogeableTypeCourse() 
+									&& !status.isLogeableTypeSubject()) {
 								continue;
 							}
 						}
@@ -100,26 +100,21 @@ public class RefreshNotificationsTask implements Task {
 
 	private boolean checkNotifiable(Context ctx, Status status) {
 		if(SettingsHelper.get(ctx, SettingsHelper.KEY_ACTIVATED_NOTIFICATIONS)) {
-			
-			if (status.type.equals(Status.TYPE_LOG)) {
-				if(status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE) 
+			if (status.isTypeLog()) {
+				if(status.isLogeableTypeLecture() 
 						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_LECTURES)) {
 					return true;
 					
-				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE) 
+				} else if (status.isLogeableTypeCourse() 
 						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_COURSES)) {
 					return true;
 					
-				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)
-						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
-					return true;
-					
-				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)
+				} else if (status.isLogeableTypeSubject()
 						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
 					return true;
 				}
 				
-			} else if (status.type.equals(Status.TYPE_ACTIVITY) 
+			} else if (status.isTypeActivity() 
 					&& SettingsHelper.get(ctx, SettingsHelper.KEY_WHEN_ANSWER_ME)) {
 				return true;
 			}

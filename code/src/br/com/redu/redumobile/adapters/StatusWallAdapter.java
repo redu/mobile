@@ -77,7 +77,7 @@ public class StatusWallAdapter extends BaseAdapter {
 		
 		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 
-		if(status.type.equals(Status.TYPE_ACTIVITY)) {
+		if(status.isTypeActivity()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
@@ -86,7 +86,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 			
-		} else if(status.type.equals(Status.TYPE_ANSWER)) {
+		} else if (status.isTypeAnswer()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
@@ -95,7 +95,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 		
-		} else if(status.type.equals(Status.TYPE_HELP)) {
+		} else if (status.isTypeHelp()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("pediu ajuda");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
@@ -106,20 +106,20 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text); //TODO
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.VISIBLE);
 		
-		} else if(status.type.equals(Status.TYPE_LOG)) {
+		} else if (status.isTypeLog()) {
 			String action = null;
 			String result = null;
 			int icon = 0;
 			
-			if(status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE)) {
+			if (status.isLogeableTypeCourse()) {
 				action = "criou o";
 				result = "Curso";
 				icon = R.drawable.ic_curso;
-			} else if(status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE)) {
+			} else if (status.isLogeableTypeLecture()) {
 				action += "criou a";
 				result = "Aula";
 				icon = R.drawable.ic_aula;
-			} else if(status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
+			} else if (status.isLogeableTypeSubject()) {
 				action += "criou o";
 				result = "Módulo";
 				icon = R.drawable.ic_modulo;
