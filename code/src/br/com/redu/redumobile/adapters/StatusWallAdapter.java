@@ -15,6 +15,7 @@ import br.com.developer.redu.models.Status;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusWallAdapter extends BaseAdapter {
@@ -53,10 +54,11 @@ public class StatusWallAdapter extends BaseAdapter {
 	}
 
 	public void addAll(List<Status> statuses) {
-		if(mStatuses != null) {
+		if(mStatuses == null) {
+			mStatuses = statuses;
+		} else {
 			mStatuses.addAll(statuses);
 		}
-		mStatuses = statuses;
 	}
 
 	@Override
@@ -73,13 +75,13 @@ public class StatusWallAdapter extends BaseAdapter {
 		// TODO
 //		new LoadUserInfoTask(status, convertView).execute();
 		
-		((TextView) convertView.findViewById(R.id.tv_date)).setText(status.created_at);
+		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 
 		if(status.type.equals(Status.TYPE_ACTIVITY)) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
-			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(0);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.GONE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
@@ -88,7 +90,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
-			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(0);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.GONE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
@@ -98,25 +100,26 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(R.drawable.ic_ajuda);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
-			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text);
+			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text); //TODO
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.VISIBLE);
 		
 		} else if(status.type.equals(Status.TYPE_LOG)) {
 			String action = null;
 			String result = null;
-			int icon = -1;
+			int icon = 0;
 			
-			if(status.type.equals(Status.LOGEABLE_TYPE_COURSE)) {
+			if(status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE)) {
 				action = "criou o";
 				result = "Curso";
 				icon = R.drawable.ic_curso;
-			} else if(status.type.equals(Status.LOGEABLE_TYPE_LECTURE)) {
+			} else if(status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE)) {
 				action += "criou a";
 				result = "Aula";
-				icon = -1; //TODO
-			} else if(status.type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
+				icon = R.drawable.ic_aula;
+			} else if(status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
 				action += "criou o";
 				result = "Módulo";
 				icon = R.drawable.ic_modulo;
@@ -127,6 +130,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.VISIBLE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(icon);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.GONE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 		}

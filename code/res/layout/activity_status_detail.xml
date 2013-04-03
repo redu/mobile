@@ -12,23 +12,6 @@
         layout="@layout/action_bar"
         app:title="Ambientes" />
 
-    <TextView
-        android:id="@+id/tv_lecture"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_page"
-        android:gravity="center_vertical"
-        android:paddingBottom="7dip"
-        android:paddingLeft="15dip"
-        android:text="Aula Lipsum"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/azul" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:background="@color/cinzaClaro" />
-
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
@@ -38,16 +21,33 @@
         android:dividerHeight="1dip" >
     </ListView>
 
-    <ProgressBar
-        android:id="@+id/pb"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_loading_answers"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="15dip" />
+        android:layout_margin="10dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Carregando respostas…"
+            android:textColor="@color/cinzaEscuro" />
+
+        <ProgressBar
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dip" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
 
         <Button
             android:layout_width="0dip"

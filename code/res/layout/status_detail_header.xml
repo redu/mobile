@@ -43,6 +43,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dip"
@@ -73,8 +74,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dip"
-            android:ellipsize="end"
-            android:maxLines="6"
             android:text="A menina tinha dois olhos ,um nariz e uma boca, mas pra nao ficar cansativo eu vou agora ter jons ahhblhBDA IBIBA IH AFSL BNHAKBHKSCB LAB KLBNibalhbfiab ibaj"
             android:textColor="#000" />
     </LinearLayout>

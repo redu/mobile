@@ -16,14 +16,13 @@ public class DateUtil {
     	
     	if(status.created_at_in_millis == 0) {
     		try {
-    			Date date = DateUtil.dfIn.parse(status.created_at);
-				status.created_at_in_millis = date.getTime();
-				formattedCreatAt = DateUtil.dfOut.format(date);
+    			status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
-				formattedCreatAt = null;
 			}
     	}
+
+    	formattedCreatAt = DateUtil.dfOut.format(new Date(status.created_at_in_millis));
     	
     	return formattedCreatAt;
     }

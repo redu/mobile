@@ -17,7 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.activities.LectureStatusDetailActivity;
+import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
@@ -76,9 +76,13 @@ public class HomeFragment extends Fragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent i = new Intent(getActivity(), LectureStatusDetailActivity.class);
-				i.putExtra(LectureStatusDetailActivity.EXTRAS_STATUS, (Status) mAdapter.getItem(position));
-				startActivity(i);
+				Status status = (Status) mAdapter.getItem(position);
+				
+				if(!status.type.equals(Status.TYPE_LOG)) {
+					Intent i = new Intent(getActivity(), StatusDetailActivity.class);
+					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
+					startActivity(i);
+				}
 			}
 		});
 		
