@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import br.com.developer.redu.models.Link;
 import br.com.developer.redu.models.Status;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.util.DateUtil;
@@ -19,8 +20,9 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "redu.db";
 	private static final int DATABASE_VERSION = 1;
 
+	// TABLE STATUS
 	private static final String TABLE_STATUS = "Status";
-
+	
 	private static final String COLUMN_ID = "id";
 	private static final String COLUMN_USER_ID = "user_id";
 	private static final String COLUMN_TYPE = "type";
@@ -30,7 +32,14 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String COLUMN_LECTURE_ALREADY_SEEN = "lecture_already_seen";
 	private static final String COLUMN_LAST_SEEN = "last_seen";
 
-	// Database creation sql statement
+	// TABLE LINK
+	private static final String TABLE_LINK = "Link";
+	
+	private static final String COLUMN_STATUS_ID = "status_id";
+	private static final String COLUMN_REL = "rel";
+	private static final String COLUMN_HREF = "href";
+
+	
 	private static final String CREATE_TABLE_STATUS = "CREATE TABLE "
 			+ TABLE_STATUS + "(" 
 			+ COLUMN_ID + " TEXT PRIMARY KEY, " 
@@ -41,6 +50,14 @@ public class DbHelper extends SQLiteOpenHelper {
 			+ COLUMN_LECTURE_ALREADY_SEEN + " TEXT NOT NULL, "
 			+ COLUMN_LAST_SEEN + " INTEGER, "
 			+ COLUMN_TEXT + " TEXT NOT NULL);";
+
+	private static final String CREATE_TABLE_LINK = "CREATE TABLE "
+			+ TABLE_LINK + "(" 
+			+ COLUMN_STATUS_ID + " TEXT, " 
+			+ COLUMN_REL + " TEXT, " 
+			+ COLUMN_HREF + " TEXT, " 
+			+ "FOREIGN KEY(" + COLUMN_STATUS_ID + ") REFERENCES " + TABLE_STATUS + "(" + COLUMN_ID + "), "
+			+ "PRIMARY KEY(" + COLUMN_STATUS_ID + ", " + COLUMN_REL + "));";
 	
 	private static DbHelper instance;
 	
@@ -58,6 +75,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(CREATE_TABLE_STATUS);
+		database.execSQL(CREATE_TABLE_LINK);
 	}
 
 	@Override
@@ -82,7 +100,9 @@ public class DbHelper extends SQLiteOpenHelper {
         		String.valueOf(count));  
   
     	while(cursor.moveToNext()) {
-			statuses.add(getCurrentStatusInCursor(cursor));
+			Status status = getCurrentStatusInCursor(cursor);
+			status.links = getLinks(db, status);
+			statuses.add(status);
     	}
         
         cursor.close();  
@@ -105,7 +125,9 @@ public class DbHelper extends SQLiteOpenHelper {
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
-			statuses.add(getCurrentStatusInCursor(cursor));
+			Status status = getCurrentStatusInCursor(cursor);
+			status.links = getLinks(db, status);
+			statuses.add(status);
 		}
 		
 		cursor.close();  
@@ -128,7 +150,9 @@ public class DbHelper extends SQLiteOpenHelper {
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
-			statuses.add(getCurrentStatusInCursor(cursor));
+			Status status = getCurrentStatusInCursor(cursor);
+			status.links = getLinks(db, status);
+			statuses.add(status);
 		}
 		
 		cursor.close();
@@ -158,15 +182,36 @@ public class DbHelper extends SQLiteOpenHelper {
 		return status;
 	}
 	
+	private List<Link> getLinks(SQLiteDatabase db, Status status) {
+		List<Link> links = new ArrayList<Link>();
+		
+		Cursor cursor;
+		cursor = db.query(TABLE_LINK, null, 
+				COLUMN_STATUS_ID + " = ?", 
+				new String[] {String.valueOf(status.id)}, 
+				null, null, null, null);
+		
+		while(cursor.moveToNext()) {
+			Link link = new Link();
+			link.rel = cursor.getString(cursor.getColumnIndex(COLUMN_REL));
+			link.href = cursor.getString(cursor.getColumnIndex(COLUMN_HREF));
+			
+			links.add(link);
+    	}
+		
+		return links;
+	}
+	
 	synchronized public long putStatus(Status status) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TEXT, status.text);
-        values.put(COLUMN_ID, status.id);
-        values.put(COLUMN_USER_ID, status.user.id);
-        values.put(COLUMN_TYPE, status.type);
-        values.put(COLUMN_LOGEABLE_TYPE, status.logeable_type);
+		// putting Status datas
+        ContentValues statusValues = new ContentValues();
+        statusValues.put(COLUMN_TEXT, status.text);
+        statusValues.put(COLUMN_ID, status.id);
+        statusValues.put(COLUMN_USER_ID, status.user.id);
+        statusValues.put(COLUMN_TYPE, status.type);
+        statusValues.put(COLUMN_LOGEABLE_TYPE, status.logeable_type);
         
         if(status.created_at_in_millis == 0) {
         	try {
@@ -175,12 +220,22 @@ public class DbHelper extends SQLiteOpenHelper {
 				e.printStackTrace();
 			}
         }
-        values.put(COLUMN_CREATE_AT_IN_MILLIS, status.created_at_in_millis);
+        statusValues.put(COLUMN_CREATE_AT_IN_MILLIS, status.created_at_in_millis);
         
-        values.put(COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
-        values.put(COLUMN_LAST_SEEN , status.lastSeen);
+        statusValues.put(COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
+        statusValues.put(COLUMN_LAST_SEEN , status.lastSeen);
         
-        long id = db.insert(TABLE_STATUS, null, values);
+        long id = db.insert(TABLE_STATUS, null, statusValues);
+        
+        // putting links datas
+        for(Link link : status.links) {
+	        ContentValues linkValues = new ContentValues();
+	        linkValues.put(COLUMN_STATUS_ID, status.id);
+	        linkValues.put(COLUMN_REL, link.rel);
+	        linkValues.put(COLUMN_HREF, link.href);
+
+	        db.insert(TABLE_LINK, null, linkValues);
+        }
         
         db.close();
         
