@@ -28,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.HomeSpaceActivity" >
+        <activity android:name=".activities.HomeSpaceActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".activities.MainActivity" >
         </activity>

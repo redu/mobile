@@ -2,7 +2,10 @@ package br.com.redu.redumobile.fragments;
 
 import java.util.List;
 
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +27,7 @@ public class EnvironmentFragment extends Fragment {
 	private List<Environment> mEnvironments;
 
 	private ListView mListView;
+	private AlertDialog mDialog;
 
 	private OnEnvironmentSelectedListener mListener;
 	
@@ -47,6 +51,11 @@ public class EnvironmentFragment extends Fragment {
 			}
 		});
 		
+		Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(inflater.inflate(R.layout.loading_dialog, null));
+		mDialog = builder.create();
+    	mDialog.show();
+		
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
@@ -59,6 +68,7 @@ public class EnvironmentFragment extends Fragment {
 			protected void onPostExecute(Void result) {
 				Activity activity = getActivity();
 				if(activity != null && mEnvironments != null) {
+					mDialog.dismiss();
 					mListView.setAdapter(new EnviromentListAdapter(activity, mEnvironments));
 				}
 			};

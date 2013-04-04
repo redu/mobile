@@ -10,6 +10,7 @@ import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.HomeSpaceActivity.SupportMaterialFragmentListener;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
 import br.com.redu.redumobile.fragments.EnvironmentFragment;
 import android.os.AsyncTask;
@@ -38,6 +39,7 @@ public class SupportMaterialFragment extends Fragment {
 	
 	
 	ListView lvFiles;
+	private SupportMaterialFragmentListener mListener;
 	
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,14 +59,17 @@ public class SupportMaterialFragment extends Fragment {
 				Object obj = lvFiles.getItemAtPosition(position);
 				if (obj instanceof Folder){
 					Folder folder = (Folder)lvFiles.getItemAtPosition(position);
+					/*transaction.replace(R.id.fragment_container, coursesAndServicesFragment);
+					transaction.addToBackStack(null);*/
+					/*FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+					transaction.addToBackStack(null);*/
+					/*Fragment newFragment = new FolderMaterialFragment();
+					getChildFragmentManager().beginTransaction().replace(R.id.vp2, newFragment);*/
+					mListener.onSwitchToNextFragment(folder);
 				}else{
 					File file = (File)lvFiles.getItemAtPosition(position);
 				}
-				/*transaction.replace(R.id.fragment_container, coursesAndServicesFragment);
-				transaction.addToBackStack(null);*/
-				FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-				transaction.addToBackStack(null);
-				Fragment fragment = new SupportMaterialFragment();
+				
 			}
 			
 		});
@@ -102,4 +107,15 @@ public class SupportMaterialFragment extends Fragment {
 			Log.i("THIAGO", "MSG1");
 		};
 	}
+
+	public void setListener(SupportMaterialFragmentListener listener){
+		mListener = listener;
+	}
+	
+/*	public static Fragment newInstance(
+			SupportMaterialFragmentListener firstPageFragmentListener) {
+			// TODO Auto-generated method stub
+			
+		return null;
+	}*/
 }

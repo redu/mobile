@@ -39,7 +39,7 @@ public class ActionBar extends FrameLayout {
 
 		ImageButton ibUp = (ImageButton) mContent.findViewById(R.id.b_up);
 		///TODO this above
-		//		ibUp.setImageResource(showCaret ? R.drawable.action_bar_home_caret : R.drawable.action_bar_home);
+		ibUp.setImageResource(showCaret ? R.drawable.ic_logo_redu_back : R.drawable.ic_logo_redu2);
 
 		addView(mContent, new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));

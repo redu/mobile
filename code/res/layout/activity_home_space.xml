@@ -74,13 +74,15 @@
             app:footerLineHeight="1dip"
             app:selectedBold="false"
             app:selectedColor="@color/azul"
-            app:titlePadding="80dip" />
+            app:titlePadding="80dip"
+            android:background="#F7F7F7" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vp2"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#FFF" />
     </LinearLayout>
 
 </LinearLayout>
