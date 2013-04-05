@@ -23,29 +23,25 @@ public class ActionBar extends FrameLayout {
 
 	public ActionBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		TypedArray styledAttrs = context.obtainStyledAttributes(attrs,
-				R.styleable.ActionBar);
+		TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.ActionBar);
 		String title = styledAttrs.getString(R.styleable.ActionBar_title);
-		boolean showCaret = styledAttrs.getBoolean(
-				R.styleable.ActionBar_showCaret, true);
+		boolean showCaret = styledAttrs.getBoolean(R.styleable.ActionBar_showCaret, true);
 		styledAttrs.recycle();
 
-		mContent = (LinearLayout) LayoutInflater.from(context).inflate(
-				R.layout.action_bar, null);
+		mContent = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.action_bar, null);
 
-		TextView tvTitle = (TextView) mContent
-				.findViewById(R.id.tv_title_action_bar);
+		TextView tvTitle = (TextView) mContent.findViewById(R.id.tv_title_action_bar);
 		tvTitle.setText(title);
 
 		ImageButton ibUp = (ImageButton) mContent.findViewById(R.id.b_up);
 		///TODO this above
 		ibUp.setImageResource(showCaret ? R.drawable.ic_logo_redu_back : R.drawable.ic_logo_redu2);
 
-		addView(mContent, new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		
+
+		addView(mContent, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		if (!isInEditMode()) {
-
 			if (context instanceof BaseActivity) {
 				((BaseActivity) context).setActionBar(this);
 
@@ -91,7 +87,7 @@ public class ActionBar extends FrameLayout {
 		ib.setBackgroundColor(Color.TRANSPARENT);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
+				LinearLayout.LayoutParams.WRAP_CONTENT );
 
 		ib.setOnClickListener(clickAction);
 

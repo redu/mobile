@@ -3,6 +3,7 @@ package br.com.redu.redumobile.fragments;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.adapters.StatusAdapter;
+import br.com.redu.redumobile.activities.StatusDetailActivity;
+import br.com.redu.redumobile.adapters.StatusWallAdapter;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 
@@ -23,7 +28,7 @@ public class HomeFragment extends Fragment {
 
 	private static final int NUM_STATUS_BY_PAGE = 25;
 	
-	private StatusAdapter mAdapter;
+	private StatusWallAdapter mAdapter;
 
 	private long mTimestamp;
 	private boolean mUpdatingList;
@@ -61,12 +66,26 @@ public class HomeFragment extends Fragment {
 		final View v = inflater.inflate(R.layout.fragment_listview, container, false);
 
 		if(mAdapter == null) {
-			mAdapter = new StatusAdapter(getActivity());
+			mAdapter = new StatusWallAdapter(getActivity());
 			mTimestamp = System.currentTimeMillis();
 		}
 		
 		ListView lv = (ListView) v.findViewById(R.id.list);
 		lv.setAdapter(mAdapter);
+		
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Status status = (Status) mAdapter.getItem(position);
+				
+				if(!status.isTypeLog()) {
+					Intent i = new Intent(getActivity(), StatusDetailActivity.class);
+					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
+					startActivity(i);
+				}
+			}
+		});
+		
 		lv.setOnScrollListener(new OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {

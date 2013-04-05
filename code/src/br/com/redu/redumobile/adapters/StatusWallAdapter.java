@@ -15,14 +15,15 @@ import br.com.developer.redu.models.Status;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
-public class StatusAdapter extends BaseAdapter {
+public class StatusWallAdapter extends BaseAdapter {
 
 	final private LayoutInflater mInflater;
 	private List<Status> mStatuses;
 	
-	public StatusAdapter(Context context) {
+	public StatusWallAdapter(Context context) {
 		mInflater = LayoutInflater.from(context);
 	}
 	
@@ -53,16 +54,17 @@ public class StatusAdapter extends BaseAdapter {
 	}
 
 	public void addAll(List<Status> statuses) {
-		if(mStatuses != null) {
+		if(mStatuses == null) {
+			mStatuses = statuses;
+		} else {
 			mStatuses.addAll(statuses);
 		}
-		mStatuses = statuses;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = mInflater.inflate(R.layout.status_item, null);
+			convertView = mInflater.inflate(R.layout.status_wall_item, null);
 		}
 		
 		Status status = mStatuses.get(position);
@@ -73,50 +75,51 @@ public class StatusAdapter extends BaseAdapter {
 		// TODO
 //		new LoadUserInfoTask(status, convertView).execute();
 		
-		((TextView) convertView.findViewById(R.id.tv_date)).setText(status.created_at);
+		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 
-		if(status.type.equals(Status.TYPE_ACTIVITY)) {
+		if(status.isTypeActivity()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
-			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(0);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.GONE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 			
-		} else if(status.type.equals(Status.TYPE_ANSWER)) {
+		} else if (status.isTypeAnswer()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
-			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(0);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.GONE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 		
-		} else if(status.type.equals(Status.TYPE_HELP)) {
+		} else if (status.isTypeHelp()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("pediu ajuda");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(R.drawable.ic_ajuda);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
-			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text);
+			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text); //TODO
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.VISIBLE);
 		
-		} else if(status.type.equals(Status.TYPE_LOG)) {
+		} else if (status.isTypeLog()) {
 			String action = null;
 			String result = null;
-			int icon = -1;
+			int icon = 0;
 			
-			if(status.type.equals(Status.LOGEABLE_TYPE_COURSE)) {
+			if (status.isLogeableTypeCourse()) {
 				action = "criou o";
 				result = "Curso";
 				icon = R.drawable.ic_curso;
-			} else if(status.type.equals(Status.LOGEABLE_TYPE_LECTURE)) {
+			} else if (status.isLogeableTypeLecture()) {
 				action += "criou a";
 				result = "Aula";
-				icon = -1; //TODO
-			} else if(status.type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
+				icon = R.drawable.ic_aula;
+			} else if (status.isLogeableTypeSubject()) {
 				action += "criou o";
 				result = "Módulo";
 				icon = R.drawable.ic_modulo;
@@ -127,6 +130,7 @@ public class StatusAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.VISIBLE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(icon);
+			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.GONE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 		}

@@ -10,14 +10,6 @@
         android:orientation="vertical"
         android:padding="15dip" >
 
-        <TextView
-            android:id="@+id/tv_breadcrumbs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="15dip"
-            android:text="Universidade > Faculdade > Centro > Disciplina > Aula"
-            android:textColor="@color/cinzaClaro" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +23,7 @@
 
             <LinearLayout
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:paddingLeft="10dip" >
@@ -55,26 +47,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dip"
-                        android:text="comentou"
+                        android:text="pediu ajuda"
                         android:textColor="@color/cinzaEscuro" />
-
-                    <TextView
-                        android:id="@+id/tv_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dip"
-                        android:text="Curso:"
-                        android:textColor="@color/cinzaEscuro"
-                        android:textStyle="bold" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_result_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dip"
-                    android:layout_weight="1"
-                    android:text="Curso para Aprender"
-                    android:textColor="@color/azul" />
 
                 <TextView
                     android:id="@+id/tv_date"
@@ -86,10 +61,11 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/iv_icon"
+                android:id="@+id/iv_help_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_ajuda"
                 android:paddingLeft="10dip" />
         </LinearLayout>
 
@@ -98,27 +74,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dip"
-            android:ellipsize="end"
-            android:maxLines="6"
             android:text="A menina tinha dois olhos ,um nariz e uma boca, mas pra nao ficar cansativo eu vou agora ter jons ahhblhBDA IBIBA IH AFSL BNHAKBHKSCB LAB KLBNibalhbfiab ibaj"
             android:textColor="#000" />
-
-        <TextView
-            android:id="@+id/tv_answers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:paddingBottom="10dip"
-            android:paddingTop="10dip"
-            android:text="3 Respostas"
-            android:textColor="@color/cinzaClaro" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/iv_mark_new_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:src="@drawable/mark_new_status" />
 
 </FrameLayout>

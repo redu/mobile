@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.redu.redumobile"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/br.com.redu.redumobile">
+    android:orientation="vertical" >
 
     <br.com.redu.redumobile.widgets.ActionBar
         android:id="@+id/actionBar"
@@ -10,8 +11,7 @@
         android:layout_height="wrap_content"
         layout="@layout/action_bar"
         app:title="Ambientes" />
-
-    <FrameLayout
+<FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

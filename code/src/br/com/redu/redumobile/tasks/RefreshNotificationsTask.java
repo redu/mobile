@@ -11,7 +11,7 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeActivity;
 import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.util.DataUtil;
+import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.util.SettingsHelper;
 
 import com.buzzbox.mob.android.scheduler.NotificationMessage;
@@ -27,7 +27,7 @@ public class RefreshNotificationsTask implements Task {
 
 	@Override
 	public String getId() {
-		return "Redu Mobile"; // give it an ID
+		return "redumobile"; // give it an ID
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class RefreshNotificationsTask implements Task {
 			if (statuses != null) {
 				for (Status status : statuses) {
 					try {
-						status.created_at_in_millis = DataUtil.df.parse(status.created_at).getTime();
+						status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
 					} catch (ParseException e) {
 						e.printStackTrace();
 						status.created_at_in_millis = 0;
@@ -77,10 +77,10 @@ public class RefreshNotificationsTask implements Task {
 
 					} else {
 						// ignoring unused Status on mobile app
-						if (status.type.equals(Status.TYPE_LOG)) {
-							if (!status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE)
-									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE)
-									&& !status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)) {
+						if (status.isTypeLog()) {
+							if (!status.isLogeableTypeLecture() 
+									&& !status.isLogeableTypeCourse() 
+									&& !status.isLogeableTypeSubject()) {
 								continue;
 							}
 						}
@@ -100,26 +100,21 @@ public class RefreshNotificationsTask implements Task {
 
 	private boolean checkNotifiable(Context ctx, Status status) {
 		if(SettingsHelper.get(ctx, SettingsHelper.KEY_ACTIVATED_NOTIFICATIONS)) {
-			
-			if (status.type.equals(Status.TYPE_LOG)) {
-				if(status.logeable_type.equals(Status.LOGEABLE_TYPE_LECTURE) 
+			if (status.isTypeLog()) {
+				if(status.isLogeableTypeLecture() 
 						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_LECTURES)) {
 					return true;
 					
-				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_COURSE) 
+				} else if (status.isLogeableTypeCourse() 
 						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_COURSES)) {
 					return true;
 					
-				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)
-						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
-					return true;
-					
-				} else if (status.logeable_type.equals(Status.LOGEABLE_TYPE_SUBJECT)
+				} else if (status.isLogeableTypeSubject()
 						&& SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
 					return true;
 				}
 				
-			} else if (status.type.equals(Status.TYPE_ACTIVITY) 
+			} else if (status.isTypeActivity() 
 					&& SettingsHelper.get(ctx, SettingsHelper.KEY_WHEN_ANSWER_ME)) {
 				return true;
 			}
