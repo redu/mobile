@@ -6,6 +6,7 @@ import br.com.developer.redu.models.File;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.HomeSpaceActivity;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 import android.content.Context;
 import android.view.LayoutInflater;

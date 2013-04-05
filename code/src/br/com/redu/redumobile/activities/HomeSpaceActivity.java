@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
@@ -76,16 +77,18 @@ public class HomeSpaceActivity extends BaseActivity {
 			items[ITEM_MORPHOLOGY] = new MorphologyFragment();
 			items[ITEM_WALL] = new SpaceWallFragment();
 			items[ITEM_SUPPORT_MATERIAL] = new SupportMaterialFragment();
+			materialFragments.add((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
 			((SupportMaterialFragment) items[ITEM_SUPPORT_MATERIAL]).setListener(new SupportMaterialFragmentListener() {
 				
 				@Override
 				public void onSwitchToNextFragment(Folder folder) {
-					materialFragments.add((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
 					mFragmentManager.beginTransaction().remove(items[ITEM_SUPPORT_MATERIAL]).commit();
 					//TODO criar pilha
-					//Bundle de folder
 					//mFragmentManager.beginTransaction().add(arg0, arg1, arg2)
-					items[ITEM_SUPPORT_MATERIAL] = new SupportMaterialFragment();
+					SupportMaterialFragment sm = new SupportMaterialFragment(folder);
+					//sm.setListener(materialFragments.get(0).mListener);
+					items[ITEM_SUPPORT_MATERIAL] = new SupportMaterialFragment(folder);
+					materialFragments.add((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
                     notifyDataSetChanged();
 				}
 				
@@ -93,6 +96,7 @@ public class HomeSpaceActivity extends BaseActivity {
 					materialFragments.remove((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
 					mFragmentManager.beginTransaction().remove(items[ITEM_SUPPORT_MATERIAL]).commit();
 					items[ITEM_SUPPORT_MATERIAL] = materialFragments.get(materialFragments.size()-1);
+					notifyDataSetChanged();
 				}
 			});
 			
@@ -132,6 +136,12 @@ public class HomeSpaceActivity extends BaseActivity {
 	            return POSITION_NONE;
 	        return POSITION_UNCHANGED;
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		finish();
 	}
 	
 	public interface SupportMaterialFragmentListener

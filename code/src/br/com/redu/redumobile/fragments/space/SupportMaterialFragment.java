@@ -26,8 +26,11 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class SupportMaterialFragment extends Fragment {
 	private int mCurrentPage;
@@ -36,16 +39,40 @@ public class SupportMaterialFragment extends Fragment {
 	
 	private List<Folder> folders;
 	private List<File> files;
+	private Folder mFolder;
 	
 	
 	ListView lvFiles;
-	private SupportMaterialFragmentListener mListener;
+	public SupportMaterialFragmentListener mListener;
 	
+	public SupportMaterialFragment(){
+		super();
+	}
 	
+	public SupportMaterialFragment(Folder folder) {
+		mFolder = folder;
+	}
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
 		final View v = inflater.inflate(R.layout.fragment_support_material, container, false);
+		TextView indice;
+		ImageButton ibBack;
+		if(mFolder != null){
+			indice = (TextView)v.findViewById(R.id.tvIndice);
+			indice.setText(mFolder.name);
+			ibBack = (ImageButton)v.findViewById(R.id.ibBack);
+			ibBack.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mListener.onBackToPreviousFragment(mFolder);
+				}
+			});
+		}else{
+			ibBack = (ImageButton)v.findViewById(R.id.ibBack);
+			ibBack.setVisibility(View.GONE);
+		}
 		
 		mSpace = (Space)getActivity().getIntent().getExtras().get(Space.class.getName());
 		
@@ -55,7 +82,6 @@ public class SupportMaterialFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
-				// TODO Auto-generated method stub
 				Object obj = lvFiles.getItemAtPosition(position);
 				if (obj instanceof Folder){
 					Folder folder = (Folder)lvFiles.getItemAtPosition(position);
@@ -68,8 +94,8 @@ public class SupportMaterialFragment extends Fragment {
 					mListener.onSwitchToNextFragment(folder);
 				}else{
 					File file = (File)lvFiles.getItemAtPosition(position);
+					//TODO DOWNLOAD DE THE FILE
 				}
-				
 			}
 			
 		});
@@ -82,8 +108,12 @@ public class SupportMaterialFragment extends Fragment {
 	class LoadFoldersAndFilesTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient();
-			
-			String folderRaizID = redu.getFolderID(mSpace.id);
+			String folderRaizID;
+			if(mFolder == null){
+				folderRaizID = redu.getFolderID(mSpace.id);
+			}else{
+				folderRaizID = mFolder.id;
+			}
 			folders = redu.getFolders(folderRaizID);
 			folders.removeAll(Collections.singleton(null));
 			files = redu.getFilesByFolder(folderRaizID);
@@ -93,7 +123,6 @@ public class SupportMaterialFragment extends Fragment {
 		}
 		@Override
 		protected void onPostExecute(Void result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			/*List<String> array = new ArrayList<String>();
 			for (int i = 0; i < folders.size()	; i++) {
@@ -104,7 +133,6 @@ public class SupportMaterialFragment extends Fragment {
 			}*/
 			/*array.removeAll(Collections.singleton(null));*/
 			lvFiles.setAdapter(new SupportMaterialsAdapter(getActivity(), folders, files));
-			Log.i("THIAGO", "MSG1");
 		};
 	}
 
@@ -112,9 +140,9 @@ public class SupportMaterialFragment extends Fragment {
 		mListener = listener;
 	}
 	
+	
 /*	public static Fragment newInstance(
 			SupportMaterialFragmentListener firstPageFragmentListener) {
-			// TODO Auto-generated method stub
 			
 		return null;
 	}*/

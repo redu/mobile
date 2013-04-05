@@ -1,8 +1,6 @@
-<br.com.redu.redumobile.widgets.LazyLoadingImageView
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:background="@null"
-	    android:id="@+id/iv_photo"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:src="@drawable/default_thumbnail_user" >
-</br.com.redu.redumobile.widgets.LazyLoadingImageView>
+<ProgressBar
+    		xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dip" />
