@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +23,9 @@ public class StatusDetailActivity extends BaseActivity {
 
 	public static final String EXTRAS_STATUS = "EXTRAS_STATUS";
 
+	private Status mStatusHeader;
+	private Status mStatus;
+	
 	private ListView mListView;
 	private View mLlLoadingAnswers;
 
@@ -31,12 +35,10 @@ public class StatusDetailActivity extends BaseActivity {
 		setActionBarTitle("Ambientes");
 
 		Bundle extras = getIntent().getExtras();
-		Status status = (Status) extras.get(EXTRAS_STATUS);
+		mStatus = (Status) extras.get(EXTRAS_STATUS);
 
 		mLlLoadingAnswers = findViewById(R.id.ll_loading_answers);
 		mListView = (ListView) findViewById(R.id.list);
-
-		new LoadStatusHeaderTask(status).execute();
 	}
 
 	public void onWallClicked(View v) {
@@ -44,7 +46,9 @@ public class StatusDetailActivity extends BaseActivity {
 	}
 
 	public void onAnswerClicked(View v) {
-
+		Intent i = new Intent(StatusDetailActivity.this, RespondStatusActivity.class);
+		i.putExtra(RespondStatusActivity.EXTRAS_STATUS, mStatusHeader);
+		startActivity(i);
 	}
 
 	private View createOriginalStatusHeaderView(Status status) {
@@ -53,8 +57,7 @@ public class StatusDetailActivity extends BaseActivity {
 
 		// ((LazyLoadingImageView)
 		// v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
-		((TextView) v.findViewById(R.id.tv_date)).setText(DateUtil
-				.getFormattedStatusCreatedAt(status));
+		((TextView) v.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 		// ((TextView)
 		// v.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
 
@@ -97,6 +100,18 @@ public class StatusDetailActivity extends BaseActivity {
 		
 		return v;
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		if(mStatusHeader == null) {
+			new LoadStatusHeaderTask(mStatus).execute();
+		} else {
+			mLlLoadingAnswers.setVisibility(View.VISIBLE);
+			new LoadAnswersStatus(mStatusHeader.id).execute();
+		}
+	}
 
 	class LoadStatusHeaderTask extends AsyncTask<Void, Void, br.com.developer.redu.models.Status> {
 		private br.com.developer.redu.models.Status mStatus;
@@ -130,6 +145,8 @@ public class StatusDetailActivity extends BaseActivity {
 				// TODO tratar quando ocorrer excecao
 				
 			} else {
+				mStatusHeader = statusHeader;
+
 				// TODO Setar title da Action bar com o nome da disciplina/
 				
 				// TODO Adicionar Header com nome da aula/disciplina onde o Status foi postado
