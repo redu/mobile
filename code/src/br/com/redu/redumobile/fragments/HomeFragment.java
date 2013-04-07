@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Status status = (Status) mAdapter.getItem(position);
 				
-				if(!status.isTypeLog()) {
+				if(!status.isLogType()) {
 					Intent i = new Intent(getActivity(), StatusDetailActivity.class);
 					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
 					startActivity(i);

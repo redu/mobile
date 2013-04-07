@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Status;
+import br.com.developer.redu.models.Statusable;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.StatusDetailAdapter;
@@ -46,9 +47,9 @@ public class StatusDetailActivity extends BaseActivity {
 
 	}
 
-	private View createHeaderView(Status status) {
+	private View createOriginalStatusHeaderView(Status status) {
 		View v = LayoutInflater.from(getApplicationContext()).inflate(
-				R.layout.status_detail_header, null);
+				R.layout.status_detail_header_original_status, null);
 
 		// ((LazyLoadingImageView)
 		// v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
@@ -57,21 +58,43 @@ public class StatusDetailActivity extends BaseActivity {
 		// ((TextView)
 		// v.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
 
-		if (status.isTypeActivity()) {
+		if (status.isActivityType()) {
 			((TextView) v.findViewById(R.id.tv_action)).setText("comentou");
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.GONE);
 
-		} else if (status.isTypeAnswer()) {
+		} else if (status.isAnswerType()) {
 			((TextView) v.findViewById(R.id.tv_action)).setText("comentou");
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.GONE);
 
-		} else if (status.isTypeHelp()) {
+		} else if (status.isHelpType()) {
 			((TextView) v.findViewById(R.id.tv_action)).setText("pediu ajuda");
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.VISIBLE);
 		}
 
 		((TextView) v.findViewById(R.id.tv_text)).setText(status.text);
 
+		return v;
+	}
+	
+	private View createPublishingLocalHeaderView(Status status) {
+		View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.status_detail_header_publishing_local, null);
+		
+		Statusable statusable = status.getStatusable();
+		
+		if(statusable.isTypeUser()) {
+			v = null;
+		
+		} else if(statusable.isTypeLecture()) {
+			TextView tv = ((TextView) v.findViewById(R.id.tv_title));
+			tv.setText(statusable.name);
+			tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_aula_azul, 0, 0, 0);
+			
+		} else if(statusable.isTypeSpace()) {
+			TextView tv = ((TextView) v.findViewById(R.id.tv_title));
+			tv.setText(statusable.name);
+			tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_disciplina_azul, 0, 0, 0);
+		}
+		
 		return v;
 	}
 
@@ -86,7 +109,7 @@ public class StatusDetailActivity extends BaseActivity {
 		protected br.com.developer.redu.models.Status doInBackground(Void... params) {
 			br.com.developer.redu.models.Status statusHeader;
 
-			if(mStatus.isTypeAnswer()) {
+			if(mStatus.isAnswerType()) {
 				try {
 					DefaultReduClient redu = ReduApplication.getReduClient();
 					statusHeader = redu.getStatus(mStatus.getInResponseToStatusId());
@@ -107,8 +130,15 @@ public class StatusDetailActivity extends BaseActivity {
 				// TODO tratar quando ocorrer excecao
 				
 			} else {
-				// TODO adicionar header com o nome do local onde foi postado o Status (R.layout.status_detail_header_lecture)
-				mListView.addHeaderView(createHeaderView(statusHeader));
+				// TODO Setar title da Action bar com o nome da disciplina/
+				
+				// TODO Adicionar Header com nome da aula/disciplina onde o Status foi postado
+//				View publishingLocalHeaderView = createPublishingLocalHeaderView(statusHeader);
+//				if(publishingLocalHeaderView != null) {
+//					mListView.addHeaderView(publishingLocalHeaderView);
+//				}
+				
+				mListView.addHeaderView(createOriginalStatusHeaderView(statusHeader));
 				mListView.setAdapter(new StatusDetailAdapter(getApplicationContext(), null));
 				
 				new LoadAnswersStatus(statusHeader.id).execute();

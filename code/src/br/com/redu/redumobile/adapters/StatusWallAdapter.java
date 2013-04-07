@@ -77,7 +77,7 @@ public class StatusWallAdapter extends BaseAdapter {
 		
 		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 
-		if(status.isTypeActivity()) {
+		if(status.isActivityType()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
@@ -86,7 +86,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 			
-		} else if (status.isTypeAnswer()) {
+		} else if (status.isAnswerType()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
@@ -95,7 +95,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.GONE);
 		
-		} else if (status.isTypeHelp()) {
+		} else if (status.isHelpType()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("pediu ajuda");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.GONE);
@@ -106,20 +106,20 @@ public class StatusWallAdapter extends BaseAdapter {
 			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text); //TODO
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.VISIBLE);
 		
-		} else if (status.isTypeLog()) {
+		} else if (status.isLogType()) {
 			String action = null;
 			String result = null;
 			int icon = 0;
 			
-			if (status.isLogeableTypeCourse()) {
+			if (status.isCourseLogeableType()) {
 				action = "criou o";
 				result = "Curso";
 				icon = R.drawable.ic_curso;
-			} else if (status.isLogeableTypeLecture()) {
+			} else if (status.isLectureLogeableType()) {
 				action += "criou a";
 				result = "Aula";
 				icon = R.drawable.ic_aula;
-			} else if (status.isLogeableTypeSubject()) {
+			} else if (status.isSubjectLogeableType()) {
 				action += "criou o";
 				result = "Módulo";
 				icon = R.drawable.ic_modulo;
