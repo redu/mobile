@@ -76,7 +76,8 @@ public class StatusWallAdapter extends BaseAdapter {
 //		new LoadUserInfoTask(status, convertView).execute();
 		
 		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
-
+		convertView.findViewById(R.id.iv_mark_new_lecture).setVisibility(View.GONE);
+		
 		if(status.isActivityType()) {
 			((TextView) convertView.findViewById(R.id.tv_action)).setText("comentou");
 			((TextView) convertView.findViewById(R.id.tv_result)).setText("");
@@ -119,6 +120,10 @@ public class StatusWallAdapter extends BaseAdapter {
 				action = "criou a";
 				result = "Aula";
 				icon = R.drawable.ic_aula;
+				
+				convertView.findViewById(R.id.iv_mark_new_lecture)
+						.setVisibility(status.lectureAreadySeen ? View.GONE : View.VISIBLE);
+
 			} else if (status.isSubjectLogeableType()) {
 				action = "criou o";
 				result = "Módulo";

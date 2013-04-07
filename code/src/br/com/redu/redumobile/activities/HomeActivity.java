@@ -1,7 +1,6 @@
 package br.com.redu.redumobile.activities;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +13,7 @@ import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.fragments.HomeFragment;
 import br.com.redu.redumobile.fragments.HomeFragment.Type;
-import br.com.redu.redumobile.tasks.RefreshNotificationsTask;
+import br.com.redu.redumobile.tasks.LoadStatusesFromWebTask;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
@@ -25,7 +24,7 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
-	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 1;
+	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 30;
 	
 	static final int NUM_ITEMS = 3;
 	
@@ -41,16 +40,15 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 		setActionBarTitle("Redu");
 
-		startService(new Intent(this, RefreshNotificationsTask.class));
-		
 		// START BuzzNotify
 		int openAppStatus = AnalyticsManager.onOpenApp(this);
 		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
-			SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", RefreshNotificationsTask.class);
-			SchedulerManager.getInstance().restart(this, RefreshNotificationsTask.class);
+			SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
+			SchedulerManager.getInstance().restart(this, LoadStatusesFromWebTask.class);
 		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
 			SchedulerManager.getInstance().restartAll(getApplicationContext());
 		}
+		SchedulerManager.getInstance().runNow(this, LoadStatusesFromWebTask.class, 0);
 		// END BuzzNotify
 
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
@@ -63,6 +61,7 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		indicator.setCurrentItem(itemChecked);
 		
 //		showWebDialog("Redu Mobile", "http://redu.com.br/#modal-sign-up");
+
 	}
 	
 	private void showWebDialog(String title, String url) {

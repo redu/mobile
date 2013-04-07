@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.scribe.exceptions.OAuthConnectionException;
+
 import android.content.Context;
 import android.content.ContextWrapper;
 import br.com.developer.redu.DefaultReduClient;
@@ -18,7 +20,7 @@ import com.buzzbox.mob.android.scheduler.NotificationMessage;
 import com.buzzbox.mob.android.scheduler.Task;
 import com.buzzbox.mob.android.scheduler.TaskResult;
 
-public class RefreshNotificationsTask implements Task {
+public class LoadStatusesFromWebTask implements Task {
 
 	@Override
 	public String getTitle() {
@@ -30,8 +32,13 @@ public class RefreshNotificationsTask implements Task {
 		return "redumobile"; // give it an ID
 	}
 
+	private static boolean mIsWorking;
+	
 	@Override
 	public TaskResult doWork(ContextWrapper ctx) {
+
+		mIsWorking = true;
+		
 		TaskResult res = new TaskResult();
 
 		List<Status> notifiableStatues = loadStatuses(ctx);
@@ -44,6 +51,8 @@ public class RefreshNotificationsTask implements Task {
 			res.addMessage(notification);
 		}
 
+		mIsWorking = false;
+		
 		return res;
 	}
 
@@ -52,47 +61,53 @@ public class RefreshNotificationsTask implements Task {
 
 		DbHelper dbHelper = DbHelper.getInstance(context);
 
-		DefaultReduClient redu = ReduApplication.getReduClient();
-		String userId = String.valueOf(ReduApplication.getUser().id);
-
-		long dbTimestamp = dbHelper.getTimestamp();
-
-		boolean loadNextPage = true;
-
-		for (int page = 1; loadNextPage; page++) {
-			List<Status> statuses = redu.getStatusesTimelineByUser(userId, null, String.valueOf(page));
-
-			if (statuses != null) {
-				for (Status status : statuses) {
-					try {
-						status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
-					} catch (ParseException e) {
-						e.printStackTrace();
-						status.created_at_in_millis = 0;
-					}
-
-					if (status.created_at_in_millis <= dbTimestamp) {
-						loadNextPage = false;
-						break;
-
-					} else {
-						// ignoring unused Status on mobile app
-						if (status.isLogType()) {
-							if (!status.isLectureLogeableType() 
-									&& !status.isCourseLogeableType() 
-									&& !status.isSubjectLogeableType()) {
-								continue;
+		try {
+			DefaultReduClient redu = ReduApplication.getReduClient();
+			String userId = String.valueOf(ReduApplication.getUser().id);
+	
+			long dbTimestamp = dbHelper.getTimestamp();
+	
+			boolean loadNextPage = true;
+	
+			for (int page = 1; loadNextPage; page++) {
+				List<Status> statuses = redu.getStatusesTimelineByUser(userId, null, String.valueOf(page));
+	
+				if (statuses != null) {
+	
+					for (Status status : statuses) {
+						try {
+							status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
+						} catch (ParseException e) {
+							e.printStackTrace();
+							status.created_at_in_millis = 0;
+						}
+	
+						if (status.created_at_in_millis <= dbTimestamp) {
+							loadNextPage = false;
+							break;
+	
+						} else {
+							// ignoring unused Status on mobile app
+							if (status.isLogType()) {
+								if (!status.isLectureLogeableType() 
+										&& !status.isCourseLogeableType() 
+										&& !status.isSubjectLogeableType()) {
+									continue;
+								}
 							}
+	
+							if(checkNotifiable(context, status)) {
+								notifiableStatuses.add(status);
+							}
+							
+							dbHelper.putStatus(status);
 						}
-
-						if(checkNotifiable(context, status)) {
-							notifiableStatuses.add(status);
-						}
-						
-						dbHelper.putStatus(status);
 					}
 				}
 			}
+		} catch(OAuthConnectionException e) {
+			e.printStackTrace();
+			mIsWorking = false;
 		}
 
 		return notifiableStatuses;
@@ -123,4 +138,7 @@ public class RefreshNotificationsTask implements Task {
 		return false;
 	}
 
+	public static boolean isWorking() {
+		return mIsWorking;
+	}
 }

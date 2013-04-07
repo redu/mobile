@@ -20,6 +20,8 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "redu.db";
 	private static final int DATABASE_VERSION = 1;
 
+	private DbHelperListener mListener;
+	
 	// TABLE STATUS
 	private static final String TABLE_STATUS = "Status";
 	
@@ -84,6 +86,10 @@ public class DbHelper extends SQLiteOpenHelper {
 				"Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATUS);
 		onCreate(db);
+	}
+	
+	public void setDbHelperListener(DbHelperListener listener) {
+		mListener = listener;
 	}
 	
 	synchronized public List<Status> getStatus(long olderThan, int count) {
@@ -205,44 +211,93 @@ public class DbHelper extends SQLiteOpenHelper {
 	synchronized public long putStatus(Status status) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 
-		// putting Status datas
-        ContentValues statusValues = new ContentValues();
-        statusValues.put(COLUMN_TEXT, status.text);
-        statusValues.put(COLUMN_ID, status.id);
-        statusValues.put(COLUMN_USER_ID, status.user.id);
-        statusValues.put(COLUMN_TYPE, status.type);
-        statusValues.put(COLUMN_LOGEABLE_TYPE, status.logeable_type);
+		long id = putStatus(db, status);
         
-        if(status.created_at_in_millis == 0) {
-        	try {
-        		status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
+        db.close();
+        
+		if(mListener != null) {
+			mListener.hasNewStatus();
+		}
+        
+        return id;
+	}
+	
+	synchronized public List<Long> putAllStatuses(List<Status> statuses) {
+		if(statuses == null || statuses.size() == 0) {
+			return null;
+		}
+		
+		SQLiteDatabase db = this.getWritableDatabase();  
+		
+		List<Long> ids = new ArrayList<Long>();
+		
+		for(Status status : statuses) {
+			ids.add(putStatus(db, status));
+		}
+		
+		db.close();
+
+		if(mListener != null) {
+			mListener.hasNewStatus();
+		}
+		
+		return ids;
+	}
+	
+	private Long putStatus(SQLiteDatabase db, Status status) {
+		if(status == null) { 
+			return 0L;
+		}
+		
+		// putting Status datas
+		ContentValues statusValues = new ContentValues();
+		statusValues.put(COLUMN_TEXT, status.text);
+		statusValues.put(COLUMN_ID, status.id);
+		statusValues.put(COLUMN_USER_ID, status.user.id);
+		statusValues.put(COLUMN_TYPE, status.type);
+		statusValues.put(COLUMN_LOGEABLE_TYPE, status.logeable_type);
+		
+		if(status.created_at_in_millis == 0) {
+			try {
+				status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-        }
-        statusValues.put(COLUMN_CREATE_AT_IN_MILLIS, status.created_at_in_millis);
-        
-        statusValues.put(COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
-        statusValues.put(COLUMN_LAST_SEEN , status.lastSeen);
-        
-        long id = db.insert(TABLE_STATUS, null, statusValues);
-        
-        // putting links datas
-        for(Link link : status.links) {
-	        ContentValues linkValues = new ContentValues();
-	        linkValues.put(COLUMN_STATUS_ID, status.id);
-	        linkValues.put(COLUMN_REL, link.rel);
-	        linkValues.put(COLUMN_HREF, link.href);
+		}
+		statusValues.put(COLUMN_CREATE_AT_IN_MILLIS, status.created_at_in_millis);
+		
+		statusValues.put(COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
+		statusValues.put(COLUMN_LAST_SEEN , status.lastSeen);
+		
+		long id = db.insert(TABLE_STATUS, null, statusValues);
+		
+		// putting links datas
+		for(Link link : status.links) {
+			ContentValues linkValues = new ContentValues();
+			linkValues.put(COLUMN_STATUS_ID, status.id);
+			linkValues.put(COLUMN_REL, link.rel);
+			linkValues.put(COLUMN_HREF, link.href);
+			
+			db.insert(TABLE_LINK, null, linkValues);
+		}
+		
+		return id;
+	}
+	
+	synchronized public long setStatusAsLastSeen(Status status) {
+		SQLiteDatabase db = this.getWritableDatabase();  
 
-	        db.insert(TABLE_LINK, null, linkValues);
-        }
+		// putting Status datas
+        ContentValues statusValues = new ContentValues();
+        statusValues.put(COLUMN_LAST_SEEN, 1);
+        
+        long id = db.update(TABLE_STATUS, statusValues, COLUMN_ID + " = ?", new String[] {status.id});
         
         db.close();
         
         return id;
 	}
 	
-	//TODO 
 	/**
 	 * Get the millis of the most recent Status saved at the db
 	 * @return the creation time, in millis, of the most recent Status saved at the db. 

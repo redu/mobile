@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,12 +23,16 @@ import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
+import br.com.redu.redumobile.db.DbHelperListener;
+import br.com.redu.redumobile.tasks.LoadStatusesFromWebTask;
 
 public class HomeFragment extends Fragment {
 
 	public enum Type {LastSeen, Wall, NewLectures};
 
 	private static final int NUM_STATUS_BY_PAGE = 25;
+	
+	private ProgressBar mProgressBar;
 	
 	private StatusWallAdapter mAdapter;
 
@@ -65,6 +71,8 @@ public class HomeFragment extends Fragment {
 
 		final View v = inflater.inflate(R.layout.fragment_listview, container, false);
 
+		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
+		
 		if(mAdapter == null) {
 			mAdapter = new StatusWallAdapter(getActivity());
 			mTimestamp = System.currentTimeMillis();
@@ -82,6 +90,9 @@ public class HomeFragment extends Fragment {
 					Intent i = new Intent(getActivity(), StatusDetailActivity.class);
 					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
 					startActivity(i);
+					
+					DbHelper dbHelper = ((DbHelperHolder) getActivity()).getDbHelper();
+					dbHelper.setStatusAsLastSeen(status);
 				}
 			}
 		});
@@ -93,22 +104,35 @@ public class HomeFragment extends Fragment {
 			}
 
 			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
+			public void onScroll(AbsListView view, int firstVisibleItem, 
 					int visibleItemCount, int totalItemCount) {
-				if (!mUpdatingList
-						&& firstVisibleItem + visibleItemCount == totalItemCount
+				if(firstVisibleItem + visibleItemCount == totalItemCount 
 						&& totalItemCount != 0) {
-					new LoadStatusesTask().execute();
+					updateStatuses();
 				}
 			}
 		});
+		
+		DbHelper dbHelper = ((DbHelperHolder) getActivity()).getDbHelper();
+		dbHelper.setDbHelperListener(new DbHelperListener() {
+			@Override
+			public void hasNewStatus() {
+				updateStatuses();
+			}
+		});
 
-		new LoadStatusesTask().execute();
+		updateStatuses();
 
 		return v;
 	}
 
-	class LoadStatusesTask extends AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
+	private void updateStatuses() {
+		if (!mUpdatingList) {
+			new LoadStatusesFromDbTask().execute();
+		}
+	}
+	
+	class LoadStatusesFromDbTask extends AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
 
 		protected void onPreExecute() {
 			mUpdatingList = true;
@@ -145,13 +169,21 @@ public class HomeFragment extends Fragment {
 		}
 
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
-			if (statuses != null && statuses.size() > 0) {
-				mAdapter.addAll(statuses);
-				mAdapter.notifyDataSetChanged();
+			 if(getActivity() != null) {
+				 if (statuses != null && statuses.size() > 0) {
+					mAdapter.addAll(statuses);
+					mAdapter.notifyDataSetChanged();
+					mTimestamp = statuses.get(statuses.size()-1).created_at_in_millis;
+					mProgressBar.setVisibility(View.GONE);
+					
+				} else if(!LoadStatusesFromWebTask.isWorking()) {
+					mProgressBar.setVisibility(View.GONE);
 				
-				mTimestamp = statuses.get(statuses.size()-1).created_at_in_millis;
+				} else {
+					Toast.makeText(getActivity(), "Aguarde alguns instantes…", Toast.LENGTH_SHORT).show();
+				}
 			}
-
+			
 			mUpdatingList = false;
 		};
 	}
