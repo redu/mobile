@@ -116,11 +116,11 @@ public class StatusWallAdapter extends BaseAdapter {
 				result = "Curso";
 				icon = R.drawable.ic_curso;
 			} else if (status.isLectureLogeableType()) {
-				action += "criou a";
+				action = "criou a";
 				result = "Aula";
 				icon = R.drawable.ic_aula;
 			} else if (status.isSubjectLogeableType()) {
-				action += "criou o";
+				action = "criou o";
 				result = "Módulo";
 				icon = R.drawable.ic_modulo;
 			}
