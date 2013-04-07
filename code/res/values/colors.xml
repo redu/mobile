@@ -2,5 +2,6 @@
 <resources>
     <color name="cinzaEscuro">#6D6E6F</color>
     <color name="cinzaClaro">#B2B2B2</color>
+    <color name="creme">#F7F7F7</color>
     <color name="azul">#4CACD5</color>
 </resources>
