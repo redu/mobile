@@ -1,5 +1,11 @@
 package br.com.redu.redumobile.fragments.space;
 
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,14 +13,21 @@ import java.util.List;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.File;
 import br.com.developer.redu.models.Folder;
+import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Link;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeSpaceActivity.SupportMaterialFragmentListener;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
 import br.com.redu.redumobile.fragments.EnvironmentFragment;
+import br.com.redu.redumobile.util.DownloadHelper;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -41,9 +54,11 @@ public class SupportMaterialFragment extends Fragment {
 	private List<File> files;
 	private Folder mFolder;
 	
+	ProgressDialog mProgressDialog;
+	
 	
 	ListView lvFiles;
-	public SupportMaterialFragmentListener mListener;
+	private SupportMaterialFragmentListener mListener;
 	
 	public SupportMaterialFragment(){
 		super();
@@ -59,6 +74,14 @@ public class SupportMaterialFragment extends Fragment {
 		final View v = inflater.inflate(R.layout.fragment_support_material, container, false);
 		TextView indice;
 		ImageButton ibBack;
+		
+		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setMessage("Aguarde...");
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setMax(100);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		
+		
 		if(mFolder != null){
 			indice = (TextView)v.findViewById(R.id.tvIndice);
 			indice.setText(mFolder.name);
@@ -94,7 +117,24 @@ public class SupportMaterialFragment extends Fragment {
 					mListener.onSwitchToNextFragment(folder);
 				}else{
 					File file = (File)lvFiles.getItemAtPosition(position);
-					//TODO DOWNLOAD DE THE FILE
+					File[] files = {file};
+					//mProgressDialog.show();
+					java.io.File f = new java.io.File(DownloadHelper.getSupportMaterialPath(), file.name);
+					if (f.exists()) {
+						Intent it;
+						try {
+							it = DownloadHelper.loadDocInReader(f);
+							startActivity(it);
+						} catch (ActivityNotFoundException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+					} else {
+						new DownloadFile().execute(files);
+					}
+					
 				}
 			}
 			
@@ -103,6 +143,10 @@ public class SupportMaterialFragment extends Fragment {
 		new LoadFoldersAndFilesTask().execute();
 		
 		return v;
+	}
+	
+	public void setListener(SupportMaterialFragmentListener listener){
+		mListener = listener;
 	}
 	
 	class LoadFoldersAndFilesTask extends AsyncTask<Void, Void, Void> {
@@ -132,14 +176,94 @@ public class SupportMaterialFragment extends Fragment {
 				array.add(files.get(i).name);
 			}*/
 			/*array.removeAll(Collections.singleton(null));*/
-			lvFiles.setAdapter(new SupportMaterialsAdapter(getActivity(), folders, files));
+			if (getActivity() != null) 
+				lvFiles.setAdapter(new SupportMaterialsAdapter(getActivity(), folders, files));
 		};
 	}
 
-	public void setListener(SupportMaterialFragmentListener listener){
-		mListener = listener;
+	// usually, subclasses of AsyncTask are declared inside the activity class.
+	// that way, you can easily modify the UI thread from here
+	private class DownloadFile extends AsyncTask<File, Integer, java.io.File> {
+	    @Override
+	    protected java.io.File doInBackground(File... file) {
+	        try {
+	        	
+	        	String path = file[0].getFilePath();
+	            URL url = new URL(path);
+	            
+	            String[] temp = path.split("\\?")[0].split("/");
+	            String fileName = temp[temp.length-1];
+	            
+	            URLConnection connection = url.openConnection();
+	            connection.connect();
+	            // this will be useful so that you can show a typical 0-100% progress bar
+	            int fileLength = connection.getContentLength();
+	            
+	            
+	            String newFolder = DownloadHelper.getSupportMaterialPath();
+	    		java.io.File myNewFolder = new java.io.File(newFolder);
+	    		if (!myNewFolder.exists())
+	    			myNewFolder.mkdirs();
+	            
+	            // download the file
+	            InputStream input = new BufferedInputStream(url.openStream());
+	            //java.io.File sdCard = Environment.getExternalStorageDirectory();
+	            /*java.io.File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+	            dir.mkdirs();
+	            File file = new File(dir, "filename");*/
+	            java.io.File filling = new java.io.File(newFolder, fileName);
+	            OutputStream output = new FileOutputStream(filling);
+
+	            byte data[] = new byte[1024];
+	            long total = 0;
+	            int count;
+	            while ((count = input.read(data)) != -1) {
+	                total += count;
+	                // publishing the progress....
+	                publishProgress((int) (total * 100 / fileLength));
+	                output.write(data, 0, count);
+	            }
+	            
+	            output.flush();
+	            output.close();
+	            input.close();
+	            return filling;
+	        } catch (Exception e) {
+	        }
+	        return null;
+	    }
+	    
+	    @Override
+	    protected void onPreExecute() {
+	        super.onPreExecute();
+	        mProgressDialog.show();
+	    }
+	    
+	    @Override
+	    protected void onProgressUpdate(Integer... progress) {
+	        super.onProgressUpdate(progress);
+	        mProgressDialog.setProgress(progress[0]);
+	    }
+	    
+	    @Override
+	    protected void onPostExecute(java.io.File file) {
+	    	super.onPostExecute(file);
+	    	mProgressDialog.setProgress(0);
+	    	mProgressDialog.dismiss();
+	    	if (getActivity() != null){
+	    		try {
+					Intent it = DownloadHelper.loadDocInReader(file);
+					startActivity(it);
+				} catch (ActivityNotFoundException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	    	}
+	    		
+	    }
+	    
 	}
-	
 	
 /*	public static Fragment newInstance(
 			SupportMaterialFragmentListener firstPageFragmentListener) {

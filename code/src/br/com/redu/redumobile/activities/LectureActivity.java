@@ -4,6 +4,7 @@ import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,8 +47,11 @@ public class LectureActivity extends BaseActivity{
 		mLecture = (Lecture)getIntent().getExtras().get(Lecture.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		
-		mTvSubject.setText(mSubject.name);
 		mTvLecture.setText(mLecture.name);
+		//mTvSubject.setText(mSubject.name);
+		
+		//Log.i("Modulo", mSubject.id);
+		Log.i("Aula", Integer.toString(mLecture.id));
 		
 		mBtEdit.setOnClickListener(new OnClickListener() {
 			@Override

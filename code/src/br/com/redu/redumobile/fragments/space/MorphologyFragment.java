@@ -29,7 +29,6 @@ public class MorphologyFragment extends Fragment {
 	
 	private User mUser;
 	private int mCurrentPage;
-	private boolean mUpdatingList;
 	private Space mSpace;
 	
 	private List<Subject> mEnrollmentedSubjects;
@@ -53,19 +52,6 @@ public class MorphologyFragment extends Fragment {
 		Log.i("Disciplina","id: "+mSpace.id);
 		
 		mExpListView = (ExpandableListView) v.findViewById(R.id.elvSubject);
-		mExpListView.setOnScrollListener(new OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// do nothing
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				if(!mUpdatingList && firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0) {
-					new LoadSubjectsTask(mCurrentPage++).execute();
-				}
-			}
-		});
 		
 		new LoadUserTask().execute();
 		
@@ -84,7 +70,7 @@ public class MorphologyFragment extends Fragment {
 //			((TextView) v.findViewById(R.id.details)).setText(user.first_name + " " + user.last_name + ", ");
 			mUser = user;
 
-			new LoadSubjectsTask(mCurrentPage).execute();
+			new LoadSubjectsTask().execute();
 		};
 	}
 	
@@ -104,16 +90,6 @@ public class MorphologyFragment extends Fragment {
 	}*/
 	
 	class LoadSubjectsTask extends AsyncTask<Void, Void, Void> {
-
-		private int page;
-		
-		public LoadSubjectsTask(int page) {
-			this.page = page;
-		}
-		
-		protected void onPreExecute() {
-			mUpdatingList = true;
-		};
 		
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient();
@@ -145,9 +121,10 @@ public class MorphologyFragment extends Fragment {
 		}
 
 		protected void onPostExecute(Void result) {
-			mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture);
-			mExpListView.setAdapter(mAdapter);			
-			mUpdatingList = false;
+			if (getActivity() != null) {
+				mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture);
+				mExpListView.setAdapter(mAdapter);			
+			}
 		};
 	}
 }

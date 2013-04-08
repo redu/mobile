@@ -1,12 +1,14 @@
 package br.com.redu.redumobile.activities;
 
 import java.util.ArrayList;
+import java.util.Currency;
 
 import android.content.ClipData.Item;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -34,6 +36,7 @@ public class HomeSpaceActivity extends BaseActivity {
 	
     private PageIndicator mIndicator;
     public MainAdapter mAdapter;
+    private ViewPager vp;
     
     
 	
@@ -44,7 +47,7 @@ public class HomeSpaceActivity extends BaseActivity {
 		
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
-		final ViewPager vp = (ViewPager) findViewById(R.id.vp2);
+		vp = (ViewPager) findViewById(R.id.vp2);
 		mAdapter = new MainAdapter(getSupportFragmentManager());
 		vp.setAdapter(mAdapter);
 		
@@ -60,7 +63,7 @@ public class HomeSpaceActivity extends BaseActivity {
 		
 	}
 	
-	class MainAdapter extends FragmentPagerAdapter {
+	class MainAdapter extends FragmentStatePagerAdapter {
 		private final Fragment[] items;
 		private final FragmentManager mFragmentManager;
 		private int currentLevel;
@@ -78,7 +81,8 @@ public class HomeSpaceActivity extends BaseActivity {
 			items[ITEM_WALL] = new SpaceWallFragment();
 			items[ITEM_SUPPORT_MATERIAL] = new SupportMaterialFragment();
 			materialFragments.add((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
-			((SupportMaterialFragment) items[ITEM_SUPPORT_MATERIAL]).setListener(new SupportMaterialFragmentListener() {
+			
+			SupportMaterialFragmentListener smfl = new SupportMaterialFragmentListener() {
 				
 				@Override
 				public void onSwitchToNextFragment(Folder folder) {
@@ -86,8 +90,9 @@ public class HomeSpaceActivity extends BaseActivity {
 					//TODO criar pilha
 					//mFragmentManager.beginTransaction().add(arg0, arg1, arg2)
 					SupportMaterialFragment sm = new SupportMaterialFragment(folder);
+					sm.setListener(this);
 					//sm.setListener(materialFragments.get(0).mListener);
-					items[ITEM_SUPPORT_MATERIAL] = new SupportMaterialFragment(folder);
+					items[ITEM_SUPPORT_MATERIAL] = sm;
 					materialFragments.add((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
                     notifyDataSetChanged();
 				}
@@ -96,9 +101,12 @@ public class HomeSpaceActivity extends BaseActivity {
 					materialFragments.remove((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
 					mFragmentManager.beginTransaction().remove(items[ITEM_SUPPORT_MATERIAL]).commit();
 					items[ITEM_SUPPORT_MATERIAL] = materialFragments.get(materialFragments.size()-1);
+					
 					notifyDataSetChanged();
 				}
-			});
+			};
+			
+			((SupportMaterialFragment) items[ITEM_SUPPORT_MATERIAL]).setListener(smfl);
 			
 		}
 
@@ -141,7 +149,10 @@ public class HomeSpaceActivity extends BaseActivity {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		finish();
+		if (vp.getCurrentItem() == ITEM_SUPPORT_MATERIAL){
+			Log.i("TESTE", "Level BACKPRESSED");
+		}
+		super.onBackPressed();
 	}
 	
 	public interface SupportMaterialFragmentListener
