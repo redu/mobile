@@ -5,127 +5,78 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    
-    <br.com.redu.redumobile.widgets.ActionBar
-        android:id="@+id/actionBar"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/tvLecture"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/action_bar"
-        app:title="Módulo Sit Amet" />
-    
-	<LinearLayout 
-	    android:layout_width="match_parent"
-   		android:layout_height="wrap_content"
-   		android:orientation="vertical"
-   		android:background="#F7F7F7">
-   		
-	    <TextView
-	        android:id="@+id/tvLecture"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Aula Lipsum"
-	        android:gravity="center_vertical"
-	        android:textColor="#36ACD5"
-		    android:drawableLeft="@drawable/ic_midia"
-	        android:textAppearance="?android:attr/textAppearanceMedium" />
-	    <TextView
-	        android:id="@+id/tvLecture"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Professor Fulano de Tal"
-	        android:gravity="center_vertical"
-	        android:textColor="#6D6E6F"
-	        android:layout_marginLeft="20dp"
-	        android:paddingLeft="10dp"
-	        android:textSize="12dp" />
-	
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="horizontal"
-	        android:layout_marginLeft="20dp" >
-	
-	        <ImageButton
-	            android:id="@+id/btEdit"
-	            style="?android:attr/buttonStyleSmall"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/bt_editar"
-	            android:background="@null"
-	            android:layout_margin="10dp"
-	            />
-	
-	        <ImageButton
-	            android:id="@+id/btRemove"
-	            style="?android:attr/buttonStyleSmall"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/bt_remover"
-	            android:background="@null"
-	            android:layout_margin="10dp"
-	             />
-	
-	    </LinearLayout>
-	    
-	</LinearLayout>
-	<View 
-	    android:layout_width="wrap_content"
-		android:layout_height="2dp"
-		android:background="@drawable/img_divider"
-		/>
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="310dp"
-	    android:gravity="center_vertical"
-	    android:orientation="vertical" >
-		
-	    <ImageView
-	        android:id="@+id/ivImage"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal"
-	        android:src="@drawable/ic_videoBig" />
+        android:text="Aula Lipsum"
+        android:gravity="center_vertical"
+        android:textColor="#36ACD5"
+	    android:drawableLeft="@drawable/ic_page"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	    <TextView
-	        android:id="@+id/tvFileName"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal"
-	        android:gravity="center_horizontal"
-	        android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
-	        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	    <ImageButton
-	            android:id="@+id/btRemove"
-	            style="?android:attr/buttonStyleSmall"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="center_horizontal"
-	            android:src="@drawable/bt_acessarAula"
-	            android:background="@null"
-	            android:layout_margin="10dp" />
-	</LinearLayout>
+        <Button
+            android:id="@+id/btEdit"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar" />
 
+        <Button
+            android:id="@+id/btRemove"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remover" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Android_Image.jpeg"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp" >
 
-        <ImageButton
-            android:id="@+id/btWall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:src="@drawable/bt_mural" />
-        
-        <ImageButton
+        <Button
             android:id="@+id/btIsDone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:src="@drawable/bt_finalizarAula" />
+            android:text="Finalizada?" />
 
-        
+        <Button
+            android:id="@+id/btWall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Mural" />
 
     </LinearLayout>
 
