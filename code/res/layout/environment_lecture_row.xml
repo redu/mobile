@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llLectureRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" 
@@ -7,7 +8,7 @@
     android:background="@drawable/bg_expandablelistview_row">
     
     <TextView 
-	    android:id="@+id/tvLecturesOrder"
+	    android:id="@+id/tvOrdering"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center_vertical"
@@ -35,6 +36,7 @@
 	    android:textSize="20sp" />
     
     <ImageView 
+        android:id="@+id/ivIsFinalized"
         android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center_vertical"

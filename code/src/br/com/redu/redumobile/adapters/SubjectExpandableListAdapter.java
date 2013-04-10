@@ -4,15 +4,18 @@ import java.util.List;
 
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Subject;
+import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.LectureActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
@@ -40,14 +43,20 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_expandable_list_item_1, null);
+			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_lecture_row, null);
 		}
 		
 		final Lecture lecture = (Lecture) getChild(groupPosition, childPosition);
-		final Subject subject = (Subject) getGroup(groupPosition);
+		final Subject subject = (Subject) getGroup(groupPosition); 
 		
-		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
+		/*TextView tvOrder = (TextView) convertView.findViewById(R.id.tvOrdering);
+		tvOrder.setText(lecture.position);*/
+		
+		TextView tv = (TextView) convertView.findViewById(R.id.tvLecturesName);
 		tv.setText(lecture.name);
+		
+		//TODO PROGRESSO DA AULA IMPLEMENTAR
+		//ImageView iv = (ImageView) convertView.findViewById(R.id.ivIsFinalized);
 		
 		convertView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -86,12 +95,10 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_expandable_list_item_1, null);
+			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_module_row, null);
 		}
-		
-		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-		tv.setText(mSubjects.get(groupPosition).name);
-		
+		TextView tv = (TextView) convertView.findViewById(R.id.tvSuject);
+		tv.setText(Html.fromHtml(mSubjects.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildrenCount(groupPosition)+" Aulas</small></font>"));
 		return convertView;
 	}
 

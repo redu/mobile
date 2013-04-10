@@ -90,7 +90,7 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvTitle);
-		tv.setText(Html.fromHtml(mCourses.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildTypeCount()+" Disciplinas<smal></font>"));
+		tv.setText(Html.fromHtml(mCourses.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+getChildTypeCount()+" Disciplinas</small></font>"));
 		
 		//ImageView setaCourse = (ImageView) convertView.findViewById(R.id.iv_seta_course); 
 		

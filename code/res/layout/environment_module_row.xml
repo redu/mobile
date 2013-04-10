@@ -14,7 +14,7 @@
     android:background="#fff">
 
 		<TextView
-		    android:id="@+id/tvTitle"
+		    android:id="@+id/tvSuject"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="1"
@@ -44,17 +44,5 @@
 		    android:padding="5dp"
  		    android:src="@drawable/ic_seta"/>
 	</LinearLayout>
-	<TextView 
-	    android:id="@+id/tvSubtitle"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-	    android:gravity="center_vertical"
-	    android:orientation="vertical"
-	    android:paddingLeft="10dp"
-	    android:text="3 Aulas"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textColor="#CCC"
-	    android:textSize="12dp" />
 
 </LinearLayout>
