@@ -6,38 +6,22 @@
     android:layout_margin="10dp"
     android:background="@drawable/bg_expandablelistview_row">
     
-    <TextView 
-	    android:id="@+id/tvLecturesOrder"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center_vertical"
-	    android:text="1"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textColor="#cccccc"
-	    android:textSize="12sp" />
-    
     <ImageView 
         android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:src="@drawable/ic_page" 
+	    android:src="@drawable/ic_space" 
 	    android:layout_gravity="center_vertical" />
     
     <TextView 
-	    android:id="@+id/tvLecturesName"
+	    android:id="@+id/tvSpaceName"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:padding="10dp"
 	    android:layout_weight="1"
 	    android:layout_gravity="center_vertical"
-	    android:text="Java Modularizado"
+	    android:text="Orientação a Objetos"
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textColor="#36ACD5"
 	    android:textSize="20sp" />
-    
-    <ImageView 
-        android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center_vertical"
-	    android:src="@drawable/ic_finished"/>
-
+   
 </LinearLayout>

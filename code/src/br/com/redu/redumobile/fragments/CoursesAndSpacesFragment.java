@@ -97,10 +97,11 @@ public class CoursesAndSpacesFragment extends Fragment {
 			}
 
 			protected void onPostExecute(Void result) {
-				((TextView) v.findViewById(R.id.title)).setText(mEnvironment.name);
-				mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
-				mListView.setAdapter(mAdapter);
-			
+				((TextView) v.findViewById(R.id.tvEnvironment)).setText(mEnvironment.name);
+				if (getActivity() != null){
+					mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
+					mListView.setAdapter(mAdapter);
+				}
 			};
 
 		}.execute();

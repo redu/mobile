@@ -29,7 +29,7 @@ public class SpaceActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_listview);
 		
-		((TextView) findViewById(R.id.title)).setText("Módulos");
+		((TextView) findViewById(R.id.tvEnvironment)).setText("Módulos");
 
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.setOnItemClickListener(new OnItemClickListener() {

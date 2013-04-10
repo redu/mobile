@@ -4,14 +4,17 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import br.com.developer.redu.models.Course;
 import br.com.developer.redu.models.Space;
+import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.HomeSpaceActivity;
 
 public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
@@ -39,12 +42,12 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_expandable_list_item_1, null);
+			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_space_row, null);
 		}
 		
 		final Space space = (Space) getChild(groupPosition, childPosition);
 		
-		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
+		TextView tv = (TextView) convertView.findViewById(R.id.tvSpaceName);
 		tv.setText(space.name);
 		
 		convertView.setOnClickListener(new OnClickListener() {
@@ -83,11 +86,13 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_expandable_list_item_1, null);
+			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_course_row, null);
 		}
 		
-		TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-		tv.setText(mCourses.get(groupPosition).name);
+		TextView tv = (TextView) convertView.findViewById(R.id.tvTitle);
+		tv.setText(Html.fromHtml(mCourses.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildTypeCount()+" Disciplinas<smal></font>"));
+		
+		//ImageView setaCourse = (ImageView) convertView.findViewById(R.id.iv_seta_course); 
 		
 		return convertView;
 	}

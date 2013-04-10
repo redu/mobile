@@ -14,7 +14,7 @@ public class SubjectActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_listview);
 		
-		((TextView) findViewById(R.id.title)).setText("Módulo");
+		((TextView) findViewById(R.id.tvEnvironment)).setText("Módulo");
 
 		Bundle extras = getIntent().getExtras();
 		mSubject = (Subject) extras.get(Subject.class.getName());

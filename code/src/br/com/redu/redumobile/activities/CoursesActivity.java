@@ -29,7 +29,7 @@ public class CoursesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_listview);
 
-		((TextView) findViewById(R.id.title)).setText("Disciplinas");
+		((TextView) findViewById(R.id.tvEnvironment)).setText("Disciplinas");
 
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
