@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_page"
         android:drawablePadding="10dip"
@@ -20,7 +20,7 @@
         android:textColor="@color/azul" />
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dip"
         android:background="@color/cinzaClaro" />
 
