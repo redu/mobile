@@ -56,7 +56,7 @@ public class HomeSpaceActivity extends BaseActivity {
 		mIndicator.setViewPager(vp);
 		
 		Space space = (Space)getIntent().getExtras().get(Space.class.getName());
-		setActionBarTitle("Disciplina "+space.name);
+		setActionBarTitle(space.name);
 		
 		int itemChecked = getIntent().getIntExtra(ITEM_EXTRA_PARAM, ITEM_WALL);
 		mIndicator.setCurrentItem(itemChecked);

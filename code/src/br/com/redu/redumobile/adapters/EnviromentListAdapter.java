@@ -6,11 +6,13 @@ import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class EnviromentListAdapter extends BaseAdapter {
@@ -55,10 +57,8 @@ public class EnviromentListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView v;
-		v = (TextView) mInflater.inflate(R.layout.enviroment_list_row, null);
-		v.setText(mEnviroment.get(position).name);
-		
-		return v;
+		TextView environment = (TextView) mInflater.inflate(R.layout.enviroment_list_row, null);
+		environment.setText(Html.fromHtml(mEnviroment.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+mEnviroment.get(position).courses_count+" Cursos</small></font>"));
+		return environment;
 	}
 }

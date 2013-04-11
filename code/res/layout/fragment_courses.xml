@@ -5,11 +5,21 @@
     android:orientation="vertical"
     android:background="#F7F7F7">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    <TextView 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/tvEnvironment"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:gravity="center_vertical"
+	    android:orientation="vertical"
+	    android:drawableLeft="@drawable/tn_enviroment"
+	    android:drawablePadding="7dp"
+	    android:padding="10dp"
+	    android:text="Ambiente"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textColor="#000000"
+	    android:textSize="20dp" />
 
     <ExpandableListView
         android:id="@+id/list"
