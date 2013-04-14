@@ -132,7 +132,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			
 			((TextView) convertView.findViewById(R.id.tv_action)).setText(action);
 			((TextView) convertView.findViewById(R.id.tv_result)).setText(result);
-			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO
+			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO a API não envia o nome do curso criado, seria necessario fazer uma nova requisicao
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.VISIBLE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(icon);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
