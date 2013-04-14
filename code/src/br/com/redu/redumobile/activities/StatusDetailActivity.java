@@ -158,7 +158,9 @@ public class StatusDetailActivity extends BaseActivity {
 				mListView.addHeaderView(createOriginalStatusHeaderView(statusHeader));
 				mListView.setAdapter(new StatusDetailAdapter(getApplicationContext(), null));
 				
-				new LoadAnswersStatus(statusHeader.id).execute();
+				if(statusHeader.answers_count > 0) {
+					new LoadAnswersStatus(statusHeader.id).execute();
+				}
 			}
 		}
 	}
@@ -169,6 +171,12 @@ public class StatusDetailActivity extends BaseActivity {
 
 		public LoadAnswersStatus(String statusId) {
 			mStatusId = statusId;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			mLlLoadingAnswers.setVisibility(View.VISIBLE);
 		}
 
 		@Override

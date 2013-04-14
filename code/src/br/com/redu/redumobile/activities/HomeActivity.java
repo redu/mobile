@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -51,6 +52,8 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		SchedulerManager.getInstance().runNow(this, LoadStatusesFromWebTask.class, 0);
 		// END BuzzNotify
 
+		mDbHelper = DbHelper.getInstance(this);
+		
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));
 		
@@ -64,6 +67,7 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 	}
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	private void showWebDialog(String title, String url) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -96,20 +100,23 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 			Bundle b;
 			
-			fragments[ITEM_WALL] = new HomeFragment();
-			b = new Bundle();
-			b.putSerializable(Type.class.getName(), Type.Wall);
-			fragments[ITEM_WALL].setArguments(b);
-			
 			fragments[ITEM_NEW_LECTURES] = new HomeFragment();
 			b = new Bundle();
 			b.putSerializable(Type.class.getName(), Type.NewLectures);
 			fragments[ITEM_NEW_LECTURES].setArguments(b);
+			
+			fragments[ITEM_WALL] = new HomeFragment();
+			b = new Bundle();
+			b.putSerializable(Type.class.getName(), Type.Wall);
+			fragments[ITEM_WALL].setArguments(b);
 
 			fragments[ITEM_LAST_SEEN_STATUS] = new HomeFragment();
 			b = new Bundle();
 			b.putSerializable(Type.class.getName(), Type.LastSeen);
 			fragments[ITEM_LAST_SEEN_STATUS].setArguments(b);
+
+			mDbHelper.addDbHelperListener(fragments[ITEM_WALL]);
+			mDbHelper.addDbHelperListener(fragments[ITEM_NEW_LECTURES]);
 		}
 
 		@Override
@@ -129,14 +136,8 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	}
 	
 	@Override
-	protected void onStart() {
-		super.onStart();
-		mDbHelper = DbHelper.getInstance(this);
-	}
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onDestroy() {
+		super.onDestroy();
 		mDbHelper.close();
 	}
 

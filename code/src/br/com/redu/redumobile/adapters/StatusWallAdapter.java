@@ -16,6 +16,7 @@ import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.util.DateUtil;
+import br.com.redu.redumobile.widgets.Breadcrumb;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusWallAdapter extends BaseAdapter {
@@ -69,8 +70,7 @@ public class StatusWallAdapter extends BaseAdapter {
 		
 		Status status = mStatuses.get(position);
 		
-		// TODO
-//		((TextView) convertView.findViewById(R.id.tv_breadcrumbs)).setText(status.created_at);
+		((Breadcrumb) convertView.findViewById(R.id.tv_breadcrumb)).setStatus(status);
 		
 		// TODO
 //		new LoadUserInfoTask(status, convertView).execute();
@@ -104,7 +104,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
 			((TextView) convertView.findViewById(R.id.tv_text)).setText(status.text);
 			((TextView) convertView.findViewById(R.id.tv_text)).setVisibility(View.VISIBLE);
-			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.text); //TODO
+			((TextView) convertView.findViewById(R.id.tv_answers)).setText(status.answers_count + ((status.answers_count == 1) ? " Resposta" : " Respostas")); 
 			((TextView) convertView.findViewById(R.id.tv_answers)).setVisibility(View.VISIBLE);
 		
 		} else if (status.isLogType()) {

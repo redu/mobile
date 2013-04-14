@@ -26,7 +26,7 @@ import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.db.DbHelperListener;
 import br.com.redu.redumobile.tasks.LoadStatusesFromWebTask;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements DbHelperListener {
 
 	public enum Type {LastSeen, Wall, NewLectures};
 
@@ -64,6 +64,11 @@ public class HomeFragment extends Fragment {
 	@Override
 	public void setArguments(Bundle bundle) {
 		mType = (Type) bundle.get(Type.class.getName());
+	}
+	
+	@Override
+	public void hasNewStatus() {
+		updateStatuses();
 	}
 	
 	@Override
@@ -110,14 +115,6 @@ public class HomeFragment extends Fragment {
 						&& totalItemCount != 0) {
 					updateStatuses();
 				}
-			}
-		});
-		
-		DbHelper dbHelper = ((DbHelperHolder) getActivity()).getDbHelper();
-		dbHelper.setDbHelperListener(new DbHelperListener() {
-			@Override
-			public void hasNewStatus() {
-				updateStatuses();
 			}
 		});
 

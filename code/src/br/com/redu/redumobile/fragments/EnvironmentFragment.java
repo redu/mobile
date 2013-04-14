@@ -38,7 +38,7 @@ public class EnvironmentFragment extends Fragment {
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_environment, container, false);
 		mListView = (ListView) v.findViewById(R.id.lvEnviroment);
@@ -49,13 +49,16 @@ public class EnvironmentFragment extends Fragment {
 			}
 		});
 		
-		Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setView(inflater.inflate(R.layout.loading_dialog, null));
-		mDialog = builder.create();
-    	mDialog.show();
-		
 		new AsyncTask<Void, Void, Void>() {
 
+			@Override
+			protected void onPreExecute() {
+				Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setView(inflater.inflate(R.layout.loading_dialog, null));
+				mDialog = builder.create();
+		    	mDialog.show();
+			};
+			
 			@Override
 			protected Void doInBackground(Void... params) {
 				DefaultReduClient redu = ReduApplication.getReduClient();
