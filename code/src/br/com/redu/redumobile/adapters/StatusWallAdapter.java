@@ -47,18 +47,27 @@ public class StatusWallAdapter extends BaseAdapter {
 		return 0;
 	}
 	
-	public void add(Status status) {
+	public void add(Status status, boolean olderThan) {
 		if(mStatuses == null) {
 			mStatuses = new ArrayList<Status>();
 		}
-		mStatuses.add(status);
+
+		if(olderThan) {
+			mStatuses.add(status);
+		} else {
+			mStatuses.add(0, status);
+		}
 	}
 
-	public void addAll(List<Status> statuses) {
+	public void addAll(List<Status> statuses, boolean olderThan) {
 		if(mStatuses == null) {
 			mStatuses = statuses;
 		} else {
-			mStatuses.addAll(statuses);
+			if(olderThan) {
+				mStatuses.addAll(statuses);
+			} else {
+				mStatuses.addAll(0, statuses);
+			}
 		}
 	}
 
@@ -132,7 +141,7 @@ public class StatusWallAdapter extends BaseAdapter {
 			
 			((TextView) convertView.findViewById(R.id.tv_action)).setText(action);
 			((TextView) convertView.findViewById(R.id.tv_result)).setText(result);
-			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO
+			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO a API não envia o nome do curso criado, seria necessario fazer uma nova requisicao
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.VISIBLE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(icon);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);

@@ -2,29 +2,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F7F7F7">
+    android:background="#F7F7F7"
+    android:orientation="vertical" >
 
-    <TextView 
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/tvEnvironment"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-	    android:gravity="center_vertical"
-	    android:orientation="vertical"
-	    android:drawableLeft="@drawable/tn_enviroment"
-	    android:drawablePadding="7dp"
-	    android:padding="10dp"
-	    android:text="Ambiente"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textColor="#000000"
-	    android:textSize="20dp" />
-
-    <ExpandableListView
-        android:id="@+id/list"
+    <TextView
+        android:id="@+id/tvEnvironment"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/tn_enviroment"
+        android:drawablePadding="7dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="Ambiente"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ExpandableListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_empty_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Este Ambiente está vazio, não há Cursos"
+            android:textColor="@color/cinzaEscuro"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

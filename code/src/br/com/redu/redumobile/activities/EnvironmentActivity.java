@@ -55,15 +55,14 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 
 	@Override
 	public void onEnvironmentSelected(Environment environment) {
-		// Create new fragment and transaction
-		Fragment coursesAndServicesFragment = new CoursesAndSpacesFragment(environment);
+		Bundle args = new Bundle();
+		args.putSerializable(CoursesAndSpacesFragment.EXTRAS_ENVIRONMENT, environment);
+
+		Fragment coursesAndServicesFragment = new CoursesAndSpacesFragment();
+		coursesAndServicesFragment.setArguments(args);
+
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-		// Replace whatever is in the fragment_container view with this fragment,
-		// and add the transaction to the back stack
 		transaction.add(R.id.fragment_container, coursesAndServicesFragment, CoursesAndSpacesFragment.class.getName());
-
-		// Commit the transaction
 		transaction.commit();	
 	}
 

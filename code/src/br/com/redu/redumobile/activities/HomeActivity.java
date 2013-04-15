@@ -13,7 +13,9 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.fragments.HomeFragment;
-import br.com.redu.redumobile.fragments.HomeFragment.Type;
+import br.com.redu.redumobile.fragments.HomeLastSeenFragment;
+import br.com.redu.redumobile.fragments.HomeNewLecturesFragment;
+import br.com.redu.redumobile.fragments.HomeWallFragment;
 import br.com.redu.redumobile.tasks.LoadStatusesFromWebTask;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
@@ -98,25 +100,9 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 			fragments = new HomeFragment[NUM_ITEMS];
 
-			Bundle b;
-			
-			fragments[ITEM_NEW_LECTURES] = new HomeFragment();
-			b = new Bundle();
-			b.putSerializable(Type.class.getName(), Type.NewLectures);
-			fragments[ITEM_NEW_LECTURES].setArguments(b);
-			
-			fragments[ITEM_WALL] = new HomeFragment();
-			b = new Bundle();
-			b.putSerializable(Type.class.getName(), Type.Wall);
-			fragments[ITEM_WALL].setArguments(b);
-
-			fragments[ITEM_LAST_SEEN_STATUS] = new HomeFragment();
-			b = new Bundle();
-			b.putSerializable(Type.class.getName(), Type.LastSeen);
-			fragments[ITEM_LAST_SEEN_STATUS].setArguments(b);
-
-			mDbHelper.addDbHelperListener(fragments[ITEM_WALL]);
-			mDbHelper.addDbHelperListener(fragments[ITEM_NEW_LECTURES]);
+			fragments[ITEM_NEW_LECTURES] = new HomeNewLecturesFragment();
+			fragments[ITEM_WALL] = new HomeWallFragment();
+			fragments[ITEM_LAST_SEEN_STATUS] = new HomeLastSeenFragment();
 		}
 
 		@Override
