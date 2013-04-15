@@ -14,15 +14,15 @@ public class DateUtil {
     public static String getFormattedStatusCreatedAt(Status status) {
     	String formattedCreatAt = null;
     	
-    	if(status.created_at_in_millis == 0) {
+    	if(status.createdAtInMillis == 0) {
     		try {
-    			status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
+    			status.createdAtInMillis = DateUtil.dfIn.parse(status.created_at).getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
     	}
 
-    	formattedCreatAt = DateUtil.dfOut.format(new Date(status.created_at_in_millis));
+    	formattedCreatAt = DateUtil.dfOut.format(new Date(status.createdAtInMillis));
     	
     	return formattedCreatAt;
     }

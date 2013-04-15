@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
@@ -24,14 +25,18 @@ import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.CoursesExpandableListAdapter;
 
 public class CoursesAndSpacesFragment extends Fragment {
+	
+	public static final String EXTRAS_ENVIRONMENT = "EXTRAS_ENVIRONMENT";
+	
 	private List<Course> mEnrollmentedCourses;
 	private List<List<Space>> mSpaces;
 
 	private Environment mEnvironment;
 	private Space mSpace;
-	
+
+	private TextView mTvEmptyList;
+	private ProgressBar mProgressBar;
 	private ExpandableListView mListView;
-	
 	private CoursesExpandableListAdapter mAdapter;
 	
 	private OnSpaceSelectedListener mListener;
@@ -41,10 +46,14 @@ public class CoursesAndSpacesFragment extends Fragment {
     }
 	
 	public CoursesAndSpacesFragment() {
+
 	}
 	
-	public CoursesAndSpacesFragment(Environment environment) {
-		mEnvironment = environment;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		mEnvironment = (Environment) getArguments().getSerializable(EXTRAS_ENVIRONMENT);
 	}
 	
 	@Override
@@ -53,10 +62,11 @@ public class CoursesAndSpacesFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		final View v = inflater.inflate(R.layout.fragment_courses, container, false);
 
+		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
+		mTvEmptyList = (TextView) v.findViewById(R.id.tv_empty_list);
+		
 		mListView = (ExpandableListView) v.findViewById(R.id.list);
-
 		mListView.setOnChildClickListener(new OnChildClickListener() {
-			
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
@@ -67,8 +77,6 @@ public class CoursesAndSpacesFragment extends Fragment {
 		});		
 		
 		new AsyncTask<Void, Void, Void>() {
-		
-			@Override
 			protected Void doInBackground(Void... params) {
 				DefaultReduClient redu = ReduApplication.getReduClient();
 
@@ -102,6 +110,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 					mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
 					mListView.setAdapter(mAdapter);
 				}
+				mProgressBar.setVisibility(View.GONE);
 			};
 
 		}.execute();

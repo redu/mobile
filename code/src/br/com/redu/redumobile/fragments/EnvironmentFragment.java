@@ -2,9 +2,9 @@ package br.com.redu.redumobile.fragments;
 
 import java.util.List;
 
+import org.scribe.exceptions.OAuthConnectionException;
+
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
@@ -25,7 +26,7 @@ public class EnvironmentFragment extends Fragment {
 	private List<Environment> mEnvironments;
 
 	private ListView mListView;
-	private AlertDialog mDialog;
+	private ProgressBar mProgressBar;
 
 	private OnEnvironmentSelectedListener mListener;
 	
@@ -49,29 +50,27 @@ public class EnvironmentFragment extends Fragment {
 			}
 		});
 		
-		new AsyncTask<Void, Void, Void>() {
-
+		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
+		
+		new AsyncTask<Void, Void, List<Environment>>() {
 			@Override
-			protected void onPreExecute() {
-				Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setView(inflater.inflate(R.layout.loading_dialog, null));
-				mDialog = builder.create();
-		    	mDialog.show();
-			};
-			
-			@Override
-			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getReduClient();
-				mEnvironments = redu.getEnvironments();
-				return null;
+			protected List<Environment> doInBackground(Void... params) {
+				try {
+					DefaultReduClient redu = ReduApplication.getReduClient();
+					return redu.getEnvironments();
+				} catch (OAuthConnectionException e) {
+					e.printStackTrace();
+					return null;
+				}
 			}
 
-			protected void onPostExecute(Void result) {
+			protected void onPostExecute(List<Environment> environments) {
 				Activity activity = getActivity();
-				if(activity != null && mEnvironments != null) {
-					mDialog.dismiss();
-					mListView.setAdapter(new EnviromentListAdapter(activity, mEnvironments));
+				if(activity != null && environments != null) {
+					mEnvironments = environments;
+					mListView.setAdapter(new EnviromentListAdapter(activity, environments));
 				}
+				mProgressBar.setVisibility(View.GONE);
 			};
 
 		}.execute();

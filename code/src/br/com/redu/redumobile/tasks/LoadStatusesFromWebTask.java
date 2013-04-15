@@ -76,13 +76,13 @@ public class LoadStatusesFromWebTask implements Task {
 	
 					for (Status status : statuses) {
 						try {
-							status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
+							status.createdAtInMillis = DateUtil.dfIn.parse(status.created_at).getTime();
 						} catch (ParseException e) {
 							e.printStackTrace();
-							status.created_at_in_millis = 0;
+							status.createdAtInMillis = 0;
 						}
 	
-						if (status.created_at_in_millis <= dbTimestamp) {
+						if (status.createdAtInMillis <= dbTimestamp) {
 							loadNextPage = false;
 							break;
 	

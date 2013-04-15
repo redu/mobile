@@ -30,6 +30,7 @@
 		    android:textSize="16sp" />
 		
 		<ImageView 
+		    android:id="@+id/iv_add"
 	        android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="center_vertical"
@@ -41,6 +42,13 @@
 		    android:layout_gravity="center_vertical"
 		    android:padding="5dp"
 		    android:src="@drawable/ic_info"/>
+
+		<!-- <ImageView 
+	        android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical"
+		    android:padding="5dp"
+ 		    android:src="@drawable/ic_seta"/> -->
 	</LinearLayout>
 	
 
