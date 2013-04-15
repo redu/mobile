@@ -4,13 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F7F7F7">
-	 
-	<ListView
+
+    <ListView
         android:id="@+id/lvEnviroment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#E7E7E7"
-        android:dividerHeight="1dp"
-        android:background="#F7F7F7" />
+        android:background="#F7F7F7" >
+    </ListView>
 
 </LinearLayout>
