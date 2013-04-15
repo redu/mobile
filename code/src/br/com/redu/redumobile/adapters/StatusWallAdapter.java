@@ -47,18 +47,27 @@ public class StatusWallAdapter extends BaseAdapter {
 		return 0;
 	}
 	
-	public void add(Status status) {
+	public void add(Status status, boolean olderThan) {
 		if(mStatuses == null) {
 			mStatuses = new ArrayList<Status>();
 		}
-		mStatuses.add(status);
+
+		if(olderThan) {
+			mStatuses.add(status);
+		} else {
+			mStatuses.add(0, status);
+		}
 	}
 
-	public void addAll(List<Status> statuses) {
+	public void addAll(List<Status> statuses, boolean olderThan) {
 		if(mStatuses == null) {
 			mStatuses = statuses;
 		} else {
-			mStatuses.addAll(statuses);
+			if(olderThan) {
+				mStatuses.addAll(statuses);
+			} else {
+				mStatuses.addAll(0, statuses);
+			}
 		}
 	}
 

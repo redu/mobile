@@ -31,7 +31,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String COLUMN_TYPE = "type";
 	private static final String COLUMN_ANSWERS_COUNT = "answers_count";
 	private static final String COLUMN_LOGEABLE_TYPE = "logeable_type";
-	private static final String COLUMN_CREATE_AT_IN_MILLIS = "create_at_in_millis";
+	private static final String COLUMN_CREATED_AT_IN_MILLIS = "created_at_in_millis";
 	private static final String COLUMN_LAST_SEEN_AT_IN_MILLIS = "last_seen_at_in_millis";
 	private static final String COLUMN_TEXT = "text";
 	private static final String COLUMN_LECTURE_ALREADY_SEEN = "lecture_already_seen";
@@ -54,7 +54,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			+ COLUMN_TYPE + " TEXT NOT NULL, " 
 			+ COLUMN_ANSWERS_COUNT + " INTEGER, " 
 			+ COLUMN_LOGEABLE_TYPE + " TEXT, " 
-			+ COLUMN_CREATE_AT_IN_MILLIS + " INTEGER, "
+			+ COLUMN_CREATED_AT_IN_MILLIS + " INTEGER, "
 			+ COLUMN_LECTURE_ALREADY_SEEN + " TEXT NOT NULL, "
 			+ COLUMN_LAST_SEEN + " INTEGER, "
 			+ COLUMN_LAST_SEEN_AT_IN_MILLIS + " INTEGER, "
@@ -104,17 +104,17 @@ public class DbHelper extends SQLiteOpenHelper {
 		mListeners.add(new WeakReference<DbHelperListener>(listener));
 	}
 	
-	synchronized public List<Status> getStatus(long olderThan, int count) {
+	synchronized public List<Status> getStatus(long timestamp, boolean olderThan, int count) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 
 		SQLiteDatabase db = this.getReadableDatabase();  
         Cursor cursor;  
   
         cursor = db.query(TABLE_STATUS, null, 
-        		COLUMN_CREATE_AT_IN_MILLIS + " < ?", 
-        		new String[] {String.valueOf(olderThan)}, 
+        		COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + "?", 
+        		new String[] {String.valueOf(timestamp)}, 
         		null, null, 
-        		COLUMN_CREATE_AT_IN_MILLIS + " DESC", 
+        		COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
         		String.valueOf(count));  
   
     	while(cursor.moveToNext()) {
@@ -129,17 +129,17 @@ public class DbHelper extends SQLiteOpenHelper {
         return statuses;  
 	}
 	
-	synchronized public List<Status> getNewLecturesStatus(long olderThan, int count) {
+	synchronized public List<Status> getNewLecturesStatus(long timestamp, boolean olderThan, int count) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
 		cursor = db.query(TABLE_STATUS, null, 
-				COLUMN_CREATE_AT_IN_MILLIS + " < ? AND " + COLUMN_LOGEABLE_TYPE + " = ?", 
-				new String[] {String.valueOf(olderThan), Status.LOGEABLE_TYPE_LECTURE}, 
+				COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + " ? AND " + COLUMN_LOGEABLE_TYPE + " = ?", 
+				new String[] {String.valueOf(timestamp), Status.LOGEABLE_TYPE_LECTURE}, 
 				null, null, 
-				COLUMN_CREATE_AT_IN_MILLIS + " DESC", 
+				COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
@@ -154,15 +154,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getLastSeenStatus(long olderThan, int count) {
+	synchronized public List<Status> getLastSeenStatus(long timestamp, boolean olderThan, int count) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
 		cursor = db.query(TABLE_STATUS, null, 
-				COLUMN_CREATE_AT_IN_MILLIS + " < ? AND " + COLUMN_LAST_SEEN + " = 1", 
-				new String[] {String.valueOf(olderThan)}, 
+				COLUMN_LAST_SEEN_AT_IN_MILLIS + (olderThan ? "<" : ">") + "? AND " + COLUMN_LAST_SEEN + " = 1", 
+				new String[] {String.valueOf(timestamp)}, 
 				null, null, 
 				COLUMN_LAST_SEEN_AT_IN_MILLIS + " DESC", 
 				String.valueOf(count));  
@@ -187,7 +187,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		status.answers_count = cursor.getInt(cursor.getColumnIndex(COLUMN_ANSWERS_COUNT));
 		status.logeable_type = cursor.getString(cursor.getColumnIndex(COLUMN_LOGEABLE_TYPE));
 		status.text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT));
-		status.created_at_in_millis = cursor.getLong(cursor.getColumnIndex(COLUMN_CREATE_AT_IN_MILLIS));
+		status.createdAtInMillis = cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED_AT_IN_MILLIS));
+		status.lastSeenAtInMillis = cursor.getLong(cursor.getColumnIndex(COLUMN_LAST_SEEN_AT_IN_MILLIS));
 		
 		int lectureAreadySeen = cursor.getInt(cursor.getColumnIndex(COLUMN_TEXT));
 		status.lectureAreadySeen = (lectureAreadySeen == 0) ? false : true;
@@ -269,14 +270,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		statusValues.put(COLUMN_ANSWERS_COUNT, status.answers_count);
 		statusValues.put(COLUMN_LOGEABLE_TYPE, status.logeable_type);
 		
-		if(status.created_at_in_millis == 0) {
+		if(status.createdAtInMillis == 0) {
 			try {
-				status.created_at_in_millis = DateUtil.dfIn.parse(status.created_at).getTime();
+				status.createdAtInMillis = DateUtil.dfIn.parse(status.created_at).getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}
-		statusValues.put(COLUMN_CREATE_AT_IN_MILLIS, status.created_at_in_millis);
+		statusValues.put(COLUMN_CREATED_AT_IN_MILLIS, status.createdAtInMillis);
 		
 		statusValues.put(COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
 		statusValues.put(COLUMN_LAST_SEEN , status.lastSeen);
@@ -320,6 +321,8 @@ public class DbHelper extends SQLiteOpenHelper {
         long id = db.update(TABLE_STATUS, statusValues, COLUMN_ID + " = ?", new String[] {status.id});
         
         db.close();
+
+        notifyListenters();
         
         return id;
 	}
@@ -335,7 +338,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor;  
         
         String query = new StringBuffer("SELECT MAX(").
-        		append(COLUMN_CREATE_AT_IN_MILLIS).
+        		append(COLUMN_CREATED_AT_IN_MILLIS).
         		append(") FROM ").
         		append(TABLE_STATUS).
         		toString();

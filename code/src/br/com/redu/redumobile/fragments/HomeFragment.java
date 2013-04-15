@@ -1,22 +1,20 @@
 package br.com.redu.redumobile.fragments;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
@@ -24,51 +22,39 @@ import br.com.redu.redumobile.adapters.StatusWallAdapter;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.db.DbHelperListener;
-import br.com.redu.redumobile.tasks.LoadStatusesFromWebTask;
 
-public class HomeFragment extends Fragment implements DbHelperListener {
+public abstract class HomeFragment extends Fragment implements DbHelperListener {
+
+	protected static final int NUM_STATUS_BY_PAGE = 25;
 
 	public enum Type {LastSeen, Wall, NewLectures};
 
-	private static final int NUM_STATUS_BY_PAGE = 25;
-	
-	private ProgressBar mProgressBar;
-	
-	private StatusWallAdapter mAdapter;
+	private ListView mListView;
+	protected StatusWallAdapter mAdapter;
 
-	private long mTimestamp;
-	private boolean mUpdatingList;
-
-	private Type mType;
+	private TextView mTvEmptyList;
+	private LinearLayout mLlNewStatus;
 	
+	public abstract String getTitle();
+	public abstract Type getType();
+	protected abstract String getEmptyListMessage();
+	protected abstract long getOldestStatusTimestamp();
+	protected abstract long getEarliestStatusTimestamp();
+	
+	/**
+	 * Starts the status updating
+	 * @param olderThan Will get the statuses older than the statuses already showed
+	 */
+	protected abstract void updateStatuses(boolean olderThan);
+
 	public HomeFragment() {
 
 	}
 	
-	public String getTitle() {
-		switch (mType) {
-			case Wall:
-				return "Início";
-			
-			case NewLectures:
-				return "Novas Aulas";
-				
-			case LastSeen:
-				return "Últimos Visualizados";
-	
-			default:
-				return null;
-		}
-	}
-	
 	@Override
-	public void setArguments(Bundle bundle) {
-		mType = (Type) bundle.get(Type.class.getName());
-	}
-	
-	@Override
-	public void hasNewStatus() {
-		updateStatuses();
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		((DbHelperHolder) activity).getDbHelper().addDbHelperListener(this);
 	}
 	
 	@Override
@@ -76,17 +62,25 @@ public class HomeFragment extends Fragment implements DbHelperListener {
 
 		final View v = inflater.inflate(R.layout.fragment_listview, container, false);
 
-		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
+		mTvEmptyList = (TextView) v.findViewById(R.id.tv_empty_list);
+		
+		mLlNewStatus = (LinearLayout) v.findViewById(R.id.ll_new_status);
+		mLlNewStatus.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mLlNewStatus.setVisibility(View.GONE);
+				mAdapter = new StatusWallAdapter(getActivity());
+				updateStatuses(true);
+			}
+		});
 		
 		if(mAdapter == null) {
 			mAdapter = new StatusWallAdapter(getActivity());
-			mTimestamp = System.currentTimeMillis();
 		}
 		
-		ListView lv = (ListView) v.findViewById(R.id.list);
-		lv.setAdapter(mAdapter);
-		
-		lv.setOnItemClickListener(new OnItemClickListener() {
+		mListView = (ListView) v.findViewById(R.id.list);
+		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Status status = (Status) mAdapter.getItem(position);
@@ -102,7 +96,7 @@ public class HomeFragment extends Fragment implements DbHelperListener {
 			}
 		});
 		
-		lv.setOnScrollListener(new OnScrollListener() {
+		mListView.setOnScrollListener(new OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// do nothing
@@ -113,75 +107,38 @@ public class HomeFragment extends Fragment implements DbHelperListener {
 					int visibleItemCount, int totalItemCount) {
 				if(firstVisibleItem + visibleItemCount == totalItemCount 
 						&& totalItemCount != 0) {
-					updateStatuses();
+					updateStatuses(true);
 				}
 			}
 		});
 
-		updateStatuses();
+		updateStatuses(true);
 
 		return v;
 	}
+	
+	@Override
+	public void hasNewStatus() {
+		updateStatuses(false);
+	}
 
-	private void updateStatuses() {
-		if (!mUpdatingList) {
-			new LoadStatusesFromDbTask().execute();
-		}
+	protected long getTimestamp(boolean olderThan) {
+		return (olderThan) ? getOldestStatusTimestamp() : getEarliestStatusTimestamp();	
 	}
 	
-	class LoadStatusesFromDbTask extends AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
-
-		protected void onPreExecute() {
-			mUpdatingList = true;
-		};
-
-		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
-			List<br.com.developer.redu.models.Status> statuses = null;
-			
-			Activity activity = getActivity();
-			
-			if(activity != null && activity instanceof DbHelperHolder && mType != null) {
-				DbHelper dbHelper = ((DbHelperHolder) activity).getDbHelper();
-				
-				switch (mType) {
-					case LastSeen:
-						statuses = dbHelper.getLastSeenStatus(mTimestamp, NUM_STATUS_BY_PAGE);
-						break;
-					
-					case Wall:
-						statuses = dbHelper.getStatus(mTimestamp, NUM_STATUS_BY_PAGE);
-						break;
-						
-					case NewLectures:
-						statuses = dbHelper.getNewLecturesStatus(mTimestamp, NUM_STATUS_BY_PAGE);
-						break;
-				
-					default:
-						statuses = null;
-						break;
-				}
-			}
-			
-			return statuses;
-		}
-
-		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
-			 if(getActivity() != null) {
-				 if (statuses != null && statuses.size() > 0) {
-					mAdapter.addAll(statuses);
-					mAdapter.notifyDataSetChanged();
-					mTimestamp = statuses.get(statuses.size()-1).created_at_in_millis;
-					mProgressBar.setVisibility(View.GONE);
-					
-				} else if(!LoadStatusesFromWebTask.isWorking()) {
-					mProgressBar.setVisibility(View.GONE);
-				
-				} else {
-					Toast.makeText(getActivity(), "Aguarde alguns instantes…", Toast.LENGTH_SHORT).show();
-				}
-			}
-			
-			mUpdatingList = false;
-		};
+	protected void showEmptyListMessage() {
+		mTvEmptyList.setText(getEmptyListMessage());
+		mTvEmptyList.setVisibility(View.VISIBLE);
+		
+		mListView.setVisibility(View.GONE);
+	}
+	
+	protected void hideEmptyListMessage() {
+		mTvEmptyList.setVisibility(View.GONE);
+		mListView.setVisibility(View.VISIBLE);
+	}
+	
+	protected void showNewStatusMessage() {
+		mLlNewStatus.setVisibility(View.VISIBLE);
 	}
 }
