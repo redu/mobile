@@ -18,6 +18,7 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.StatusDetailAdapter;
 import br.com.redu.redumobile.util.DateUtil;
+import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusDetailActivity extends BaseActivity {
 
@@ -52,14 +53,11 @@ public class StatusDetailActivity extends BaseActivity {
 	}
 
 	private View createOriginalStatusHeaderView(Status status) {
-		View v = LayoutInflater.from(getApplicationContext()).inflate(
-				R.layout.status_detail_header_original_status, null);
+		View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.status_detail_header_original_status, null);
 
-		// ((LazyLoadingImageView)
-		// v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
+		((LazyLoadingImageView) v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
 		((TextView) v.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
-		// ((TextView)
-		// v.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
+		((TextView) v.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
 
 		if (status.isActivityType()) {
 			((TextView) v.findViewById(R.id.tv_action)).setText("comentou");
