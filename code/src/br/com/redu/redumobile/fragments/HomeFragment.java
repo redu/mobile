@@ -1,7 +1,10 @@
 package br.com.redu.redumobile.fragments;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,7 +28,7 @@ import br.com.redu.redumobile.db.DbHelperListener;
 
 public abstract class HomeFragment extends Fragment implements DbHelperListener {
 
-	protected static final int NUM_STATUS_BY_PAGE = 25;
+	protected static final int NUM_STATUS_BY_PAGE_DEFAULT = 25;
 
 	public enum Type {LastSeen, Wall, NewLectures};
 
@@ -40,12 +43,7 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 	protected abstract String getEmptyListMessage();
 	protected abstract long getOldestStatusTimestamp();
 	protected abstract long getEarliestStatusTimestamp();
-	
-	/**
-	 * Starts the status updating
-	 * @param olderThan Will get the statuses older than the statuses already showed
-	 */
-	protected abstract void updateStatuses(boolean olderThan);
+	protected abstract List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan);
 
 	public HomeFragment() {
 
@@ -54,7 +52,9 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((DbHelperHolder) activity).getDbHelper().addDbHelperListener(this);
+		if(activity != null) {
+			((DbHelperHolder) activity).getDbHelper().addDbHelperListener(this);
+		}
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 			}
 		});
 
-		updateStatuses(true);
+		updateStatuses(false);
 
 		return v;
 	}
@@ -140,5 +140,50 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 	
 	protected void showNewStatusMessage() {
 		mLlNewStatus.setVisibility(View.VISIBLE);
+	}
+	
+	private void updateStatuses(boolean olderThan) {
+		new LoadStatusesFromDbTask(olderThan).execute();
+	}
+	
+	class LoadStatusesFromDbTask extends AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
+
+		boolean mOlderThan;
+		
+		public LoadStatusesFromDbTask(boolean olderThan) {
+			mOlderThan = olderThan;
+		}
+		
+		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
+			List<br.com.developer.redu.models.Status> statuses = null;
+			
+			Activity activity = getActivity();
+			if(activity != null && activity instanceof DbHelperHolder) {
+				long timestamp = getTimestamp(mOlderThan);
+
+				DbHelper dbHelper = ((DbHelperHolder) activity).getDbHelper();
+				statuses = getStatuses(dbHelper, timestamp, mOlderThan);
+			}
+			
+			return statuses;
+		}
+
+		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
+			 if(getActivity() != null) {
+				 if (statuses != null && statuses.size() > 0) {
+					if (mAdapter.isEmpty() || mOlderThan) {
+						mAdapter.addAll(statuses, mOlderThan);
+						mAdapter.notifyDataSetChanged();
+						hideEmptyListMessage();
+						
+					} else if (!mOlderThan) {
+						showNewStatusMessage();
+					}
+					
+				} else if(mAdapter.isEmpty()) {
+					showEmptyListMessage();
+			 	}	
+			}
+		};
 	}
 }

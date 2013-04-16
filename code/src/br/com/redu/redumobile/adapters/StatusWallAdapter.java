@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import br.com.developer.redu.models.Status;
-import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.widgets.Breadcrumb;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
@@ -81,8 +78,8 @@ public class StatusWallAdapter extends BaseAdapter {
 		
 		((Breadcrumb) convertView.findViewById(R.id.tv_breadcrumb)).setStatus(status);
 		
-		// TODO
-//		new LoadUserInfoTask(status, convertView).execute();
+		((LazyLoadingImageView) convertView.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
+		((TextView) convertView.findViewById(R.id.tv_user_nome)).setText(status.user.getCompleteName());
 		
 		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 		convertView.findViewById(R.id.iv_mark_new_lecture).setVisibility(View.GONE);
@@ -152,28 +149,28 @@ public class StatusWallAdapter extends BaseAdapter {
 		return convertView;
 	}
 	
-	class LoadUserInfoTask extends AsyncTask<Void, Void, User> {
-
-		private br.com.developer.redu.models.Status mStatus;
-		private View mView;
-		
-		public LoadUserInfoTask(br.com.developer.redu.models.Status status, View view) {
-			mStatus = status;
-			mView = view;
-		}
-		
-		protected User doInBackground(Void... params) {
-			String userId = String.valueOf(mStatus.user.id);
-			return ReduApplication.getReduClient().getUser(userId);
-		}
-
-		protected void onPostExecute(User user) {
-			if (user != null) {
-				mStatus.user = user;
-				
-				((LazyLoadingImageView) mView.findViewById(R.id.iv_photo)).setImageUrl(user.thumbnails.get(0).href);
-				((TextView) mView.findViewById(R.id.tv_user_nome)).setText(new StringBuffer(user.first_name).append(" ").append(user.last_name).toString());
-			}
-		}
-	}
+//	class LoadUserInfoTask extends AsyncTask<Void, Void, User> {
+//
+//		private br.com.developer.redu.models.Status mStatus;
+//		private View mView;
+//		
+//		public LoadUserInfoTask(br.com.developer.redu.models.Status status, View view) {
+//			mStatus = status;
+//			mView = view;
+//		}
+//		
+//		protected User doInBackground(Void... params) {
+//			String userId = String.valueOf(mStatus.user.id);
+//			return ReduApplication.getReduClient().getUser(userId);
+//		}
+//
+//		protected void onPostExecute(User user) {
+//			if (user != null) {
+//				mStatus.user = user;
+//				
+//				((LazyLoadingImageView) mView.findViewById(R.id.iv_photo)).setImageUrl(user.thumbnails.get(0).href);
+//				((TextView) mView.findViewById(R.id.tv_user_nome)).setText(new StringBuffer(user.first_name).append(" ").append(user.last_name).toString());
+//			}
+//		}
+//	}
 }
