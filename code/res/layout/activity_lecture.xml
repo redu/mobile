@@ -86,6 +86,7 @@
                 android:id="@+id/llDocument"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"
                 android:orientation="vertical"
@@ -123,7 +124,8 @@
             <LinearLayout
                 android:id="@+id/llMedia"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"
                 android:orientation="vertical"
@@ -161,7 +163,8 @@
             <LinearLayout
                 android:id="@+id/llPage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"
                 android:orientation="vertical"
@@ -180,7 +183,8 @@
             <LinearLayout
                 android:id="@+id/llCanvasExercice"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dip"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"
                 android:orientation="vertical"

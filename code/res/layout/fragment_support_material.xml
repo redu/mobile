@@ -32,14 +32,14 @@
 	        android:layout_alignParentRight="true"
 	        android:layout_marginRight="32dp"
 	        android:background="@null"
-	        android:src="@drawable/ic_back" />
+	        android:src="@drawable/ic_seta_back" />
 	    
 	    <ImageButton 
 	        android:id="@+id/ibMore"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="end"
-	        android:src="@drawable/ic_add"
+	        android:src="@drawable/ic_add2"
 	        android:background="@null"
 	        android:layout_alignParentRight="true"
 	        />
@@ -90,17 +90,14 @@
 
     </RelativeLayout> -->
     
-	<View
-	    android:layout_width="wrap_content"
-	    android:layout_height="1dp"
-	    android:background="#e7e7e7" />
 	
     <ListView
         android:id="@+id/lvFiles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:divider="#e7e7e7"
-        >
+        android:dividerHeight="1dp">
+	    
     </ListView>
 
 </LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+ 		    	
+    <EditText  
+	    android:id="@+id/EditTextTitle"  
+	    android:layout_height="wrap_content"
+	    android:hint="Digite aqui o nome do módulo..."  
+	    android:inputType="text"  
+	    android:textSize="12sp"
+	    android:layout_marginTop="10dp"
+	    android:textColor="#B3B3B3"
+	    android:layout_width="fill_parent">  
+	</EditText>  
+	<View
+	    android:layout_width="wrap_content"
+	    android:layout_height="1dp"
+	    android:background="#e7e7e7"
+	    android:layout_marginTop="5dp" />
+	<TextView
+            android:id="@+id/tv_text_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dip"
+            android:background="#6D6E6F"
+            android:padding="2dip"
+            android:text="250"
+            android:textColor="#FFF"
+            android:textSize="10dip" />
+    <EditText  
+	    android:id="@+id/EditTextTitle"  
+	    android:layout_height="wrap_content"
+	    android:hint="Digite aqui sua descrição..."  
+	    android:inputType="text"  
+	    android:textSize="12sp"
+	    android:maxLength="250"
+	    android:textColor="#B3B3B3"
+	    android:layout_width="fill_parent">  
+	</EditText>  
+
+
+</LinearLayout>
