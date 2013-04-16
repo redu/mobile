@@ -2,15 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/creme" >
+    android:orientation="vertical"
+    android:background="@color/creme">
+
 
     <ListView
         android:id="@+id/lvEnviroment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F7F7F7"
-        android:divider="#E7E7E7"
-        android:dividerHeight="1dp" />
+        android:background="@color/creme">
+    </ListView>
+
     
     <ProgressBar
         android:id="@+id/pb"

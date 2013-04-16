@@ -19,6 +19,7 @@ import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeSpaceActivity.SupportMaterialFragmentListener;
+import br.com.redu.redumobile.activities.lecture.UploadFileFolderActivity;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
 import br.com.redu.redumobile.fragments.EnvironmentFragment;
 import br.com.redu.redumobile.util.DownloadHelper;
@@ -96,6 +97,20 @@ public class SupportMaterialFragment extends Fragment {
 			ibBack = (ImageButton)v.findViewById(R.id.ibBack);
 			ibBack.setVisibility(View.GONE);
 		}
+		
+		ImageButton ibMore = (ImageButton) v.findViewById(R.id.ibMore);
+		ibMore.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(getActivity(), UploadFileFolderActivity.class);
+				if(mFolder != null)
+					it.putExtra(Folder.class.getName(), mFolder);
+				else
+					it.putExtra(Space.class.getName(), mSpace);
+				startActivity(it);
+			}
+		});
 		
 		mSpace = (Space)getActivity().getIntent().getExtras().get(Space.class.getName());
 		

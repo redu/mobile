@@ -14,6 +14,7 @@ import br.com.redu.redumobile.util.DownloadHelper;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,11 +29,11 @@ public class LectureActivity extends BaseActivity{
 	
 	private TextView mTvSubject;
 	private TextView mTvLecture;
-	private ImageButton mBtEdit;
-	private ImageButton mBtRemove;
+	private ImageView mBtEdit;
+	private ImageView mBtRemove;
 	
-	private ImageButton mBtIsDone;
-	private ImageButton mBtWall;
+	private ImageView mBtIsDone;
+	private ImageView mBtWall;
 	
 	private Lecture mLecture;
 	private Subject mSubject;
@@ -46,15 +47,15 @@ public class LectureActivity extends BaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lecture);
 		
-		//mTvSubject = (TextView) findViewById(R.id.tvSubject);
+		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
-		mBtEdit = (ImageButton) findViewById(R.id.btEdit);
-		mBtRemove = (ImageButton) findViewById(R.id.btRemove);
+		mBtEdit = (ImageView) findViewById(R.id.btEdit);
+		mBtRemove = (ImageView) findViewById(R.id.btRemove);
 		/*mIvImage = (ImageView) findViewById(R.id.ivImage);
 		mTvFileName = (TextView) findViewById(R.id.tvFileName);*/
 		
-		mBtIsDone = (ImageButton) findViewById(R.id.btIsDone);
-		mBtWall = (ImageButton) findViewById(R.id.btWall);
+		mBtIsDone = (ImageView) findViewById(R.id.btIsDone);
+		mBtWall = (ImageView) findViewById(R.id.btWall);
 		
 		mProgressDialog = new ProgressDialog(this);
 		mProgressDialog.setMessage("Aguarde...");
@@ -68,7 +69,6 @@ public class LectureActivity extends BaseActivity{
 		LinearLayout layoutLecture;
 		if (mLecture.type.equals(Lecture.TYPE_CANVAS) || mLecture.type.equals(Lecture.TYPE_EXERCISE)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llCanvasExercice);
-			ImageView ivCanvas = (ImageView) layoutLecture.findViewById(R.id.ivCanvasExercice);
 			TextView tvCanvas = (TextView) layoutLecture.findViewById(R.id.tvCanvasExercice);
 			ImageView ibCanvas = (ImageView) layoutLecture.findViewById(R.id.ivCanvasExercice);
 			tvCanvas.setText("Exercice... ou Canvas...");
@@ -110,6 +110,13 @@ public class LectureActivity extends BaseActivity{
 			TextView tvMedia = (TextView) layoutLecture.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
 			ImageButton ibMedia = (ImageButton) layoutLecture.findViewById(R.id.ibAcessarMedia);
+			ibMedia.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mLecture.getFilePath())));
+				}
+			});
 			layoutLecture.setVisibility(View.VISIBLE);
 		}else if (mLecture.type.equals(Lecture.TYPE_PAGE)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llPage);
@@ -119,7 +126,7 @@ public class LectureActivity extends BaseActivity{
 		}
 		
 		mTvLecture.setText(mLecture.name);
-		//mTvSubject.setText(mSubject.name);
+		mTvSubject.setText(mSubject.name);
 		
 		//Log.i("Modulo", mSubject.id);
 		Log.i("Aula", Integer.toString(mLecture.id));

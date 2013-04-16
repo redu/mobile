@@ -54,6 +54,26 @@
         </activity>
         <activity android:name=".activities.LectureActivity" >
         </activity>
+        <activity android:name=".activities.lecture.UploadFileFolderActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        <activity android:name=".activities.lecture.UploadStep1Activity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".activities.lecture.UploadStep2Activity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activities.lecture.UploadStep3Activity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".activities.lecture.NewFolderActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <!-- BuzzBox -->
         <receiver android:name="com.buzzbox.mob.android.scheduler.SchedulerReceiver" >

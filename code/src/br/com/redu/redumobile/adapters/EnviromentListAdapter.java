@@ -58,7 +58,10 @@ public class EnviromentListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView environment = (TextView) mInflater.inflate(R.layout.enviroment_list_row, null);
-		environment.setText(Html.fromHtml(mEnviroment.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+mEnviroment.get(position).courses_count+" Cursos</small></font>"));
+		if (mEnviroment.get(position).courses_count.equals("0"))
+			environment.setText(Html.fromHtml(mEnviroment.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>Ambiente vazio, Não há Cursos</small></font>"));
+		else 
+			environment.setText(Html.fromHtml(mEnviroment.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+mEnviroment.get(position).courses_count+" Cursos</small></font>"));
 		return environment;
 	}
 }
