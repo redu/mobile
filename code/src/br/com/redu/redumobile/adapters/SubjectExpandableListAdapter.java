@@ -55,8 +55,8 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		final Subject subject = (Subject) getGroup(groupPosition); 
 		
 		//TODO AJEITAR A POSITION
-		/*TextView tvOrder = (TextView) convertView.findViewById(R.id.tvOrdering);
-		tvOrder.setText(lecture.position);*/
+		TextView tvOrder = (TextView) convertView.findViewById(R.id.tvOrdering);
+		tvOrder.setText(Integer.toString(lecture.position));
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvLecturesName);
 		tv.setText(lecture.name);

@@ -47,7 +47,7 @@ public class LectureActivity extends BaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lecture);
 		
-		//mTvSubject = (TextView) findViewById(R.id.tvSubject);
+		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
 		mBtEdit = (ImageView) findViewById(R.id.btEdit);
 		mBtRemove = (ImageView) findViewById(R.id.btRemove);
@@ -126,7 +126,7 @@ public class LectureActivity extends BaseActivity{
 		}
 		
 		mTvLecture.setText(mLecture.name);
-		//mTvSubject.setText(mSubject.name);
+		mTvSubject.setText(mSubject.name);
 		
 		//Log.i("Modulo", mSubject.id);
 		Log.i("Aula", Integer.toString(mLecture.id));
