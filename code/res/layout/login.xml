@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout 
+	    android:layout_width="match_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1"	    
+		android:orientation="vertical" 
+    	android:background="@drawable/bg_login">
+	    <LinearLayout 
+		    android:layout_width="wrap_content"
+		    android:layout_height="0dip"
+		    android:layout_weight="1"
+		    android:orientation="vertical" 
+		    android:background="@drawable/bg_light_login">
+		    <LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="0dip"
+			    android:layout_weight="0.5"
+			    android:orientation="vertical" >
+		    	<ImageView 
+		    	    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center"
+				    android:src="@drawable/redu_logo"
+				    android:layout_margin="10dp"/>
+			</LinearLayout>
+			<View
+		        android:layout_width="match_parent"
+		        android:layout_height="1dip"
+		        android:background="@color/cinzaClaro" />
+			<LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="0dip"
+			    android:layout_weight="0.5"
+			    android:orientation="vertical"
+			    android:background="#CFFF" 
+			    android:padding="15dp">
+		    	
+			    <TextView 
+			        android:layout_width="match_parent"
+		      		android:layout_height="wrap_content"
+		      		android:text="Login ou email"
+		      		android:textSize="12sp"
+		      		android:textColor="@color/cinzaEscuro"
+		      		android:layout_marginTop="25dp"/>
+			    <EditText 
+			        android:layout_width="match_parent"
+		      		android:layout_height="wrap_content"
+		      		android:text="Seu login ou email cadastrado"
+		      		android:textSize="12sp"
+		      		android:textColor="@color/cinzaClaro"/>
+			    <TextView 
+			        android:layout_width="match_parent"
+		      		android:layout_height="wrap_content"
+		      		android:text="Senha"
+		      		android:layout_marginTop="15dp"
+		      		android:textColor="@color/cinzaEscuro"
+		      		android:textSize="12sp"/>
+			    <EditText 
+			        android:layout_width="match_parent"
+		      		android:layout_height="wrap_content"
+		      		android:text="Sua senha"
+		      		android:textSize="12sp"
+		      		android:textColor="@color/cinzaClaro"/>
+		    	<FrameLayout 
+		    	    android:layout_width="match_parent"
+		      		android:layout_height="wrap_content"
+		      		android:layout_marginTop="20dp">
+	
+		    	    <CheckedTextView
+		    	        android:layout_width="wrap_content"
+		    	        android:layout_height="wrap_content"
+		    	        android:layout_gravity="left"
+		    	        android:textSize="12sp"
+		    	        android:text="Mostrar Senha"
+		    	        android:textColor="@color/cinzaEscuro" />
+	
+		    	    <TextView 
+		    	        android:layout_width="wrap_content"
+			      		android:layout_height="wrap_content"
+			      		android:layout_gravity="right"
+			      		android:textColor="@color/azul"
+			      		android:textSize="12sp"
+			      		android:clickable="true"
+			      		android:background="@null"
+			      		android:text="Esqueceu?"/>
+		    	</FrameLayout>
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+	<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+		
+		    <ImageView
+		        android:id="@+id/btRegister"
+		        android:layout_width="0dip"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:src="@drawable/bt_mural" />
+		
+		    <ImageView
+		        android:id="@+id/btEnter"
+		        android:layout_width="0dip"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:src="@drawable/bt_finalizar_aula" />
+		</LinearLayout>
+</LinearLayout>
