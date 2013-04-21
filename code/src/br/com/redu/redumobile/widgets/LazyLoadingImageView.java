@@ -141,7 +141,9 @@ public class LazyLoadingImageView extends FrameLayout {
 					bmp = memoryCache.get(urlImagem);
 				} else {
 					bmp = ImageLoader.loadBitmap(mContext, urlImagem, false);
-					memoryCache.put(urlImagem, bmp);
+					if(bmp != null) {
+						memoryCache.put(urlImagem, bmp);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
