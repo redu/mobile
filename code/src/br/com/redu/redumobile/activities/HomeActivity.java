@@ -10,13 +10,13 @@ import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.fragments.HomeFragment;
 import br.com.redu.redumobile.fragments.HomeLastSeenFragment;
 import br.com.redu.redumobile.fragments.HomeNewLecturesFragment;
 import br.com.redu.redumobile.fragments.HomeWallFragment;
-import br.com.redu.redumobile.tasks.LoadStatusesFromWebTask;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
@@ -131,4 +131,5 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	public DbHelper getDbHelper() {
 		return mDbHelper;
 	}
+
 }

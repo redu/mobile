@@ -22,21 +22,30 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
+import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
+import br.com.redu.redumobile.data.LoadingStatusesManager;
+import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.db.DbHelperListener;
 
-public abstract class HomeFragment extends Fragment implements DbHelperListener {
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+public abstract class HomeFragment extends Fragment implements DbHelperListener, OnRefreshListener<ListView> {
 
 	protected static final int NUM_STATUS_BY_PAGE_DEFAULT = 25;
 
 	public enum Type {LastSeen, Wall, NewLectures};
 
-	private ListView mListView;
+	private PullToRefreshListView mListView;
 	protected StatusWallAdapter mAdapter;
 
 	private TextView mTvEmptyList;
 	private LinearLayout mLlNewStatus;
+	private PullToRefreshBase<ListView> mRefreshView;
 	
 	public abstract String getTitle();
 	public abstract Type getType();
@@ -48,14 +57,52 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 	public HomeFragment() {
 
 	}
-	
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		LoadingStatusesManager.add(new OnLoadStatusesListener() {
+			@Override
+			public void onStart() {
+			}
+			
+			@Override
+			public void onError(Exception e) {
+				// TODO show a error message
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if(mRefreshView != null) {
+							mRefreshView.onRefreshComplete();
+						}
+					}
+				});
+			}
+			
+			@Override
+			public void onComplete() {
+				updateStatuses(false);
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if(mRefreshView != null) {
+							mRefreshView.onRefreshComplete();
+						}
+					}
+				});
+			}
+		});
+	}
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		
 		if(activity != null) {
 			((DbHelperHolder) activity).getDbHelper().addDbHelperListener(this);
 		}
-	}
+	}	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,12 +125,15 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 			mAdapter = new StatusWallAdapter(getActivity());
 		}
 		
-		mListView = (ListView) v.findViewById(R.id.list);
+		mListView = (PullToRefreshListView) v.findViewById(R.id.list);
 		mListView.setAdapter(mAdapter);
+		
+		mListView.setOnRefreshListener(this);
+		
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Status status = (Status) mAdapter.getItem(position);
+				Status status = (Status) mAdapter.getItem(position - 1);
 				
 				if(!status.isLogType()) {
 					Intent i = new Intent(getActivity(), StatusDetailActivity.class);
@@ -116,11 +166,6 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 
 		return v;
 	}
-	
-	@Override
-	public void hasNewStatus() {
-		updateStatuses(false);
-	}
 
 	protected long getTimestamp(boolean olderThan) {
 		return (olderThan) ? getOldestStatusTimestamp() : getEarliestStatusTimestamp();	
@@ -140,6 +185,20 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener 
 	
 	protected void showNewStatusMessage() {
 		mLlNewStatus.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		Activity activity = getActivity();
+		if(activity != null) {
+			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
+			mRefreshView = refreshView;
+		}
+	}
+	
+	@Override
+	public void hasNewStatus() {
+		updateStatuses(false);
 	}
 	
 	private void updateStatuses(boolean olderThan) {

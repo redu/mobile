@@ -184,7 +184,8 @@ public class StatusDetailActivity extends BaseActivity {
 			try {
 				DefaultReduClient redu = ReduApplication.getReduClient();
 				answers = redu.getAnswers(mStatusId);
-			} catch (OAuthConnectionException e) {
+			} catch (Exception e) {
+				//TODO show message for internet problems
 				e.printStackTrace();
 				answers = null;
 			}
