@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -22,14 +21,11 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
-import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
-import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.db.DbHelperListener;
 
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -45,7 +41,9 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener,
 
 	private TextView mTvEmptyList;
 	private LinearLayout mLlNewStatus;
-	private PullToRefreshBase<ListView> mRefreshView;
+	
+	protected boolean isWaitingNotification;
+	protected PullToRefreshBase<ListView> mRefreshView;
 	
 	public abstract String getTitle();
 	public abstract Type getType();
@@ -56,43 +54,6 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener,
 
 	public HomeFragment() {
 
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		LoadingStatusesManager.add(new OnLoadStatusesListener() {
-			@Override
-			public void onStart() {
-			}
-			
-			@Override
-			public void onError(Exception e) {
-				// TODO show a error message
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if(mRefreshView != null) {
-							mRefreshView.onRefreshComplete();
-						}
-					}
-				});
-			}
-			
-			@Override
-			public void onComplete() {
-				updateStatuses(false);
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if(mRefreshView != null) {
-							mRefreshView.onRefreshComplete();
-						}
-					}
-				});
-			}
-		});
 	}
 
 	@Override
@@ -111,15 +72,21 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener,
 
 		mTvEmptyList = (TextView) v.findViewById(R.id.tv_empty_list);
 		
-		mLlNewStatus = (LinearLayout) v.findViewById(R.id.ll_new_status);
-		mLlNewStatus.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mLlNewStatus.setVisibility(View.GONE);
-				mAdapter = new StatusWallAdapter(getActivity());
-				updateStatuses(true);
-			}
-		});
+		// TODO Exibir view com New Status, para notificar o usuario que o app recebeu novos Status no bd
+//		mLlNewStatus = (LinearLayout) v.findViewById(R.id.ll_new_status);
+//		mLlNewStatus.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				mLlNewStatus.setVisibility(View.GONE);
+//				mListView.smoothScrollTo(0, new OnSmoothScrollFinishedListener() {
+//					@Override
+//					public void onSmoothScrollFinished() {
+//						//mAdapter.clear();
+//						//updateStatuses(true);
+//					}
+//				});
+//			}
+//		});
 		
 		if(mAdapter == null) {
 			mAdapter = new StatusWallAdapter(getActivity());
@@ -157,12 +124,12 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener,
 					int visibleItemCount, int totalItemCount) {
 				if(firstVisibleItem + visibleItemCount == totalItemCount 
 						&& totalItemCount != 0) {
-					updateStatuses(true);
+					updateStatusesFromDb(true);
 				}
 			}
 		});
 
-		updateStatuses(false);
+		updateStatusesFromDb(false);
 
 		return v;
 	}
@@ -188,20 +155,11 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener,
 	}
 	
 	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		Activity activity = getActivity();
-		if(activity != null) {
-			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
-			mRefreshView = refreshView;
-		}
-	}
-	
-	@Override
 	public void hasNewStatus() {
-		updateStatuses(false);
+		//showNewStatusMessage();
 	}
 	
-	private void updateStatuses(boolean olderThan) {
+	protected void updateStatusesFromDb(boolean olderThan) {
 		new LoadStatusesFromDbTask(olderThan).execute();
 	}
 	
@@ -234,14 +192,17 @@ public abstract class HomeFragment extends Fragment implements DbHelperListener,
 						mAdapter.addAll(statuses, mOlderThan);
 						mAdapter.notifyDataSetChanged();
 						hideEmptyListMessage();
-						
-					} else if (!mOlderThan) {
-						showNewStatusMessage();
 					}
+//					} else if (!mOlderThan) {
+//						showNewStatusMessage();
+//					}
 					
 				} else if(mAdapter.isEmpty()) {
 					showEmptyListMessage();
 			 	}	
+				LoadingStatusesManager.notifyOnComplete();
+			} else {
+				LoadingStatusesManager.notifyOnError(null);
 			}
 		};
 	}

@@ -35,8 +35,6 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	static final int ITEM_WALL = 1;
 	static final int ITEM_LAST_SEEN_STATUS = 2;
 
-	private DbHelper mDbHelper;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_home);
@@ -54,8 +52,6 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		SchedulerManager.getInstance().runNow(this, LoadStatusesFromWebTask.class, 0);
 		// END BuzzNotify
 
-		mDbHelper = DbHelper.getInstance(this);
-		
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));
 		
@@ -123,13 +119,13 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	
 	@Override
 	protected void onDestroy() {
+		DbHelper.getInstance(this).close();
 		super.onDestroy();
-		mDbHelper.close();
 	}
 
 	@Override
 	public DbHelper getDbHelper() {
-		return mDbHelper;
+		return DbHelper.getInstance(this);
 	}
 
 }

@@ -33,7 +33,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshListView.InternalListView;
 import com.handmark.pulltorefresh.library.internal.FlipLoadingLayout;
 import com.handmark.pulltorefresh.library.internal.LoadingLayout;
 import com.handmark.pulltorefresh.library.internal.RotateLoadingLayout;
@@ -991,7 +993,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * 
 	 * @param scrollValue - Position to scroll to
 	 */
-	protected final void smoothScrollTo(int scrollValue) {
+	public final void smoothScrollTo(int scrollValue) {
 		smoothScrollTo(scrollValue, getPullToRefreshScrollDuration());
 	}
 
@@ -1002,7 +1004,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @param scrollValue - Position to scroll to
 	 * @param listener - Listener for scroll
 	 */
-	protected final void smoothScrollTo(int scrollValue, OnSmoothScrollFinishedListener listener) {
+	public final void smoothScrollTo(int scrollValue, OnSmoothScrollFinishedListener listener) {
 		smoothScrollTo(scrollValue, getPullToRefreshScrollDuration(), 0, listener);
 	}
 
@@ -1012,7 +1014,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * 
 	 * @param scrollValue - Position to scroll to
 	 */
-	protected final void smoothScrollToLonger(int scrollValue) {
+	public final void smoothScrollToLonger(int scrollValue) {
 		smoothScrollTo(scrollValue, getPullToRefreshScrollDurationLonger());
 	}
 
@@ -1253,11 +1255,15 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		final int oldScrollValue;
 		switch (getPullToRefreshScrollDirection()) {
 			case HORIZONTAL:
-				oldScrollValue = getScrollX();
+				oldScrollValue = mRefreshableView.getScrollX();
 				break;
 			case VERTICAL:
 			default:
-				oldScrollValue = getScrollY();
+				if(mRefreshableView instanceof InternalListView) {
+					oldScrollValue = 100;//(int) ((ListView) mRefreshableView).get();//FirstVisiblePosition();
+				} else {
+					oldScrollValue = mRefreshableView.getScrollY();
+				}
 				break;
 		}
 
@@ -1646,7 +1652,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		}
 	}
 
-	static interface OnSmoothScrollFinishedListener {
+	public static interface OnSmoothScrollFinishedListener {
 		void onSmoothScrollFinished();
 	}
 

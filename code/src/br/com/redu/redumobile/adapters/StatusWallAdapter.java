@@ -68,6 +68,10 @@ public class StatusWallAdapter extends BaseAdapter {
 			}
 		}
 	}
+	
+	public void clear() {
+		mStatuses = null;
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -149,29 +153,4 @@ public class StatusWallAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
-	
-//	class LoadUserInfoTask extends AsyncTask<Void, Void, User> {
-//
-//		private br.com.developer.redu.models.Status mStatus;
-//		private View mView;
-//		
-//		public LoadUserInfoTask(br.com.developer.redu.models.Status status, View view) {
-//			mStatus = status;
-//			mView = view;
-//		}
-//		
-//		protected User doInBackground(Void... params) {
-//			String userId = String.valueOf(mStatus.user.id);
-//			return ReduApplication.getReduClient().getUser(userId);
-//		}
-//
-//		protected void onPostExecute(User user) {
-//			if (user != null) {
-//				mStatus.user = user;
-//				
-//				((LazyLoadingImageView) mView.findViewById(R.id.iv_photo)).setImageUrl(user.thumbnails.get(0).href);
-//				((TextView) mView.findViewById(R.id.tv_user_nome)).setText(new StringBuffer(user.first_name).append(" ").append(user.last_name).toString());
-//			}
-//		}
-//	}
 }
