@@ -56,7 +56,7 @@ public class EnvironmentFragment extends Fragment {
 			@Override
 			protected List<Environment> doInBackground(Void... params) {
 				try {
-					DefaultReduClient redu = ReduApplication.getReduClient();
+					DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 					return redu.getEnvironments();
 				} catch (OAuthConnectionException e) {
 					e.printStackTrace();

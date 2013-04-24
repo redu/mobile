@@ -162,7 +162,7 @@ public class StatusDetailActivity extends BaseActivity {
 			List<br.com.developer.redu.models.Status> answers;
 
 			try {
-				DefaultReduClient redu = ReduApplication.getReduClient();
+				DefaultReduClient redu = ReduApplication.getReduClient(StatusDetailActivity.this);
 				answers = redu.getAnswers(mStatusId);
 			} catch (Exception e) {
 				//TODO show message for internet problems
@@ -198,8 +198,8 @@ public class StatusDetailActivity extends BaseActivity {
 			
 			br.com.developer.redu.models.Status status;
 			try {
-				DefaultReduClient client = ReduApplication.getReduClient();
-				status = client.postAnswer(statusId, text);
+				DefaultReduClient redu = ReduApplication.getReduClient(StatusDetailActivity.this);
+				status = redu.postAnswer(statusId, text);
 			} catch(Exception e) {
 				status = null;
 			}

@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import br.com.developer.redu.DefaultReduClient;
@@ -75,7 +73,7 @@ public class MorphologyFragment extends Fragment {
 	class LoadUserTask extends AsyncTask<Void, Void, User> {
 		@Override
 		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getReduClient();
+			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 			Log.i("Redu", redu.getAuthorizeUrl());
 			return redu.getMe();
 		}
@@ -106,10 +104,10 @@ public class MorphologyFragment extends Fragment {
 	class LoadSubjectsTask extends AsyncTask<Void, Void, Void> {
 		
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getReduClient();
+			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+			
 			mEnrollmentedSubjects = new ArrayList<Subject>();
-			List<Subject> subjects = new ArrayList<Subject>();
-			subjects = redu.getSubjectsBySpace(mSpace.id);
+			List<Subject> subjects = redu.getSubjectsBySpace(mSpace.id);
 			
 			mLecture = new ArrayList<List<Lecture>>();
 			

@@ -58,8 +58,8 @@ public class LoadStatusesFromWebTask implements Task {
 		DbHelper dbHelper = DbHelper.getInstance(context);
 
 		try {
-			DefaultReduClient redu = ReduApplication.getReduClient();
-			String userId = String.valueOf(ReduApplication.getUser().id);
+			DefaultReduClient redu = ReduApplication.getReduClient(context);
+			String userId = String.valueOf(ReduApplication.getUser(context).id);
 	
 			long dbTimestamp = dbHelper.getTimestamp();
 	
