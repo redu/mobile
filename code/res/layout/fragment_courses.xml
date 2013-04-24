@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#F7F7F7"
     android:orientation="vertical" >
-
+	
     <TextView
         android:id="@+id/tvEnvironment"
         android:layout_width="match_parent"
@@ -13,15 +13,16 @@
         android:drawablePadding="7dp"
         android:gravity="center_vertical"
         android:padding="10dp"
-        android:text="Ambiente"
+        android:text="Carregando..."
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#5D5D5D"
         android:textSize="20dp" />
+    
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
+        
         <ExpandableListView
             android:id="@+id/list"
             android:divider="@null"

@@ -2,11 +2,6 @@ package br.com.redu.redumobile.adapters;
 
 import java.util.List;
 
-import br.com.developer.redu.models.Lecture;
-import br.com.developer.redu.models.Subject;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.activities.LectureActivity;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -17,17 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Subject;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.LectureActivity;
+import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
 
 public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 
 	Context mContext;
 	List<Subject> mSubjects;
 	List<List<Lecture>> mLectures;
-	Dialog mDialog;
+	Subject mCurrentSubject;
+	Dialog mDialogInfo;
 	
 	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures) {
 		mContext = context;
@@ -54,7 +55,6 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		final Lecture lecture = (Lecture) getChild(groupPosition, childPosition);
 		final Subject subject = (Subject) getGroup(groupPosition); 
 		
-		//TODO AJEITAR A POSITION
 		TextView tvOrder = (TextView) convertView.findViewById(R.id.tvOrdering);
 		tvOrder.setText(Integer.toString(lecture.position));
 		
@@ -104,21 +104,39 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		if(convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_module_row, null);
 		}
+		mCurrentSubject = mSubjects.get(groupPosition);
 		
 		ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
 		ibAdd.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				/*Builder builder = new AlertDialog.Builder(mContext);
+				builder.setView(LayoutInflater.from(mContext).inflate(R.layout.popup_listview_row, null));
+				mDialogNewLecture = builder.create();
+		    	mDialogNewLecture.show();*/
+				Intent it = new Intent(mContext, UploadStep1Activity.class);
+				mContext.startActivity(it);
+			}
+		});
+		
+		ImageView ivHelp = (ImageView) convertView.findViewById(R.id.iv_info);
+		ivHelp.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
 				Builder builder = new AlertDialog.Builder(mContext);
-				builder.setView(LayoutInflater.from(mContext).inflate(R.layout.loading_dialog, null));
-				mDialog = builder.create();
-		    	mDialog.show();
+				View v2 = LayoutInflater.from(mContext).inflate(R.layout.popup_listview_row, null);
+				TextView tvInfo = (TextView)v2.findViewById(R.id.tv_insert_file_folder);
+				tvInfo.setText(mCurrentSubject.description);
+				builder.setView(v2);
+				mDialogInfo = builder.create();
+		    	mDialogInfo.show();
 			}
 		});
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvSuject);
-		tv.setText(Html.fromHtml(mSubjects.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildrenCount(groupPosition)+" Aulas</small></font>"));
+		tv.setText(Html.fromHtml(mCurrentSubject.name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildrenCount(groupPosition)+" Aulas</small></font>"));
 		return convertView;
 	}
 

@@ -87,11 +87,8 @@ public class HomeSpaceActivity extends BaseActivity {
 				@Override
 				public void onSwitchToNextFragment(Folder folder) {
 					mFragmentManager.beginTransaction().remove(items[ITEM_SUPPORT_MATERIAL]).commit();
-					//TODO criar pilha
-					//mFragmentManager.beginTransaction().add(arg0, arg1, arg2)
 					SupportMaterialFragment sm = new SupportMaterialFragment(folder);
 					sm.setListener(this);
-					//sm.setListener(materialFragments.get(0).mListener);
 					items[ITEM_SUPPORT_MATERIAL] = sm;
 					materialFragments.add((SupportMaterialFragment)items[ITEM_SUPPORT_MATERIAL]);
                     notifyDataSetChanged();
@@ -122,24 +119,16 @@ public class HomeSpaceActivity extends BaseActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			/*if (position == 2){
-					return items[ITEM_SUPPORT_MATERIAL];
-				}
-				return items[ITEM_SUPPORT_MATERIAL];
-			}
-			else*/
 				return items[position]; 
 		}
 		
 		@Override
 		public void notifyDataSetChanged() {
-			// TODO Auto-generated method stub
 			super.notifyDataSetChanged();
 		}
 		
 		@Override
 		public int getItemPosition(Object object) {
-			// TODO Auto-generated method stub
 			if (object instanceof SupportMaterialFragment)
 	            return POSITION_NONE;
 	        return POSITION_UNCHANGED;
@@ -148,11 +137,11 @@ public class HomeSpaceActivity extends BaseActivity {
 	
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		if (vp.getCurrentItem() == ITEM_SUPPORT_MATERIAL){
-			Log.i("TESTE", "Level BACKPRESSED");
+			//TODO Fazer back.
+		}else{
+			super.onBackPressed();
 		}
-		super.onBackPressed();
 	}
 	
 	public interface SupportMaterialFragmentListener

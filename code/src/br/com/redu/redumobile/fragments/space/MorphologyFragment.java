@@ -6,16 +6,19 @@ import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
@@ -23,6 +26,7 @@ import br.com.developer.redu.models.Subject;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.NewModuleActivity;
 import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 
 public class MorphologyFragment extends Fragment {
@@ -47,6 +51,16 @@ public class MorphologyFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		final View v = inflater.inflate(R.layout.fragment_mophology, container, false);
+		ImageButton ibModulo= (ImageButton)v.findViewById(R.id.btNovoModulo);
+		
+		ibModulo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(getActivity(), NewModuleActivity.class);
+				startActivity(it);
+			}
+		});
 		
 		mSpace = (Space)getActivity().getIntent().getExtras().get(Space.class.getName());
 		Log.i("Disciplina","id: "+mSpace.id);

@@ -9,6 +9,7 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.HomeSpaceActivity;
 import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,9 +75,8 @@ public class SupportMaterialsAdapter extends BaseAdapter {
 			v.setText(mFolders.get(position).name);
 		} else {
 			v= (TextView) mInflater.inflate(R.layout.support_material_files, null);
-			v.setText(mFiles.get(position-(mFolders.size())).name);
+			v.setText(Html.fromHtml(mFiles.get(position-(mFolders.size())).name+"<br><font color=\"#CCCCCC\"><small> ("+mFiles.get(position-(mFolders.size())).size+")</small></font>"));
 		}
-		
 		return v;
 	}
 }
