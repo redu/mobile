@@ -9,8 +9,8 @@ public class ReduApplication extends Application {
 	private static final String CONSUMER_KEY = "YzbH0ulBcOjXSPtmhJuEHNFFf6eZGiamQeOBQhU1";
 	private static final String CONSUMER_SECRET_KEY = "kUdQsrimVZqgS7u1JuCnMGvARWhmiLWcbrZKwYO8";
 	
-	private static final String USER_PIN = "hxEhgW4RY2WOI0q8Gcfh";
-	private static String PIN ;
+	private static final String USER_PIN = "lRfdZWKxMPRgH4NLl7aS";
+	private static String PIN = "lRfdZWKxMPRgH4NLl7aS";
 	
 
 	static private DefaultReduClient reduClient;
@@ -19,7 +19,7 @@ public class ReduApplication extends Application {
 	static public DefaultReduClient getReduClient() {
 		if(reduClient == null) {
 			reduClient = new DefaultReduClient(CONSUMER_KEY, CONSUMER_SECRET_KEY);
-			reduClient.initClient(USER_PIN);
+			reduClient.initClient(PIN);
 		}
 		return reduClient;
 	}
@@ -37,7 +37,7 @@ public class ReduApplication extends Application {
 
 	public static void setPIN(String pIN) {
 		PIN = pIN;
-		reduClient.initClient(USER_PIN);
+		reduClient.initClient(PIN);
 	}
 
 	static public User getUser() {

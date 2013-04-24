@@ -34,6 +34,7 @@ public class LoginWebViewActivity extends Activity{
 		    public void processHTML(String pin)
 		    {
 		        ReduApplication.setPIN(pin);
+		        Log.i("PIN: ", pin);
 		        prefs.edit().putString("pin", pin).commit();
 		        Toast toast = Toast.makeText(mContext, "Aguarde...",Toast.LENGTH_LONG);
 		        toast.show();
