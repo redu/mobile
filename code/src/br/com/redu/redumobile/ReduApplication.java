@@ -37,6 +37,7 @@ public class ReduApplication extends Application {
 
 	public static void setPIN(String pIN) {
 		PIN = pIN;
+		reduClient.initClient(USER_PIN);
 	}
 
 	static public User getUser() {
