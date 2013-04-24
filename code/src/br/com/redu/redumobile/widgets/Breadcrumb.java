@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import br.com.developer.redu.models.Status;
 import android.content.Context;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
+import br.com.developer.redu.models.Status;
 
-public class Breadcrumb extends TextView {
+public class Breadcrumb extends EllipsizingTextView {
 
 	public Breadcrumb(Context context) {
 		super(context);

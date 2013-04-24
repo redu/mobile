@@ -128,11 +128,6 @@ public class LazyLoadingImageView extends FrameLayout {
 	
 	class ImageViewLoader extends AsyncTask<String, Void, Bitmap> {
 		@Override
-		protected void onPreExecute() {
-	        setImageDefault();
-		}
-		
-		@Override
 		protected Bitmap doInBackground(String... params) {
 			Bitmap bmp;
 			String urlImagem = params[0];
@@ -141,7 +136,9 @@ public class LazyLoadingImageView extends FrameLayout {
 					bmp = memoryCache.get(urlImagem);
 				} else {
 					bmp = ImageLoader.loadBitmap(mContext, urlImagem, false);
-					memoryCache.put(urlImagem, bmp);
+					if(bmp != null) {
+						memoryCache.put(urlImagem, bmp);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -155,7 +152,7 @@ public class LazyLoadingImageView extends FrameLayout {
 			if(result != null) {
 				setImage(result);
 			} else {
-				setVisibility(View.INVISIBLE);
+				setImageDefault();
 			}
 		}
 	}

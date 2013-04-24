@@ -2,15 +2,18 @@ package br.com.redu.redumobile.activities;
 
 import java.util.List;
 
-import org.scribe.exceptions.OAuthConnectionException;
-
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Status;
 import br.com.developer.redu.models.Statusable;
@@ -22,13 +25,16 @@ import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusDetailActivity extends BaseActivity {
 
-	public static final String EXTRAS_STATUS = "EXTRAS_STATUS";
+	private static final int NUM_MAX_CHARACERS = 800;
 
-	private Status mStatusHeader;
-	private Status mStatus;
+	public static final String EXTRAS_STATUS = "EXTRAS_STATUS";
+	
+	private LayoutInflater mInflater;
 	
 	private ListView mListView;
-	private View mLlLoadingAnswers;
+	private StatusDetailAdapter mAdapter;
+	private EditText mEditText;
+	private View mFooterLoadingAnswers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,49 +42,81 @@ public class StatusDetailActivity extends BaseActivity {
 		setActionBarTitle("Ambientes");
 
 		Bundle extras = getIntent().getExtras();
-		mStatus = (Status) extras.get(EXTRAS_STATUS);
+		final Status status = (Status) extras.get(EXTRAS_STATUS);
 
-		mLlLoadingAnswers = findViewById(R.id.ll_loading_answers);
+		mInflater = LayoutInflater.from(this);
+		
+		mFooterLoadingAnswers = mInflater.inflate(R.layout.status_detail_footer_loading_answers, null);
+		
 		mListView = (ListView) findViewById(R.id.list);
+		mListView.addHeaderView(createStatusHeaderView(status));
+	
+		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
+		mListView.setAdapter(mAdapter);
+
+		if(status.answers_count > 0) {
+			new LoadAnswersStatus(status.id).execute();
+		}
+		
+		final TextView tvTextCount = (TextView) findViewById(R.id.tv_text_count);
+		mEditText = (EditText) findViewById(R.id.et_text);
+		mEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				int numRemainingChars = NUM_MAX_CHARACERS - s.length();
+				tvTextCount.setText(String.valueOf(numRemainingChars));
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+		
+		addActionToActionBar(R.drawable.ic_add, new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String text = mEditText.getText().toString();
+				if(text.length() <= NUM_MAX_CHARACERS) {
+					new PostAnswerTask().execute(status.id, text);
+				}
+			}
+		});
 	}
 
-	public void onWallClicked(View v) {
-
-	}
-
-	public void onAnswerClicked(View v) {
-		Intent i = new Intent(StatusDetailActivity.this, RespondStatusActivity.class);
-		i.putExtra(RespondStatusActivity.EXTRAS_STATUS, mStatusHeader);
-		startActivity(i);
-	}
-
-	private View createOriginalStatusHeaderView(Status status) {
-		View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.status_detail_header_original_status, null);
+	private View createStatusHeaderView(Status status) {
+		View v = mInflater.inflate(R.layout.status_detail_header_original_status, null);
 
 		((LazyLoadingImageView) v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
 		((TextView) v.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
-		((TextView) v.findViewById(R.id.tv_user_name)).setText(status.user.getCompleteName());
 
+		StringBuffer userActionBuffer = new StringBuffer().append("<b>").append(status.user.getCompleteName()).append("</b>");
+		
 		if (status.isActivityType()) {
-			((TextView) v.findViewById(R.id.tv_action)).setText("comentou");
+			userActionBuffer.append(" comentou");
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.GONE);
 
 		} else if (status.isAnswerType()) {
-			((TextView) v.findViewById(R.id.tv_action)).setText("comentou");
+			userActionBuffer.append(" comentou");
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.GONE);
 
 		} else if (status.isHelpType()) {
-			((TextView) v.findViewById(R.id.tv_action)).setText("pediu ajuda");
+			userActionBuffer.append(" pediu ajuda");
 			v.findViewById(R.id.iv_help_icon).setVisibility(View.VISIBLE);
 		}
+
+		((TextView) v.findViewById(R.id.tv_user_action)).setText(Html.fromHtml(userActionBuffer.toString()));
 
 		((TextView) v.findViewById(R.id.tv_text)).setText(status.text);
 
 		return v;
 	}
 	
-	private View createPublishingLocalHeaderView(Status status) {
-		View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.status_detail_header_publishing_local, null);
+	private View createLocalOfPublicationHeaderView(Status status) {
+		View v = mInflater.inflate(R.layout.status_detail_header_publishing_local, null);
 		
 		Statusable statusable = status.getStatusable();
 		
@@ -103,66 +141,8 @@ public class StatusDetailActivity extends BaseActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		if(mStatusHeader == null) {
-			new LoadStatusHeaderTask(mStatus).execute();
-		} else {
-			mLlLoadingAnswers.setVisibility(View.VISIBLE);
-			new LoadAnswersStatus(mStatusHeader.id).execute();
-		}
 	}
 
-	class LoadStatusHeaderTask extends AsyncTask<Void, Void, br.com.developer.redu.models.Status> {
-		private br.com.developer.redu.models.Status mStatus;
-		
-		public LoadStatusHeaderTask(br.com.developer.redu.models.Status status) {
-			mStatus = status;
-		}
-		
-		@Override
-		protected br.com.developer.redu.models.Status doInBackground(Void... params) {
-			br.com.developer.redu.models.Status statusHeader;
-
-			if(mStatus.isAnswerType()) {
-				try {
-					DefaultReduClient redu = ReduApplication.getReduClient();
-					statusHeader = redu.getStatus(mStatus.getInResponseToStatusId());
-				} catch (OAuthConnectionException e) {
-					e.printStackTrace();
-					statusHeader = null;
-				}
-			} else {
-				statusHeader = mStatus;
-			}
-			
-			return statusHeader;
-		}
-		
-		@Override
-		protected void onPostExecute(br.com.developer.redu.models.Status statusHeader) {
-			if(statusHeader == null) {
-				// TODO tratar quando ocorrer excecao
-				
-			} else {
-				mStatusHeader = statusHeader;
-
-				// TODO Setar title da Action bar com o nome da disciplina/
-				
-				// TODO Adicionar Header com nome da aula/disciplina onde o Status foi postado
-//				View publishingLocalHeaderView = createPublishingLocalHeaderView(statusHeader);
-//				if(publishingLocalHeaderView != null) {
-//					mListView.addHeaderView(publishingLocalHeaderView);
-//				}
-				
-				mListView.addHeaderView(createOriginalStatusHeaderView(statusHeader));
-				mListView.setAdapter(new StatusDetailAdapter(getApplicationContext(), null));
-				
-				if(statusHeader.answers_count > 0) {
-					new LoadAnswersStatus(statusHeader.id).execute();
-				}
-			}
-		}
-	}
-	
 	class LoadAnswersStatus extends
 			AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
 		private String mStatusId;
@@ -174,7 +154,7 @@ public class StatusDetailActivity extends BaseActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			mLlLoadingAnswers.setVisibility(View.VISIBLE);
+			mListView.addFooterView(mFooterLoadingAnswers);
 		}
 
 		@Override
@@ -184,7 +164,8 @@ public class StatusDetailActivity extends BaseActivity {
 			try {
 				DefaultReduClient redu = ReduApplication.getReduClient();
 				answers = redu.getAnswers(mStatusId);
-			} catch (OAuthConnectionException e) {
+			} catch (Exception e) {
+				//TODO show message for internet problems
 				e.printStackTrace();
 				answers = null;
 			}
@@ -195,11 +176,47 @@ public class StatusDetailActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> answers) {
 			if (answers != null && answers.size() > 0) {
-				mListView.setAdapter(new StatusDetailAdapter(getApplicationContext(), answers));
-				mListView.invalidate();
+				mAdapter.addAll(answers);
+				mAdapter.notifyDataSetChanged();
 			}
+			
+			mListView.removeFooterView(mFooterLoadingAnswers);
+		}
+	}
+	
+	class PostAnswerTask extends AsyncTask<String, Void, br.com.developer.redu.models.Status> {
 
-			mLlLoadingAnswers.setVisibility(View.GONE);
+		@Override
+		protected void onPreExecute() {
+			showProgressDialog("Enviando sua resposta…");
+		}
+		
+		@Override
+		protected br.com.developer.redu.models.Status doInBackground(String... params) {
+			String statusId = params[0];
+			String text = params[1];
+			
+			br.com.developer.redu.models.Status status;
+			try {
+				DefaultReduClient client = ReduApplication.getReduClient();
+				status = client.postAnswer(statusId, text);
+			} catch(Exception e) {
+				status = null;
+			}
+			
+			return status;
+		}
+		
+		@Override
+		protected void onPostExecute(br.com.developer.redu.models.Status result) {
+			dismissProgressDialog();
+			
+			if(result == null) {
+				Toast.makeText(StatusDetailActivity.this, "Não foi possível enviar sua resposta.", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(StatusDetailActivity.this, "Resposta enviada com sucesso.", Toast.LENGTH_SHORT).show();
+				finish();
+			}
 		}
 	}
 }

@@ -36,13 +36,12 @@
         android:textColor="@color/cinzaEscuro"
         android:visibility="gone" />
 
-    <ListView
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:divider="@color/dividerColor"
-        android:dividerHeight="1dip" >
-    </ListView>
+        android:dividerHeight="1dip" />
 
 </LinearLayout>

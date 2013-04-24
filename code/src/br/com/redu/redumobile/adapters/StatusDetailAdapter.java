@@ -22,6 +22,14 @@ public class StatusDetailAdapter extends BaseAdapter {
 		mInflater = LayoutInflater.from(context);
 		mAnswers = answers;
 	}
+
+	public void addAll(List<Status> answers) {
+		if(mAnswers == null) {
+			mAnswers = answers;
+		} else {
+			mAnswers.addAll(answers);
+		}
+	}
 	
 	@Override
 	public int getCount() {

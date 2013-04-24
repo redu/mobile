@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.tasks;
+package br.com.redu.redumobile.data;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -32,15 +32,11 @@ public class LoadStatusesFromWebTask implements Task {
 		return "redumobile"; // give it an ID
 	}
 
-	private static boolean mIsWorking;
-	
 	@Override
 	public TaskResult doWork(ContextWrapper ctx) {
 
-		mIsWorking = true;
+		TaskResult taskResult = new TaskResult();
 		
-		TaskResult res = new TaskResult();
-
 		List<Status> notifiableStatues = loadStatuses(ctx);
 
 		for (Status status : notifiableStatues) {
@@ -48,15 +44,15 @@ public class LoadStatusesFromWebTask implements Task {
 			notification.setNotificationId(Integer.valueOf(status.id));
 			// notification.notificationIconResource = R.drawable.icon_notification_cards_clubs;
 			notification.setNotificationClickIntentClass(HomeActivity.class);
-			res.addMessage(notification);
+			taskResult.addMessage(notification);
 		}
-
-		mIsWorking = false;
 		
-		return res;
+		return taskResult;
 	}
 
 	private List<Status> loadStatuses(Context context) {
+		LoadingStatusesManager.notifyOnStart();
+
 		List<Status> notifiableStatuses = new ArrayList<Status>();
 
 		DbHelper dbHelper = DbHelper.getInstance(context);
@@ -105,9 +101,12 @@ public class LoadStatusesFromWebTask implements Task {
 					}
 				}
 			}
+
+			LoadingStatusesManager.notifyOnComplete();
+
 		} catch(OAuthConnectionException e) {
 			e.printStackTrace();
-			mIsWorking = false;
+			LoadingStatusesManager.notifyOnError(e);
 		}
 
 		return notifiableStatuses;
@@ -136,9 +135,5 @@ public class LoadStatusesFromWebTask implements Task {
 		}
 		
 		return false;
-	}
-
-	public static boolean isWorking() {
-		return mIsWorking;
 	}
 }

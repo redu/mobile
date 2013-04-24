@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>redu-android</project>
+		<project>ReduMobile-AndroidPushRefresh</project>
 		<project>ReduMobile-ViewPagerIndicator</project>
 	</projects>
 	<buildSpec>
