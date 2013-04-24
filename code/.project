@@ -6,6 +6,7 @@
 		<project>redu-android</project>
 		<project>ReduMobile-AndroidPushRefresh</project>
 		<project>ReduMobile-ViewPagerIndicator</project>
+		<project>ReduMobile-WebCachedImageView</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

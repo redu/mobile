@@ -2,20 +2,16 @@ package br.com.redu.redumobile.adapters;
 
 import java.util.List;
 
-import br.com.developer.redu.models.File;
-import br.com.developer.redu.models.Folder;
-import br.com.developer.redu.models.Status;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.activities.HomeSpaceActivity;
-import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import br.com.developer.redu.models.File;
+import br.com.developer.redu.models.Folder;
+import br.com.redu.redumobile.R;
 
 public class SupportMaterialsAdapter extends BaseAdapter {
 

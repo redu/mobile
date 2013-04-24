@@ -2,18 +2,15 @@ package br.com.redu.redumobile.adapters;
 
 import java.util.List;
 
-import br.com.developer.redu.models.Environment;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import br.com.developer.redu.models.Environment;
+import br.com.redu.redumobile.R;
 
 public class EnviromentListAdapter extends BaseAdapter {
 

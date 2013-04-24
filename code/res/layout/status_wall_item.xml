@@ -23,11 +23,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <br.com.redu.redumobile.widgets.LazyLoadingImageView
+            <android.view.WebCachedImageView
                 android:id="@+id/iv_photo"
                 android:layout_width="48dip"
                 android:layout_height="48dip"
-                app:src="@drawable/default_thumbnail_user" />
+                app:placeHolder="@drawable/default_thumbnail_user" />
 
             <LinearLayout
                 android:layout_width="0dip"

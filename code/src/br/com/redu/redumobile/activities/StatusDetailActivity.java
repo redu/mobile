@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WebCachedImageView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.StatusDetailAdapter;
 import br.com.redu.redumobile.util.DateUtil;
-import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusDetailActivity extends BaseActivity {
 
@@ -90,7 +90,7 @@ public class StatusDetailActivity extends BaseActivity {
 	private View createStatusHeaderView(Status status) {
 		View v = mInflater.inflate(R.layout.status_detail_header_original_status, null);
 
-		((LazyLoadingImageView) v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
+		((WebCachedImageView) v.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
 		((TextView) v.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
 
 		StringBuffer userActionBuffer = new StringBuffer().append("<b>").append(status.user.getCompleteName()).append("</b>");
