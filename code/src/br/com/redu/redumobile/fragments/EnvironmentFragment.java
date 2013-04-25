@@ -5,9 +5,9 @@ import java.util.List;
 import org.scribe.exceptions.OAuthConnectionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +19,16 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.EnvironmentActivity;
 import br.com.redu.redumobile.adapters.EnviromentListAdapter;
 
-public class EnvironmentFragment extends Fragment {
+public class EnvironmentFragment extends HomeFragment {
 
 	private List<Environment> mEnvironments;
 
 	private ListView mListView;
 	private ProgressBar mProgressBar;
 
-	private OnEnvironmentSelectedListener mListener;
-	
-	public interface OnEnvironmentSelectedListener {
-        public void onEnvironmentSelected(Environment environment);
-    }
-	
 	public EnvironmentFragment() {
 		
 	}
@@ -46,7 +41,9 @@ public class EnvironmentFragment extends Fragment {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				mListener.onEnvironmentSelected(mEnvironments.get(position));
+				Intent i = new Intent(getActivity(), EnvironmentActivity.class);
+				i.putExtra(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironments.get(position));
+				startActivity(i);
 			}
 		});
 		
@@ -78,13 +75,8 @@ public class EnvironmentFragment extends Fragment {
 		return v;
 	}
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnEnvironmentSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnEnvironmentSelectedListener");
-        }
-    }
+	@Override
+	public String getTitle() {
+		return "Ambientes";
+	}
 }
