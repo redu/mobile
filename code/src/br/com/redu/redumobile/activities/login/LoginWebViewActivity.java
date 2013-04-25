@@ -3,6 +3,7 @@ package br.com.redu.redumobile.activities.login;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -49,9 +50,17 @@ public class LoginWebViewActivity extends BaseActivity {
 			}
 		});
 
-//		Log.i("AUTHORIZE URL", client.getAuthorizeUrl());
-		DefaultReduClient client = ReduApplication.getReduClient(this);
-		mWebView.loadUrl(client.getAuthorizeUrl());
+		new AsyncTask<Void, Void, String>() {
+			@Override
+			protected String doInBackground(Void... params) {
+		 		DefaultReduClient client = ReduApplication.getReduClient(LoginWebViewActivity.this);
+		 		return client.getAuthorizeUrl();
+			}
+			@Override
+			protected void onPostExecute(String authorizeUrl) {
+				mWebView.loadUrl(authorizeUrl);			
+			}
+		}.execute();
 	}
 	
 	// An instance of this class will be registered as a JavaScript interface
