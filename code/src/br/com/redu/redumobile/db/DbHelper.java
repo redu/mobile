@@ -394,12 +394,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put(TableUser.COLUMN_FIRST_NAME, user.first_name);
 		values.put(TableUser.COLUMN_LAST_NAME, user.last_name);
 		
+		long id = db.insert(TableUser.NAME, null, values);	
+
 		// putting thumbnails datas
 		for(Thumbnail thumbnail : user.thumbnails) {
 			putThumbnail(db, thumbnail, user.id);
 		}
 		
-		return db.insert(TableUser.NAME, null, values);	
+		return id;
 	}
 	
 	private long putThumbnail(SQLiteDatabase db, Thumbnail thumbnail, int userId) {
