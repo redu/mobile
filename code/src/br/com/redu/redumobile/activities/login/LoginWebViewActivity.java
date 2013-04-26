@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.BaseActivity;
 import br.com.redu.redumobile.activities.HomeActivity;
+import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.PinCodeHelper;
 
 public class LoginWebViewActivity extends BaseActivity {
@@ -67,10 +69,22 @@ public class LoginWebViewActivity extends BaseActivity {
 	// An instance of this class will be registered as a JavaScript interface
 	class MyJavaScriptInterface {
 		public void processHTML(String pinCode) {
+			new AsyncTask<Void, Void, Void>() {
+				@Override
+				protected Void doInBackground(Void... params) {
+			 		DbHelper dbHelper = DbHelper.getInstance(LoginWebViewActivity.this);
+			 		User appUser = ReduApplication.getUser(LoginWebViewActivity.this);
+			 		dbHelper.putAppUser(appUser);
+			 		return null;
+				}
+			}.execute();
+			
 			PinCodeHelper.setPinCode(getApplicationContext(), pinCode);
-			dismissProgressDialog();
+			
 			Intent it = new Intent(LoginWebViewActivity.this, HomeActivity.class);
 			startActivity(it);
+			
+			dismissProgressDialog();
 			finish();
 		}
 	}
