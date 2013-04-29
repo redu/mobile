@@ -51,6 +51,8 @@ public class LoadStatusesFromWebTask implements Task {
 	}
 
 	private List<Status> loadStatuses(Context context) {
+		boolean firstRunning = false;
+		
 		LoadingStatusesManager.notifyOnStart();
 
 		List<Status> notifiableStatuses = new ArrayList<Status>();
@@ -61,15 +63,31 @@ public class LoadStatusesFromWebTask implements Task {
 			DefaultReduClient redu = ReduApplication.getReduClient(context);
 			String userId = String.valueOf(ReduApplication.getUser(context).id);
 	
-			long dbTimestamp = dbHelper.getTimestamp();
+			long dbTimestamp;
+			if(dbHelper.getOldestStatusesWereDownloaded(userId)) {
+				dbTimestamp = dbHelper.getTimestamp();
+			} else {
+				dbTimestamp = 0;
+			}
+			firstRunning = (dbTimestamp == 0) ? true : false;
 	
 			boolean loadNextPage = true;
 	
 			for (int page = 1; loadNextPage; page++) {
-				List<Status> statuses = redu.getStatusesTimelineByUser(userId, null, String.valueOf(page));
+				String pageStr = String.valueOf(page);
+				
+				List<Status> statuses = new ArrayList<Status>();
+				statuses.addAll(redu.getStatusesTimelineByUser(userId, Status.TYPE_ACTIVITY, pageStr));
+				statuses.addAll(redu.getStatusesTimelineByUser(userId, Status.TYPE_HELP, pageStr));
+				statuses.addAll(redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_COURSE, pageStr));
+				statuses.addAll(redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr));
+				statuses.addAll(redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr));
 	
-				if (statuses != null) {
-	
+				if (statuses.size() == 0) {
+					dbHelper.setOldestStatusesWereDownloaded(userId);
+					loadNextPage = false;
+					
+				} else {
 					for (Status status : statuses) {
 						try {
 							status.createdAtInMillis = DateUtil.dfIn.parse(status.created_at).getTime();
@@ -80,23 +98,11 @@ public class LoadStatusesFromWebTask implements Task {
 	
 						if (status.createdAtInMillis <= dbTimestamp) {
 							loadNextPage = false;
-							break;
-	
 						} else {
-							// ignoring unused Status on mobile app
-							if (status.isLogType()) {
-								if (!status.isLectureLogeableType() 
-										&& !status.isCourseLogeableType() 
-										&& !status.isSubjectLogeableType()) {
-									continue;
-								}
-							}
-	
-							if(checkNotifiable(context, status)) {
+							long id = dbHelper.putStatus(status, userId);
+							if(checkNotifiable(context, status) && firstRunning == false && id != -1) {
 								notifiableStatuses.add(status);
 							}
-							
-							dbHelper.putStatus(status);
 						}
 					}
 				}

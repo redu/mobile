@@ -29,10 +29,12 @@ public class DbHelper extends SQLiteOpenHelper {
 		public static final String NAME = "AppUser";
 		
 		public static final String COLUMN_ID = "id";
+		public static final String COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED = "oldest_statuses_were_downloaded";
 		
 		public static final String CREATE = "CREATE TABLE "
 				+ NAME + "(" 
-				+ COLUMN_ID + " TEXT PRIMARY KEY );";
+				+ COLUMN_ID + " TEXT PRIMARY KEY, "
+				+ COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED + " INTEGER );";
 	}
 	
 	// TABLE STATUS
@@ -447,7 +449,6 @@ public class DbHelper extends SQLiteOpenHelper {
 	synchronized public long setStatusAsLastSeen(Status status) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 
-		// putting Status datas
         ContentValues statusValues = new ContentValues();
         statusValues.put(TableStatus.COLUMN_LAST_SEEN, 1);
         statusValues.put(TableStatus.COLUMN_LAST_SEEN_AT_IN_MILLIS, System.currentTimeMillis());
@@ -459,6 +460,36 @@ public class DbHelper extends SQLiteOpenHelper {
         notifyListenters();
         
         return id;
+	}
+	
+	synchronized public long setOldestStatusesWereDownloaded(String appUserId) {
+		SQLiteDatabase db = this.getWritableDatabase();  
+		
+		ContentValues values = new ContentValues();
+		values.put(TableAppUser.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED, 1);
+		
+		long id = db.update(TableAppUser.NAME, values, TableAppUser.COLUMN_ID + " = ?", new String[] {appUserId});
+		
+		db.close();
+		
+		return id;
+	}
+	
+	synchronized public boolean getOldestStatusesWereDownloaded(String appUserId) {
+		boolean oledestStatusesWereDownloaded = false;
+		
+		SQLiteDatabase db = this.getReadableDatabase();  
+		
+		Cursor cursor = db.query(TableAppUser.NAME, null, TableAppUser.COLUMN_ID + " = ?", new String[] {appUserId}, null, null, null);
+        if (cursor.moveToFirst()) {  
+        	int value = cursor.getInt(cursor.getColumnIndex(TableAppUser.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED));
+        	oledestStatusesWereDownloaded = (value == 0) ? false : true;
+        }
+        
+        cursor.close();  
+        db.close();
+        
+        return oledestStatusesWereDownloaded;
 	}
 
 	private void notifyListenters() {
