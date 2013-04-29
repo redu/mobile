@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import br.com.developer.redu.DefaultReduClient;
@@ -56,6 +57,7 @@ public class MorphologyFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent it = new Intent(getActivity(), NewModuleActivity.class);
+				it.putExtra(Space.class.getName(), mSpace);
 				startActivity(it);
 			}
 		});
@@ -64,6 +66,7 @@ public class MorphologyFragment extends Fragment {
 		Log.i("Disciplina","id: "+mSpace.id);
 		
 		mExpListView = (ExpandableListView) v.findViewById(R.id.elvSubject);
+		mExpListView.setEmptyView(getActivity().findViewById(R.id.elv_subject_empyt));
 		
 		new LoadUserTask().execute();
 		

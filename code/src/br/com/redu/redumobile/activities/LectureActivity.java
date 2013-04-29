@@ -11,12 +11,15 @@ import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.util.DownloadHelper;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,10 +43,11 @@ public class LectureActivity extends BaseActivity{
 	
 	private ProgressDialog mProgressDialog;
 	
+	private AlertDialog alertDialog;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lecture);
 		
@@ -62,21 +66,68 @@ public class LectureActivity extends BaseActivity{
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-	
 		
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				this);
+ 
+		// set title
+		alertDialogBuilder.setTitle("Visualização no Navegador");
+ 
+		// set dialog message
+		alertDialogBuilder
+			.setMessage("A visualização desta Aula será feita através do navegador web do seu dispositivo")
+			.setCancelable(false)
+			.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					// if this button is clicked, close
+					// current activity
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse(mLecture.getSelfLink()));
+					startActivity(i);
+				}
+			  })
+			.setNegativeButton("Cancelar",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					// if this button is clicked, just close
+					// the dialog box and do nothing
+					dialog.cancel();
+				}
+			});
+ 				// create alert dialog
+			alertDialog = alertDialogBuilder.create();
+
+	
 		mLecture = (Lecture)getIntent().getExtras().get(Lecture.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		LinearLayout layoutLecture;
-		if (mLecture.type.equals(Lecture.TYPE_CANVAS) || mLecture.type.equals(Lecture.TYPE_EXERCISE)) {
-			layoutLecture = (LinearLayout)findViewById(R.id.llCanvasExercice);
-			TextView tvCanvas = (TextView) layoutLecture.findViewById(R.id.tvCanvasExercice);
-			ImageView ibCanvas = (ImageView) layoutLecture.findViewById(R.id.ivCanvasExercice);
-			tvCanvas.setText("Exercice... ou Canvas...");
+		if (mLecture.type.equals(Lecture.TYPE_CANVAS)) {
+			layoutLecture = (LinearLayout)findViewById(R.id.llCanvas);
+			ImageView ibCanvas = (ImageView) layoutLecture.findViewById(R.id.ivCanvas);
+			ibCanvas.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					alertDialog.show();
+					Log.i("BONECAO", "FERROOO");
+				}
+			});
+			layoutLecture.setVisibility(View.VISIBLE);
+		}else if(mLecture.type.equals(Lecture.TYPE_EXERCISE)){
+			layoutLecture = (LinearLayout)findViewById(R.id.llExercice);
+			ImageView ivExercice = (ImageView) layoutLecture.findViewById(R.id.ivExercice);
+			ivExercice.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					alertDialog.show();
+					Log.i("BONECAO", "METALLLLL");
+				}
+			});
 			layoutLecture.setVisibility(View.VISIBLE);
 		}else if (mLecture.type.equals(Lecture.TYPE_DOCUMENT)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llDocument);
 			ImageView ivDocument = (ImageView) layoutLecture.findViewById(R.id.ivDocument);
-			ivDocument.setImageResource(R.drawable.ic_doc);
+			ivDocument.setImageResource(R.drawable.ic_doc_big);
 			TextView tvDocument = (TextView) layoutLecture.findViewById(R.id.tvDocument);
 			tvDocument.setText(mLecture.name);
 			ImageButton ibDocument = (ImageButton) layoutLecture.findViewById(R.id.btAcessarDocument);
@@ -106,7 +157,7 @@ public class LectureActivity extends BaseActivity{
 		}else if (mLecture.type.equals(Lecture.TYPE_MEDIA)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llMedia);
 			ImageView ivMedia = (ImageView) layoutLecture.findViewById(R.id.ivMedia);
-			ivMedia.setImageResource(R.drawable.ic_video_big);
+			ivMedia.setImageResource(R.drawable.ic_midia_big);
 			TextView tvMedia = (TextView) layoutLecture.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
 			ImageButton ibMedia = (ImageButton) layoutLecture.findViewById(R.id.ibAcessarMedia);
@@ -121,7 +172,7 @@ public class LectureActivity extends BaseActivity{
 		}else if (mLecture.type.equals(Lecture.TYPE_PAGE)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llPage);
 			TextView tvPage = (TextView) layoutLecture.findViewById(R.id.tvPage);
-			tvPage.setText(mLecture.raw);
+			tvPage.setText(Html.fromHtml(mLecture.content));
 			layoutLecture.setVisibility(View.VISIBLE);
 		}
 		

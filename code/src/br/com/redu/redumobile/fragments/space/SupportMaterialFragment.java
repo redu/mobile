@@ -11,6 +11,8 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,6 +48,8 @@ public class SupportMaterialFragment extends Fragment {
 	
 	ProgressDialog mProgressDialog;
 	
+	DownloadFile df;
+	
 	
 	ListView lvFiles;
 	private SupportMaterialFragmentListener mListener;
@@ -57,7 +61,7 @@ public class SupportMaterialFragment extends Fragment {
 	public SupportMaterialFragment(Folder folder) {
 		mFolder = folder;
 	}
-
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
@@ -71,6 +75,14 @@ public class SupportMaterialFragment extends Fragment {
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		
+		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	df.cancel(true);
+		    	df.running = false;
+		        dialog.dismiss();
+		    }
+		});
 		
 		if(mFolder != null){
 			indice = (TextView)v.findViewById(R.id.tvIndice);
@@ -93,10 +105,11 @@ public class SupportMaterialFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent it = new Intent(getActivity(), UploadFileFolderActivity.class);
+				it.putExtra(Space.class.getName(), mSpace);
 				if(mFolder != null)
-					it.putExtra(Folder.class.getName(), mFolder);
+					it.putExtra("id", mFolder.id);
 				else
-					it.putExtra(Space.class.getName(), mSpace);
+					it.putExtra("id", mSpace.id);
 				startActivity(it);
 			}
 		});
@@ -136,7 +149,8 @@ public class SupportMaterialFragment extends Fragment {
 						}
 						
 					} else {
-						new DownloadFile().execute(files);
+						df = new DownloadFile();
+						df.execute(files);
 					}
 					
 				}
@@ -188,6 +202,9 @@ public class SupportMaterialFragment extends Fragment {
 	// usually, subclasses of AsyncTask are declared inside the activity class.
 	// that way, you can easily modify the UI thread from here
 	private class DownloadFile extends AsyncTask<File, Integer, java.io.File> {
+		
+		private volatile boolean running = true;
+		
 	    @Override
 	    protected java.io.File doInBackground(File... file) {
 	        try {
@@ -224,6 +241,13 @@ public class SupportMaterialFragment extends Fragment {
 	            while ((count = input.read(data)) != -1) {
 	                total += count;
 	                // publishing the progress....
+	                if (!running){
+	                	output.flush();
+	    	            output.close();
+	    	            input.close();
+	    	            filling.delete();
+	                	return null;
+	                }
 	                publishProgress((int) (total * 100 / fileLength));
 	                output.write(data, 0, count);
 	            }
@@ -239,8 +263,12 @@ public class SupportMaterialFragment extends Fragment {
 	    
 	    @Override
 	    protected void onPreExecute() {
-	        super.onPreExecute();
 	        mProgressDialog.show();
+	    }
+	    
+	    @Override
+	    protected void onCancelled() {
+	        running = false;    
 	    }
 	    
 	    @Override
@@ -252,7 +280,7 @@ public class SupportMaterialFragment extends Fragment {
 	    @Override
 	    protected void onPostExecute(java.io.File file) {
 	    	super.onPostExecute(file);
-	    	mProgressDialog.setProgress(0);
+	    	publishProgress(0);
 	    	mProgressDialog.dismiss();
 	    	if (getActivity() != null){
 	    		try {

@@ -28,7 +28,6 @@ public class LoginWebViewActivity extends BaseActivity {
 		if(PinCodeHelper.hasPinCode(this)) {
 			startActivity(new Intent(this, HomeActivity.class));
 			finish();
-
 		} else {
 			setContentView(R.layout.activity_login_web);
 	
@@ -65,7 +64,7 @@ public class LoginWebViewActivity extends BaseActivity {
 			}.execute();
 		}
 	}
-	
+
 	// An instance of this class will be registered as a JavaScript interface
 	class MyJavaScriptInterface {
 		public void processHTML(String pinCode) {
