@@ -12,7 +12,7 @@ import br.com.redu.redumobile.db.DbHelper;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeLastSeenFragment extends HomeFragment {
+public class HomeLastSeenFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

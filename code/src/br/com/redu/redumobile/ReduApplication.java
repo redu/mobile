@@ -13,24 +13,23 @@ public class ReduApplication extends Application {
 
 //	private static final String USER_PIN = "hxEhgW4RY2WOI0q8Gcfh";
 
-	static private DefaultReduClient reduClient;
+	static private DefaultReduClient reduClientInitialized;
 	static private User user;
 
 	static public DefaultReduClient getReduClient(Context context) {
-		if(reduClient == null) {
-			DefaultReduClient tempClient = new DefaultReduClient(CONSUMER_KEY, CONSUMER_SECRET_KEY);
-
-			String pinCode = PinCodeHelper.getPinCode(context);
-			if(pinCode != null) {
-				tempClient.initClient(pinCode);
-				reduClient = tempClient;
-			}
-
-			return tempClient;
-
-		} else {
-			return reduClient;
+		if(reduClientInitialized != null) {
+			return reduClientInitialized;
 		}
+		
+		DefaultReduClient reduClient = new DefaultReduClient(CONSUMER_KEY, CONSUMER_SECRET_KEY);
+			
+		String pinCode = PinCodeHelper.getPinCode(context);
+		if(pinCode != null) {
+			reduClient.initClient(pinCode);
+			reduClientInitialized = reduClient;
+		}
+		
+		return reduClient;
 	}
 
 	static public User getUser(Context context) {

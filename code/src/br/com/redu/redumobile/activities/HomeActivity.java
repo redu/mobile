@@ -13,6 +13,7 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperHolder;
+import br.com.redu.redumobile.fragments.EnvironmentFragment;
 import br.com.redu.redumobile.fragments.HomeFragment;
 import br.com.redu.redumobile.fragments.HomeLastSeenFragment;
 import br.com.redu.redumobile.fragments.HomeNewLecturesFragment;
@@ -29,11 +30,12 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 30;
 	
-	static final int NUM_ITEMS = 3;
+	static final int NUM_ITEMS = 4;
 	
 	static final int ITEM_NEW_LECTURES = 0;
-	static final int ITEM_WALL = 1;
-	static final int ITEM_LAST_SEEN_STATUS = 2;
+	static final int ITEM_LAST_SEEN_STATUS = 1;
+	static final int ITEM_WALL = 2;
+	static final int ITEM_ENVIRONMENTS = 3;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,8 +99,9 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 			fragments = new HomeFragment[NUM_ITEMS];
 
 			fragments[ITEM_NEW_LECTURES] = new HomeNewLecturesFragment();
-			fragments[ITEM_WALL] = new HomeWallFragment();
 			fragments[ITEM_LAST_SEEN_STATUS] = new HomeLastSeenFragment();
+			fragments[ITEM_WALL] = new HomeWallFragment();
+			fragments[ITEM_ENVIRONMENTS] = new EnvironmentFragment();
 		}
 
 		@Override

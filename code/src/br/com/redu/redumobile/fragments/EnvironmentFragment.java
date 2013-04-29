@@ -1,13 +1,14 @@
 package br.com.redu.redumobile.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +20,29 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.EnvironmentActivity;
 import br.com.redu.redumobile.adapters.EnviromentListAdapter;
 
-public class EnvironmentFragment extends Fragment {
+public class EnvironmentFragment extends HomeFragment {
 
-	private List<Environment> mEnvironments;
+	private static final String ENVIRONMENTS_SAVED = "ENVIRONMENTS_SAVED";
+	
+	private ArrayList<Environment> mEnvironments;
 
 	private ListView mListView;
 	private ProgressBar mProgressBar;
 
-	private OnEnvironmentSelectedListener mListener;
-	
-	public interface OnEnvironmentSelectedListener {
-        public void onEnvironmentSelected(Environment environment);
-    }
-	
 	public EnvironmentFragment() {
 		
 	}
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -46,45 +51,60 @@ public class EnvironmentFragment extends Fragment {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				mListener.onEnvironmentSelected(mEnvironments.get(position));
+				Intent i = new Intent(getActivity(), EnvironmentActivity.class);
+				i.putExtra(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironments.get(position));
+				startActivity(i);
 			}
 		});
 		
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		
-		new AsyncTask<Void, Void, List<Environment>>() {
-			@Override
-			protected List<Environment> doInBackground(Void... params) {
-				try {
-					DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
-					return redu.getEnvironments();
-				} catch (OAuthConnectionException e) {
-					e.printStackTrace();
-					return null;
+		if(savedInstanceState != null && savedInstanceState.containsKey(ENVIRONMENTS_SAVED)) {
+			mEnvironments = (ArrayList<Environment>) savedInstanceState.get(ENVIRONMENTS_SAVED);
+			mListView.setAdapter(new EnviromentListAdapter(getActivity(), mEnvironments));
+			mProgressBar.setVisibility(View.GONE);
+			
+		} else {
+			new AsyncTask<Void, Void, List<Environment>>() {
+				@Override
+				protected List<Environment> doInBackground(Void... params) {
+					try {
+						DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+						return redu.getEnvironments();
+					} catch (OAuthConnectionException e) {
+						e.printStackTrace();
+						return null;
+					}
 				}
-			}
-
-			protected void onPostExecute(List<Environment> environments) {
-				Activity activity = getActivity();
-				if(activity != null && environments != null) {
-					mEnvironments = environments;
-					mListView.setAdapter(new EnviromentListAdapter(activity, environments));
-				}
-				mProgressBar.setVisibility(View.GONE);
-			};
-
-		}.execute();
+	
+				protected void onPostExecute(List<Environment> environments) {
+					Activity activity = getActivity();
+					if(activity != null && environments != null) {
+						mEnvironments = new ArrayList<Environment>(environments);
+						mListView.setAdapter(new EnviromentListAdapter(activity, mEnvironments));
+					}
+					mProgressBar.setVisibility(View.GONE);
+				};
+	
+			}.execute();
+		}
 		
 		return v;
 	}
+	
+	@Override
+	public void onViewStateRestored(Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(ENVIRONMENTS_SAVED, mEnvironments);
+		super.onSaveInstanceState(outState);
+	}
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnEnvironmentSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnEnvironmentSelectedListener");
-        }
-    }
+	@Override
+	public String getTitle() {
+		return "Ambientes";
+	}
 }

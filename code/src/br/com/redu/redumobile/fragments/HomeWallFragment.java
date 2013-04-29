@@ -14,7 +14,7 @@ import br.com.redu.redumobile.db.DbHelper;
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeWallFragment extends HomeFragment {
+public class HomeWallFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
