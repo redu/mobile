@@ -8,6 +8,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WebCachedImageView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.widgets.Breadcrumb;
-import br.com.redu.redumobile.widgets.LazyLoadingImageView;
 
 public class StatusWallAdapter extends BaseAdapter {
 
@@ -83,7 +83,7 @@ public class StatusWallAdapter extends BaseAdapter {
 		
 		((Breadcrumb) convertView.findViewById(R.id.tv_breadcrumb)).setStatus(status);
 		
-		((LazyLoadingImageView) convertView.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
+		((WebCachedImageView) convertView.findViewById(R.id.iv_photo)).setImageUrl(status.user.getThumbnailUrl());
 		
 		StringBuffer userActionResultBuffer = new StringBuffer();
 		userActionResultBuffer.append("<b>").append(status.user.getCompleteName()).append("</b>");

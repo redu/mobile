@@ -58,6 +58,20 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView tvOrder = (TextView) convertView.findViewById(R.id.tvOrdering);
 		tvOrder.setText(Integer.toString(lecture.position));
 		
+		ImageView ivLecture = (ImageView) convertView.findViewById(R.id.ivLecture);
+		
+		if (lecture.type.equals(Lecture.TYPE_DOCUMENT)){
+			ivLecture.setImageResource(R.drawable.ic_doc_mini);
+		}else if(lecture.type.equals(Lecture.TYPE_MEDIA)){
+			ivLecture.setImageResource(R.drawable.ic_midia_mini);
+		}else if(lecture.type.equals(Lecture.TYPE_PAGE)){
+			ivLecture.setImageResource(R.drawable.ic_page);
+		}else if(lecture.type.equals(Lecture.TYPE_CANVAS)){
+			ivLecture.setImageResource(R.drawable.ic_canvas_mini);
+		}else if(lecture.type.equals(Lecture.TYPE_EXERCISE)){
+			ivLecture.setImageResource(R.drawable.ic_exercice_mini);
+		}
+		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvLecturesName);
 		tv.setText(lecture.name);
 		

@@ -80,7 +80,7 @@ public class RespondStatusActivity extends BaseActivity {
 			
 			br.com.developer.redu.models.Status status;
 			try {
-				DefaultReduClient client = ReduApplication.getReduClient();
+				DefaultReduClient client = ReduApplication.getReduClient(RespondStatusActivity.this);
 				status = client.postAnswer(mStatus.id, text);
 			} catch(Exception e) {
 				status = null;

@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
@@ -25,13 +26,16 @@ public class PopupAdapter extends BaseAdapter {
 
 	final private LayoutInflater mInflater;
 	final private Context mContext;
-	
+	private Space space;
+	private String id;
 	private String[] values;
 	
-	public PopupAdapter(Context context, String[] values) {
+	public PopupAdapter(Context context, String[] values, String id, Space space) {
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		this.values = values;
+		this.id = id;
+		this.space = space;
 	}
 	
 	@Override
@@ -69,6 +73,8 @@ public class PopupAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					Intent it = new Intent(mContext, UploadStep1Activity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
 					mContext.startActivity(it);
 				}
 			});
@@ -79,6 +85,8 @@ public class PopupAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					Intent it = new Intent(mContext, NewFolderActivity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
 					mContext.startActivity(it);
 				}
 			});

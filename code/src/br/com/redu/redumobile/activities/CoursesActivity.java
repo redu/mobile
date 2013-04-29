@@ -48,7 +48,7 @@ public class CoursesActivity extends Activity {
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getReduClient();
+				DefaultReduClient redu = ReduApplication.getReduClient(CoursesActivity.this);
 				mSpaces = redu.getSpacesByCourse(mCourse.id);
 				return null;
 			}

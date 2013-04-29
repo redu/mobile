@@ -78,7 +78,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 		
 		new AsyncTask<Void, Void, Void>() {
 			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getReduClient();
+				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 
 				mEnrollmentedCourses = new ArrayList<Course>();
 				mSpaces = new ArrayList<List<Space>>();

@@ -105,10 +105,11 @@ public class SupportMaterialFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent it = new Intent(getActivity(), UploadFileFolderActivity.class);
+				it.putExtra(Space.class.getName(), mSpace);
 				if(mFolder != null)
-					it.putExtra(Folder.class.getName(), mFolder);
+					it.putExtra("id", mFolder.id);
 				else
-					it.putExtra(Space.class.getName(), mSpace);
+					it.putExtra("id", mSpace.id);
 				startActivity(it);
 			}
 		});
@@ -168,7 +169,7 @@ public class SupportMaterialFragment extends Fragment {
 	
 	class LoadFoldersAndFilesTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getReduClient();
+			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 			String folderRaizID;
 			if(mFolder == null){
 				folderRaizID = redu.getFolderID(mSpace.id);

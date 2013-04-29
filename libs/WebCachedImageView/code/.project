@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ReduMobile</name>
+	<name>ReduMobile-WebCachedImageView</name>
 	<comment></comment>
 	<projects>
-		<project>redu-android</project>
-		<project>ReduMobile-AndroidPushRefresh</project>
-		<project>ReduMobile-ViewPagerIndicator</project>
-		<project>ReduMobile-WebCachedImageView</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
