@@ -18,17 +18,19 @@
 		    android:layout_width="match_parent"
 		    >
 		    
-		    <ImageButton
+		    <android.widget.Button
 		        android:layout_width="wrap_content"
 	    	    android:layout_height="wrap_content"
 	    	    android:layout_gravity="left"
-	    	    android:background="@drawable/bt_cancelar"
+	    	    android:text="Cancelar"
+	    	    android:background="@drawable/bt_gray"
 	    	    android:layout_margin="7dp" />
-		    <ImageButton 
+		    <android.widget.Button 
 		   		android:layout_width="wrap_content"
 		   		android:layout_gravity="right"
 		   	    android:layout_height="wrap_content"
-		   	    android:background="@drawable/bt_add"
+		   	    android:text="Adicionar"
+		   	    android:background="@drawable/bt_gray"
 		   	    android:layout_margin="7dp"/>
 		 </FrameLayout>
 	
