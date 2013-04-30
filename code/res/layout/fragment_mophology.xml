@@ -5,13 +5,13 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <ImageButton
+    <Button
         android:id="@+id/btNovoModulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/bt_novomodulo"
-        android:background="@null"
+        android:text="Novo Módulo"
+        android:background="@drawable/bt_gray"
         android:layout_margin="12dp" />
 	<View
                 android:layout_width="wrap_content"

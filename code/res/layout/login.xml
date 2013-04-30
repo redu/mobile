@@ -96,18 +96,20 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" >
 		
-		    <ImageView
+		    <Button
 		        android:id="@+id/btRegister"
 		        android:layout_width="0dip"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
-		        android:src="@drawable/bt_mural" />
+		        android:text="Cadastrar-se"
+		        android:background="@drawable/bt_bottom_gray" />
 		
-		    <ImageView
+		    <Button
 		        android:id="@+id/btEnter"
 		        android:layout_width="0dip"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
-		        android:src="@drawable/bt_finalizar_aula" />
+		        android:text="Cadastrar-se"
+		        android:background="@drawable/bt_bottom_green" />
 		</LinearLayout>
 </LinearLayout>

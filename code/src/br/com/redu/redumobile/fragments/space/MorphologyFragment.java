@@ -137,7 +137,7 @@ public class MorphologyFragment extends Fragment {
 
 		protected void onPostExecute(Void result) {
 			if (getActivity() != null) {
-				mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture);
+				mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
 				mExpListView.setAdapter(mAdapter);			
 			}
 		};

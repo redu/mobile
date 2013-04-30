@@ -21,6 +21,8 @@ import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
+import br.com.redu.redumobile.activities.lecture.UploadStep2Activity;
+import br.com.redu.redumobile.activities.lecture.UploadStep3Activity;
 
 public class PopupAdapter extends BaseAdapter {
 
@@ -93,15 +95,63 @@ public class PopupAdapter extends BaseAdapter {
 		}
 		if (values[position].equals("Vídeo")){
 			iv.setImageResource(R.drawable.ic_midia);
-			//TODO 
+			tv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(mContext, UploadStep2Activity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
+					mContext.startActivity(it);
+				}
+			}); 
 		}
 		if (values[position].equals("Foto")){
 			iv.setImageResource(R.drawable.ic_photo);
-			//TODO 
+			tv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(mContext, UploadStep2Activity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
+					mContext.startActivity(it);
+				}
+			});  
 		}
 		if (values[position].equals("Áudio")){
-			iv.setImageResource(R.drawable.ic_audio);
-			//TODO 
+			iv.setImageResource(R.drawable.ic_midia);
+			tv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(mContext, UploadStep2Activity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
+					mContext.startActivity(it);
+				}
+			}); 
+		}
+		if (values[position].equals("Gravar")){
+			iv.setImageResource(R.drawable.ic_midia);
+			tv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(mContext, UploadStep3Activity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
+					mContext.startActivity(it);
+				}
+			}); 
+		}
+		if (values[position].equals("Escolher da Galeria")){
+			iv.setImageResource(R.drawable.ic_galeria);
+			tv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(mContext, UploadStep3Activity.class);
+					it.putExtra(Space.class.getName(), space);
+					it.putExtra("id", id);
+					mContext.startActivity(it);
+				}
+			}); 
 		}
 		return ll;
 	}

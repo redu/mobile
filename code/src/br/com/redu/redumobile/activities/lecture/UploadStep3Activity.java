@@ -7,20 +7,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 
-public class UploadStep1Activity extends Activity{
-	
-	String superId;
-	Space space;
+public class UploadStep3Activity extends Activity {
+
+	private String superId;
+	private Space space;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.insert_file_or_lecture);
+		setContentView(R.layout.confirm_inserted_file_or_lecture);
 		superId = getIntent().getExtras().getString("id");
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
-		String[] str = {"Foto","Vídeo","Áudio"};
+		String[] str = {"Gravar","Escolher da Galeria"};
 		lv.setAdapter(new PopupAdapter(this, str,superId, space));
 	}
 	

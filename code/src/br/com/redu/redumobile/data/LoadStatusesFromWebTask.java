@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Status;
+import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.HomeActivity;
 import br.com.redu.redumobile.db.DbHelper;
@@ -40,9 +41,9 @@ public class LoadStatusesFromWebTask implements Task {
 		List<Status> notifiableStatues = loadStatuses(ctx);
 
 		for (Status status : notifiableStatues) {
-			NotificationMessage notification = new NotificationMessage("Redu Mobile", status.text);
+			NotificationMessage notification = new NotificationMessage(getTitle(), status.text);
 			notification.setNotificationId(Integer.valueOf(status.id));
-			// notification.notificationIconResource = R.drawable.icon_notification_cards_clubs;
+			notification.setNotificationIconResource(R.drawable.ic_status_notification);
 			notification.setNotificationClickIntentClass(HomeActivity.class);
 			taskResult.addMessage(notification);
 		}
