@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:src="@drawable/bt_novomodulo"
         android:background="@null"
-        android:layout_margin="8dp" />
+        android:layout_margin="12dp" />
 	<View
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
