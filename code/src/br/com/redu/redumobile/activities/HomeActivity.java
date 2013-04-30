@@ -32,8 +32,8 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	
 	static final int NUM_ITEMS = 4;
 	
-	static final int ITEM_NEW_LECTURES = 0;
-	static final int ITEM_LAST_SEEN_STATUS = 1;
+	static final int ITEM_LAST_SEEN_STATUS = 0;
+	static final int ITEM_NEW_LECTURES = 1;
 	static final int ITEM_WALL = 2;
 	static final int ITEM_ENVIRONMENTS = 3;
 

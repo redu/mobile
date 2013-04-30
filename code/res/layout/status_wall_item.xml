@@ -89,7 +89,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_mark_new_lecture"
+        android:id="@+id/iv_mark_new_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"

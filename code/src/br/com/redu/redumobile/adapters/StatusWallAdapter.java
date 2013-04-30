@@ -89,7 +89,7 @@ public class StatusWallAdapter extends BaseAdapter {
 		userActionResultBuffer.append("<b>").append(status.user.getCompleteName()).append("</b>");
 		
 		((TextView) convertView.findViewById(R.id.tv_date)).setText(DateUtil.getFormattedStatusCreatedAt(status));
-		convertView.findViewById(R.id.iv_mark_new_lecture).setVisibility(View.GONE);
+		convertView.findViewById(R.id.iv_mark_new_status).setVisibility(status.lastSeen ? View.GONE : View.VISIBLE);
 		
 		if(status.isActivityType()) {
 			userActionResultBuffer.append(" comentou");
@@ -124,24 +124,21 @@ public class StatusWallAdapter extends BaseAdapter {
 			
 			if (status.isCourseLogeableType()) {
 				action = " criou o";
-				result = " Curso";
+				result = " Curso:";
 				icon = R.drawable.ic_curso;
 			} else if (status.isLectureLogeableType()) {
 				action = " criou a";
-				result = " Aula";
+				result = " Aula:";
 				icon = R.drawable.ic_aula;
-				
-				convertView.findViewById(R.id.iv_mark_new_lecture)
-						.setVisibility(status.lectureAreadySeen ? View.GONE : View.VISIBLE);
 
 			} else if (status.isSubjectLogeableType()) {
 				action = " criou o";
-				result = " Módulo";
+				result = " Módulo:";
 				icon = R.drawable.ic_modulo;
 			}
 			
 			userActionResultBuffer.append(action).append("<b>").append(result).append("</b>");
-			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(""); // TODO a API não envia o nome do curso criado, seria necessario fazer uma nova requisicao
+			((TextView) convertView.findViewById(R.id.tv_result_name)).setText("NÃO É POSSÍVEL OBTER O NOME"); // TODO a API não envia o nome do curso criado, seria necessario fazer uma nova requisicao
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.VISIBLE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(icon);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);
