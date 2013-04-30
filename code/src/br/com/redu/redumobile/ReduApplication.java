@@ -15,7 +15,7 @@ public class ReduApplication extends Application {
 
 	static private DefaultReduClient reduClientInitialized;
 	static private User user;
-	
+
 	static public DefaultReduClient getReduClient(Context context) {
 		if(reduClientInitialized != null) {
 			return reduClientInitialized;
@@ -31,7 +31,7 @@ public class ReduApplication extends Application {
 		
 		return reduClient;
 	}
-	
+
 	static public User getUser(Context context) {
 		if(user == null) {
 			user = getReduClient(context).getMe();

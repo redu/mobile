@@ -20,6 +20,10 @@ public class PinCodeHelper {
 		return getPrefs(context).edit().putString(REDU_PIN_CODE, pinCode).commit();
 	}
 	
+	public static boolean clearPinCode(Context context) {
+		return getPrefs(context).edit().clear().commit();
+	}
+	
 	private static SharedPreferences getPrefs(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}

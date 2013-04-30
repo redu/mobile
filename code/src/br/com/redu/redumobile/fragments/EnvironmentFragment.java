@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
@@ -24,7 +25,9 @@ import br.com.redu.redumobile.adapters.EnviromentListAdapter;
 
 public class EnvironmentFragment extends HomeFragment {
 
-	private List<Environment> mEnvironments;
+	private static final String ENVIRONMENTS_SAVED = "ENVIRONMENTS_SAVED";
+	
+	private ArrayList<Environment> mEnvironments;
 
 	private ListView mListView;
 	private ProgressBar mProgressBar;
@@ -33,6 +36,13 @@ public class EnvironmentFragment extends HomeFragment {
 		
 	}
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -49,30 +59,48 @@ public class EnvironmentFragment extends HomeFragment {
 		
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		
-		new AsyncTask<Void, Void, List<Environment>>() {
-			@Override
-			protected List<Environment> doInBackground(Void... params) {
-				try {
-					DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
-					return redu.getEnvironments();
-				} catch (OAuthConnectionException e) {
-					e.printStackTrace();
-					return null;
+		if(savedInstanceState != null && savedInstanceState.containsKey(ENVIRONMENTS_SAVED)) {
+			mEnvironments = (ArrayList<Environment>) savedInstanceState.get(ENVIRONMENTS_SAVED);
+			mListView.setAdapter(new EnviromentListAdapter(getActivity(), mEnvironments));
+			mProgressBar.setVisibility(View.GONE);
+			
+		} else {
+			new AsyncTask<Void, Void, List<Environment>>() {
+				@Override
+				protected List<Environment> doInBackground(Void... params) {
+					try {
+						DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+						return redu.getEnvironments();
+					} catch (OAuthConnectionException e) {
+						e.printStackTrace();
+						return null;
+					}
 				}
-			}
-
-			protected void onPostExecute(List<Environment> environments) {
-				Activity activity = getActivity();
-				if(activity != null && environments != null) {
-					mEnvironments = environments;
-					mListView.setAdapter(new EnviromentListAdapter(activity, environments));
-				}
-				mProgressBar.setVisibility(View.GONE);
-			};
-
-		}.execute();
+	
+				protected void onPostExecute(List<Environment> environments) {
+					Activity activity = getActivity();
+					if(activity != null && environments != null) {
+						mEnvironments = new ArrayList<Environment>(environments);
+						mListView.setAdapter(new EnviromentListAdapter(activity, mEnvironments));
+					}
+					mProgressBar.setVisibility(View.GONE);
+				};
+	
+			}.execute();
+		}
 		
 		return v;
+	}
+	
+	@Override
+	public void onViewStateRestored(Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(ENVIRONMENTS_SAVED, mEnvironments);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override

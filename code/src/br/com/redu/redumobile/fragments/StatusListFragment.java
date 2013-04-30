@@ -154,7 +154,7 @@ public abstract class StatusListFragment extends HomeFragment implements DbHelpe
 	
 	@Override
 	public void hasNewStatus() {
-		//showNewStatusMessage();
+		updateStatusesFromDb(false);
 	}
 	
 	protected void updateStatusesFromDb(boolean olderThan) {

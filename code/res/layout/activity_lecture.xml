@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_video_big" />
+                    android:src="@drawable/ic_doc_big" />
 
                 <TextView
                     android:id="@+id/tvDocument"
@@ -178,12 +178,11 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
 
-            <!-- TIPO CANVAS e EXERCICE -->
+            <!-- TIPO CANVAS  -->
 
             <LinearLayout
-                android:id="@+id/llCanvasExercice"
+                android:id="@+id/llCanvas"
                 android:layout_width="match_parent"
-                android:layout_height="0dip"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"
@@ -191,14 +190,14 @@
                 android:visibility="gone" >
 
                 <ImageView
-                    android:id="@+id/ivCanvasExercice"
+                    android:id="@+id/ivCanvas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_video_big" />
+                    android:src="@drawable/ic_canvas_big" />
 
                 <TextView
-                    android:id="@+id/tvCanvasExercice"
+                    android:id="@+id/tvCanvas"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -207,7 +206,45 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <ImageButton
-                    android:id="@+id/ibCanvasExercice"
+                    android:id="@+id/ibCanvas"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:background="@null"
+                    android:src="@drawable/bt_acessar_aula" />
+            </LinearLayout>
+            
+            <!-- TIPO EXERCICE -->
+            
+            <LinearLayout
+                android:id="@+id/llExercice"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="290dp"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <ImageView
+                    android:id="@+id/ivExercice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_exercice_big" />
+
+                <TextView
+                    android:id="@+id/tvExercice"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageButton
+                    android:id="@+id/ibExercice"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

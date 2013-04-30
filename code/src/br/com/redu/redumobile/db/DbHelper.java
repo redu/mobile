@@ -24,11 +24,25 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	private static List<WeakReference<DbHelperListener>> mListeners;
 	
+	// TABLE APP_USER
+	private static class TableAppUser {
+		public static final String NAME = "AppUser";
+		
+		public static final String COLUMN_ID = "id";
+		public static final String COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED = "oldest_statuses_were_downloaded";
+		
+		public static final String CREATE = "CREATE TABLE "
+				+ NAME + "(" 
+				+ COLUMN_ID + " TEXT PRIMARY KEY, "
+				+ COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED + " INTEGER );";
+	}
+	
 	// TABLE STATUS
 	private static class TableStatus {
 		public static final String NAME = "Status";
 		
 		public static final String COLUMN_ID = "id";
+		public static final String COLUMN_APP_USER_ID = "app_user_id";
 		public static final String COLUMN_USER_ID = "user_id";
 		public static final String COLUMN_TYPE = "type";
 		public static final String COLUMN_ANSWERS_COUNT = "answers_count";
@@ -42,6 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		public static final String CREATE = "CREATE TABLE "
 				+ NAME + "(" 
 				+ COLUMN_ID + " TEXT PRIMARY KEY, " 
+				+ COLUMN_APP_USER_ID + " INTEGER, " 
 				+ COLUMN_USER_ID + " INTEGER, " 
 				+ COLUMN_TYPE + " TEXT NOT NULL, " 
 				+ COLUMN_ANSWERS_COUNT + " INTEGER, " 
@@ -51,7 +66,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ COLUMN_LAST_SEEN + " INTEGER, "
 				+ COLUMN_LAST_SEEN_AT_IN_MILLIS + " INTEGER, "
 				+ COLUMN_TEXT + " TEXT NOT NULL, "
-				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TableUser.NAME + "(" + COLUMN_USER_ID + "));";
+				+ "FOREIGN KEY(" + COLUMN_APP_USER_ID + ") REFERENCES " + TableAppUser.NAME + "(" + TableAppUser.COLUMN_ID + "), "
+				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TableUser.NAME + "(" + TableUser.COLUMN_ID + "));";
 	}
 
 	// TABLE LINK
@@ -126,6 +142,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		database.execSQL(TableUser.CREATE);
 		database.execSQL(TableLink.CREATE);
 		database.execSQL(TableThumbnail.CREATE);
+		database.execSQL(TableAppUser.CREATE);
 	}
 
 	@Override
@@ -135,6 +152,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TableStatus.NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + TableLink.NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + TableUser.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + TableThumbnail.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + TableAppUser.NAME);
 		onCreate(db);
 	}
 	
@@ -307,10 +326,23 @@ public class DbHelper extends SQLiteOpenHelper {
 		return links;
 	}
 	
-	synchronized public long putStatus(Status status) {
+	synchronized public long putAppUser(User appUser) {
+		SQLiteDatabase db = this.getWritableDatabase();  
+		
+		ContentValues values = new ContentValues();
+		values.put(TableAppUser.COLUMN_ID , appUser.id);
+		
+		long id = db.insert(TableAppUser.NAME, null, values);
+		
+		db.close();
+		
+		return id;
+	}
+	
+	synchronized public long putStatus(Status status, String appUserId) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 
-		long id = putStatus(db, status);
+		long id = putStatus(db, status, appUserId);
         
         db.close();
         
@@ -319,7 +351,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return id;
 	}
 	
-	synchronized public List<Long> putAllStatuses(List<Status> statuses) {
+	synchronized public List<Long> putAllStatuses(List<Status> statuses, String appUserId) {
 		if(statuses == null || statuses.size() == 0) {
 			return null;
 		}
@@ -329,7 +361,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		List<Long> ids = new ArrayList<Long>();
 		
 		for(Status status : statuses) {
-			ids.add(putStatus(db, status));
+			ids.add(putStatus(db, status, appUserId));
 		}
 		
 		db.close();
@@ -339,7 +371,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return ids;
 	}
 	
-	private Long putStatus(SQLiteDatabase db, Status status) {
+	private Long putStatus(SQLiteDatabase db, Status status, String appUserId) {
 		if(status == null) { 
 			return 0L;
 		}
@@ -350,6 +382,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(TableStatus.COLUMN_TEXT, status.text);
 		values.put(TableStatus.COLUMN_ID, status.id);
+		values.put(TableStatus.COLUMN_APP_USER_ID, appUserId);
 		values.put(TableStatus.COLUMN_USER_ID, status.user.id);
 		values.put(TableStatus.COLUMN_TYPE, status.type);
 		values.put(TableStatus.COLUMN_ANSWERS_COUNT, status.answers_count);
@@ -394,12 +427,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put(TableUser.COLUMN_FIRST_NAME, user.first_name);
 		values.put(TableUser.COLUMN_LAST_NAME, user.last_name);
 		
+		long id = db.insert(TableUser.NAME, null, values);	
+
 		// putting thumbnails datas
 		for(Thumbnail thumbnail : user.thumbnails) {
 			putThumbnail(db, thumbnail, user.id);
 		}
 		
-		return db.insert(TableUser.NAME, null, values);	
+		return id;
 	}
 	
 	private long putThumbnail(SQLiteDatabase db, Thumbnail thumbnail, int userId) {
@@ -414,7 +449,6 @@ public class DbHelper extends SQLiteOpenHelper {
 	synchronized public long setStatusAsLastSeen(Status status) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 
-		// putting Status datas
         ContentValues statusValues = new ContentValues();
         statusValues.put(TableStatus.COLUMN_LAST_SEEN, 1);
         statusValues.put(TableStatus.COLUMN_LAST_SEEN_AT_IN_MILLIS, System.currentTimeMillis());
@@ -426,6 +460,36 @@ public class DbHelper extends SQLiteOpenHelper {
         notifyListenters();
         
         return id;
+	}
+	
+	synchronized public long setOldestStatusesWereDownloaded(String appUserId) {
+		SQLiteDatabase db = this.getWritableDatabase();  
+		
+		ContentValues values = new ContentValues();
+		values.put(TableAppUser.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED, 1);
+		
+		long id = db.update(TableAppUser.NAME, values, TableAppUser.COLUMN_ID + " = ?", new String[] {appUserId});
+		
+		db.close();
+		
+		return id;
+	}
+	
+	synchronized public boolean getOldestStatusesWereDownloaded(String appUserId) {
+		boolean oledestStatusesWereDownloaded = false;
+		
+		SQLiteDatabase db = this.getReadableDatabase();  
+		
+		Cursor cursor = db.query(TableAppUser.NAME, null, TableAppUser.COLUMN_ID + " = ?", new String[] {appUserId}, null, null, null);
+        if (cursor.moveToFirst()) {  
+        	int value = cursor.getInt(cursor.getColumnIndex(TableAppUser.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED));
+        	oledestStatusesWereDownloaded = (value == 0) ? false : true;
+        }
+        
+        cursor.close();  
+        db.close();
+        
+        return oledestStatusesWereDownloaded;
 	}
 
 	private void notifyListenters() {
