@@ -10,29 +10,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/bt_novomodulo"
+        android:layout_margin="8dp"
         android:background="@null"
-        android:layout_margin="8dp" />
-	<View
-                android:layout_width="wrap_content"
-                android:layout_height="2dp"
-                android:background="@drawable/img_divider" />
-    <ExpandableListView
-        android:id="@+id/elvSubject"
-        android:layout_width="match_parent"
-        android:background="#fff"
-        android:divider="@null"
-        android:layout_height="wrap_content" >
-    </ExpandableListView>
+        android:src="@drawable/bt_novomodulo" />
 
-    <TextView
-        android:id="@+id/elv_subject_empyt"
+    <View
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#CCCCCC"
-        android:text="Esta Disciplina está vazia, comece adicionando um novo Módulo através do botão acima"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:visibility="gone"
-        android:padding="15dp" />
+        android:layout_height="2dp"
+        android:background="@drawable/img_divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ExpandableListView
+            android:id="@+id/elvSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:divider="@null"
+            android:visibility="gone" >
+        </ExpandableListView>
+
+        <TextView
+            android:id="@+id/elv_subject_empyt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Esta Disciplina está vazia, comece adicionando um novo Módulo através do botão acima"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#CCCCCC"
+            android:visibility="gone" />
+        
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+        
+    </FrameLayout>
 
 </LinearLayout>

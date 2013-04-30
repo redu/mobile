@@ -20,4 +20,11 @@ public class UploadFileFolderActivity extends Activity {
 		Space space = (Space)getIntent().getExtras().get(Space.class.getName());
 		lv.setAdapter(new PopupAdapter(this, str, id, space));
 	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		finish();
+	}
+	
 }

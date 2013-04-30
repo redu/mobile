@@ -29,7 +29,6 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	List<Subject> mSubjects;
 	List<List<Lecture>> mLectures;
 	Subject mCurrentSubject;
-	Dialog mDialogInfo;
 	Space mSpace;
 	
 	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures, Space space) {
@@ -136,6 +135,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		});
 		
 		ImageView ivHelp = (ImageView) convertView.findViewById(R.id.iv_info);
+		
 		ivHelp.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -145,7 +145,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 				TextView tvInfo = (TextView)v2.findViewById(R.id.tv_insert_file_folder);
 				tvInfo.setText(mCurrentSubject.description);
 				builder.setView(v2);
-				mDialogInfo = builder.create();
+				Dialog mDialogInfo = builder.create();
 		    	mDialogInfo.show();
 			}
 		});

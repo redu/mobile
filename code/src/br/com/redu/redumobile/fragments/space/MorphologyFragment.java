@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
@@ -40,6 +41,8 @@ public class MorphologyFragment extends Fragment {
 	private ExpandableListView mExpListView;
 	private SubjectExpandableListAdapter mAdapter;
 	
+	private ProgressBar mProgressBar;
+	
 	
 	public MorphologyFragment() {
 		mCurrentPage = 0;
@@ -51,7 +54,7 @@ public class MorphologyFragment extends Fragment {
 		
 		final View v = inflater.inflate(R.layout.fragment_mophology, container, false);
 		ImageButton ibModulo= (ImageButton)v.findViewById(R.id.btNovoModulo);
-		
+		mProgressBar = (ProgressBar)v.findViewById(R.id.pb);
 		ibModulo.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -106,6 +109,8 @@ public class MorphologyFragment extends Fragment {
 	
 	class LoadSubjectsTask extends AsyncTask<Void, Void, Void> {
 		
+	
+
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 			
@@ -138,7 +143,9 @@ public class MorphologyFragment extends Fragment {
 		protected void onPostExecute(Void result) {
 			if (getActivity() != null) {
 				mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
-				mExpListView.setAdapter(mAdapter);			
+				mExpListView.setAdapter(mAdapter);
+				mExpListView.setVisibility(View.VISIBLE);
+				mProgressBar.setVisibility(View.GONE);
 			}
 		};
 	}

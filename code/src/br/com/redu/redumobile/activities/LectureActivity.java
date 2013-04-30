@@ -45,6 +45,7 @@ public class LectureActivity extends BaseActivity{
 	
 	private AlertDialog alertDialog;
 	
+	DownloadFile df;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,15 @@ public class LectureActivity extends BaseActivity{
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		
+		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	df.cancel(true);
+		    	df.running = false;
+		        dialog.dismiss();
+		    }
+		});
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				this);
@@ -217,7 +227,9 @@ public class LectureActivity extends BaseActivity{
 	}
 
 	private class DownloadFile extends AsyncTask<Lecture, Integer, java.io.File> {
-	    @Override
+	    private boolean running;
+
+		@Override
 	    protected java.io.File doInBackground(Lecture... lecture) {
 	        try {
 	        	
@@ -253,6 +265,13 @@ public class LectureActivity extends BaseActivity{
 	            while ((count = input.read(data)) != -1) {
 	                total += count;
 	                // publishing the progress....
+	                if (!running){
+	                	output.flush();
+	    	            output.close();
+	    	            input.close();
+	    	            filling.delete();
+	                	return null;
+	                }
 	                publishProgress((int) (total * 100 / fileLength));
 	                output.write(data, 0, count);
 	            }

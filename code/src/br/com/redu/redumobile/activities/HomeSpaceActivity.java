@@ -38,8 +38,12 @@ public class HomeSpaceActivity extends BaseActivity {
     public MainAdapter mAdapter;
     private ViewPager vp;
     
-    
-	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		mAdapter.notifyDataSetChanged();
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.File;
@@ -50,6 +51,7 @@ public class SupportMaterialFragment extends Fragment {
 	
 	DownloadFile df;
 	
+	private ProgressBar mProgressBar;
 	
 	ListView lvFiles;
 	private SupportMaterialFragmentListener mListener;
@@ -68,6 +70,8 @@ public class SupportMaterialFragment extends Fragment {
 		final View v = inflater.inflate(R.layout.fragment_support_material, container, false);
 		TextView indice;
 		ImageButton ibBack;
+		
+		mProgressBar = (ProgressBar)v.findViewById(R.id.pb);
 		
 		mProgressDialog = new ProgressDialog(getActivity());
 		mProgressDialog.setMessage("Aguarde...");
@@ -168,6 +172,7 @@ public class SupportMaterialFragment extends Fragment {
 	}
 	
 	class LoadFoldersAndFilesTask extends AsyncTask<Void, Void, Void> {
+		
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 			String folderRaizID;
@@ -194,8 +199,11 @@ public class SupportMaterialFragment extends Fragment {
 				array.add(files.get(i).name);
 			}*/
 			/*array.removeAll(Collections.singleton(null));*/
-			if (getActivity() != null) 
+			if (getActivity() != null){ 
 				lvFiles.setAdapter(new SupportMaterialsAdapter(getActivity(), folders, files));
+				lvFiles.setVisibility(View.VISIBLE);
+				mProgressBar.setVisibility(View.GONE);
+			}
 		};
 	}
 
