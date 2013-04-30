@@ -35,6 +35,8 @@ public class CoursesAndSpacesFragment extends Fragment {
 	private Space mSpace;
 
 	private TextView mTvEmptyList;
+	
+	private TextView mTvEnvironment;
 	private ProgressBar mProgressBar;
 	private ExpandableListView mListView;
 	private CoursesExpandableListAdapter mAdapter;
@@ -64,6 +66,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		mTvEmptyList = (TextView) v.findViewById(R.id.tv_empty_list);
+		mTvEnvironment = (TextView) v.findViewById(R.id.tvEnvironment);
 		
 		mListView = (ExpandableListView) v.findViewById(R.id.list);
 		mListView.setOnChildClickListener(new OnChildClickListener() {
@@ -105,11 +108,18 @@ public class CoursesAndSpacesFragment extends Fragment {
 			}
 
 			protected void onPostExecute(Void result) {
-				((TextView) v.findViewById(R.id.tvEnvironment)).setText(mEnvironment.name);
 				if (getActivity() != null){
-					mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
-					mListView.setAdapter(mAdapter);
+					mTvEnvironment.setText(mEnvironment.name);
+					mTvEnvironment.setVisibility(View.VISIBLE);
+					
+					if(mEnrollmentedCourses.isEmpty()) {
+						mTvEmptyList.setVisibility(View.VISIBLE);
+					} else {
+						mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
+						mListView.setAdapter(mAdapter);
+					}
 				}
+				
 				mProgressBar.setVisibility(View.GONE);
 			};
 
