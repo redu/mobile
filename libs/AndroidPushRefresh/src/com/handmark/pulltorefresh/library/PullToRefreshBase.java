@@ -33,7 +33,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView.InternalListView;
 import com.handmark.pulltorefresh.library.internal.FlipLoadingLayout;
@@ -48,7 +47,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	// Constants
 	// ===========================================================
 
-	static final boolean DEBUG = true;
+	static final boolean DEBUG = false;
 
 	static final boolean USE_HW_LAYERS = false;
 
