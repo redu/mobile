@@ -15,7 +15,7 @@
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="#F7F7F7"
                 android:orientation="vertical" >
 
@@ -183,6 +183,7 @@
             <LinearLayout
                 android:id="@+id/llCanvas"
                 android:layout_width="match_parent"
+                android:layout_height="0dip"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"
@@ -221,6 +222,7 @@
             <LinearLayout
                 android:id="@+id/llExercice"
                 android:layout_width="match_parent"
+                android:layout_height="0dip"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:minHeight="290dp"

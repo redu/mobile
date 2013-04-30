@@ -102,25 +102,23 @@ public class LectureActivity extends BaseActivity{
 		LinearLayout layoutLecture;
 		if (mLecture.type.equals(Lecture.TYPE_CANVAS)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llCanvas);
-			ImageView ibCanvas = (ImageView) layoutLecture.findViewById(R.id.ivCanvas);
+			ImageButton ibCanvas = (ImageButton) layoutLecture.findViewById(R.id.ibCanvas);
 			ibCanvas.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					alertDialog.show();
-					Log.i("BONECAO", "FERROOO");
 				}
 			});
 			layoutLecture.setVisibility(View.VISIBLE);
 		}else if(mLecture.type.equals(Lecture.TYPE_EXERCISE)){
 			layoutLecture = (LinearLayout)findViewById(R.id.llExercice);
-			ImageView ivExercice = (ImageView) layoutLecture.findViewById(R.id.ivExercice);
-			ivExercice.setOnClickListener(new OnClickListener() {
+			ImageButton ibAccess = (ImageButton) layoutLecture.findViewById(R.id.ibExercice);
+			ibAccess.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					alertDialog.show();
-					Log.i("BONECAO", "METALLLLL");
 				}
 			});
 			layoutLecture.setVisibility(View.VISIBLE);
