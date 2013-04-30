@@ -23,6 +23,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,11 +33,11 @@ public class LectureActivity extends BaseActivity{
 	
 	private TextView mTvSubject;
 	private TextView mTvLecture;
-	private ImageView mBtEdit;
-	private ImageView mBtRemove;
+	private Button mBtEdit;
+	private Button mBtRemove;
 	
-	private ImageView mBtIsDone;
-	private ImageView mBtWall;
+	private Button mBtIsDone;
+	private Button mBtWall;
 	
 	private Lecture mLecture;
 	private Subject mSubject;
@@ -54,13 +55,13 @@ public class LectureActivity extends BaseActivity{
 		
 		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
-		mBtEdit = (ImageView) findViewById(R.id.btEdit);
-		mBtRemove = (ImageView) findViewById(R.id.btRemove);
+		mBtEdit = (Button) findViewById(R.id.btEdit);
+		mBtRemove = (Button) findViewById(R.id.btRemove);
 		/*mIvImage = (ImageView) findViewById(R.id.ivImage);
 		mTvFileName = (TextView) findViewById(R.id.tvFileName);*/
 		
-		mBtIsDone = (ImageView) findViewById(R.id.btIsDone);
-		mBtWall = (ImageView) findViewById(R.id.btWall);
+		mBtIsDone = (Button) findViewById(R.id.btIsDone);
+		mBtWall = (Button) findViewById(R.id.btWall);
 		
 		mProgressDialog = new ProgressDialog(this);
 		mProgressDialog.setMessage("Aguarde...");
@@ -157,7 +158,8 @@ public class LectureActivity extends BaseActivity{
 							e.printStackTrace();
 						}
 					}else{
-						new DownloadFile().execute(lecture);
+						df = new DownloadFile();
+						df.execute(lecture);
 					}
 				}
 			});
@@ -227,7 +229,7 @@ public class LectureActivity extends BaseActivity{
 	}
 
 	private class DownloadFile extends AsyncTask<Lecture, Integer, java.io.File> {
-	    private boolean running;
+		private volatile boolean running = true;
 
 		@Override
 	    protected java.io.File doInBackground(Lecture... lecture) {
@@ -284,6 +286,11 @@ public class LectureActivity extends BaseActivity{
 	        }
 	        return null;
 	    }
+		
+		@Override
+	    protected void onCancelled() {
+	        running = false;    
+	    }
 	    
 	    @Override
 	    protected void onPreExecute() {
@@ -302,7 +309,7 @@ public class LectureActivity extends BaseActivity{
 	    	super.onPostExecute(file);
 	    	mProgressDialog.setProgress(0);
 	    	mProgressDialog.dismiss();
-	    	if (this != null){
+	    	if (this != null && file != null){
 	    		try {
 					Intent it = DownloadHelper.loadDocInReader(file);
 					startActivity(it);

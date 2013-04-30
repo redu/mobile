@@ -3,7 +3,6 @@ package br.com.redu.redumobile.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Space;
@@ -31,16 +30,6 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.add(R.id.fragment_container, coursesAndServicesFragment, CoursesAndSpacesFragment.class.getName());
 		transaction.commit();		
-	}
-
-	@Override
-	public void onBackPressed() {
-		FragmentManager fm = getSupportFragmentManager();
-		if (getSupportFragmentManager().findFragmentByTag(CoursesAndSpacesFragment.class.getName()) != null){
-			fm.beginTransaction().remove(fm.findFragmentByTag(CoursesAndSpacesFragment.class.getName())).commit();
-		}else{
-			finish();
-		}
 	}
 
 	@Override

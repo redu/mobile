@@ -145,7 +145,7 @@ public class PopupAdapter extends BaseAdapter {
 			}); 
 		}
 		if (values[position].equals("Escolher da Galeria")){
-			iv.setImageResource(R.drawable.ic_galeria);
+			iv.setImageResource(R.drawable.ic_galery);
 			tv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

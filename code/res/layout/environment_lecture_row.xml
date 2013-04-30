@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="#fff">
-    <LinearLayout 
+    <android.widget.LinearLayout 
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal" 
@@ -13,7 +13,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:background="@drawable/bg_expandablelistview_row">
+    android:background="@drawable/bt_gray">
     
     <TextView 
 	    android:id="@+id/tvOrdering"
@@ -51,5 +51,5 @@
 	    android:layout_gravity="center_vertical"
 	    android:src="@drawable/ic_finished"/> -->
 
-</LinearLayout>
+</android.widget.LinearLayout>
 </LinearLayout>

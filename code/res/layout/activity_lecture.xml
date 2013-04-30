@@ -55,23 +55,23 @@
                     android:layout_marginLeft="20dp"
                     android:orientation="horizontal" >
 
-                    <ImageButton
+                    <Button
                         android:id="@+id/btEdit"
                         style="?android:attr/buttonStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:background="@null"
-                        android:src="@drawable/bt_editar" />
+                        android:text="Editar"
+                        android:background="@drawable/bt_gray" />
 
-                    <ImageButton
+                    <Button
                         android:id="@+id/btRemove"
                         style="?android:attr/buttonStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:background="@null"
-                        android:src="@drawable/bt_remover" />
+                        android:text="Remover"
+                        android:background="@drawable/bt_gray" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -261,19 +261,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <ImageView
+                <Button
                     android:id="@+id/btWall"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/bt_mural" />
+                    android:text="Mural"
+                    android:textColor="@color/cinzaClaro"
+                    android:background="@drawable/bt_bottom_gray" />
 
-                <ImageView
+                <Button
                     android:id="@+id/btIsDone"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/bt_finalizar_aula" />
+                    android:text="Finalizar Aula"
+                    android:background="@drawable/bt_bottom_green" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

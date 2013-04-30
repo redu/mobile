@@ -290,7 +290,7 @@ public class SupportMaterialFragment extends Fragment {
 	    	super.onPostExecute(file);
 	    	publishProgress(0);
 	    	mProgressDialog.dismiss();
-	    	if (getActivity() != null){
+	    	if (getActivity() != null && file != null){
 	    		try {
 					Intent it = DownloadHelper.loadDocInReader(file);
 					startActivity(it);

@@ -21,6 +21,7 @@ import br.com.developer.redu.models.Statusable;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.StatusDetailAdapter;
+import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.DateUtil;
 
 public class StatusDetailActivity extends BaseActivity {
@@ -115,6 +116,7 @@ public class StatusDetailActivity extends BaseActivity {
 		return v;
 	}
 	
+	// TODO Use this method to set header
 	private View createLocalOfPublicationHeaderView(Status status) {
 		View v = mInflater.inflate(R.layout.status_detail_header_publishing_local, null);
 		
@@ -176,6 +178,9 @@ public class StatusDetailActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> answers) {
 			if (answers != null && answers.size() > 0) {
+				DbHelper dbHelper = DbHelper.getInstance(StatusDetailActivity.this);
+				dbHelper.updateStatusAnswersCount(mStatusId, answers.size());
+					
 				mAdapter.addAll(answers);
 				mAdapter.notifyDataSetChanged();
 			}

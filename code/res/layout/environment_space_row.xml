@@ -12,7 +12,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:background="@drawable/bg_expandablelistview_row">
+    android:background="@drawable/bt_gray">
     <ImageView 
         android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"

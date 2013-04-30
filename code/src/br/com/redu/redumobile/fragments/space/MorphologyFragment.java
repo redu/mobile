@@ -15,9 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
+import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
@@ -53,7 +52,7 @@ public class MorphologyFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		final View v = inflater.inflate(R.layout.fragment_mophology, container, false);
-		ImageButton ibModulo= (ImageButton)v.findViewById(R.id.btNovoModulo);
+		Button ibModulo= (Button)v.findViewById(R.id.btNovoModulo);
 		mProgressBar = (ProgressBar)v.findViewById(R.id.pb);
 		ibModulo.setOnClickListener(new OnClickListener() {
 			

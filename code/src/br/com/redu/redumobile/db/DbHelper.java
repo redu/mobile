@@ -25,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static List<WeakReference<DbHelperListener>> mListeners;
 	
 	// TABLE APP_USER
-	private static class TableAppUser {
+	private static class AppUserTable {
 		public static final String NAME = "AppUser";
 		
 		public static final String COLUMN_ID = "id";
@@ -38,7 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 	
 	// TABLE STATUS
-	private static class TableStatus {
+	private static class StatusTable {
 		public static final String NAME = "Status";
 		
 		public static final String COLUMN_ID = "id";
@@ -66,12 +66,12 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ COLUMN_LAST_SEEN + " INTEGER, "
 				+ COLUMN_LAST_SEEN_AT_IN_MILLIS + " INTEGER, "
 				+ COLUMN_TEXT + " TEXT NOT NULL, "
-				+ "FOREIGN KEY(" + COLUMN_APP_USER_ID + ") REFERENCES " + TableAppUser.NAME + "(" + TableAppUser.COLUMN_ID + "), "
-				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TableUser.NAME + "(" + TableUser.COLUMN_ID + "));";
+				+ "FOREIGN KEY(" + COLUMN_APP_USER_ID + ") REFERENCES " + AppUserTable.NAME + "(" + AppUserTable.COLUMN_ID + "), "
+				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + UserTable.NAME + "(" + UserTable.COLUMN_ID + "));";
 	}
 
 	// TABLE LINK
-	private static class TableLink {
+	private static class LinkTable {
 		public static final String NAME = "Link";
 		
 		public static final String COLUMN_STATUS_ID = "status_id";
@@ -87,12 +87,12 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ COLUMN_HREF + " TEXT, " 
 				+ COLUMN_NAME + " TEXT, " 
 				+ COLUMN_PERMALINK + " TEXT, " 
-				+ "FOREIGN KEY(" + COLUMN_STATUS_ID + ") REFERENCES " + TableStatus.NAME + "(" + TableStatus.COLUMN_ID + "), "
+				+ "FOREIGN KEY(" + COLUMN_STATUS_ID + ") REFERENCES " + StatusTable.NAME + "(" + StatusTable.COLUMN_ID + "), "
 				+ "PRIMARY KEY(" + COLUMN_STATUS_ID + ", " + COLUMN_REL + "));";
 	}
 	
 	// TABLE THUMBNAIL
-	private static class TableThumbnail {
+	private static class ThumbnailTable {
 		public static final String NAME = "Thumbnail";
 		
 		public static final String COLUMN_USER_ID = "user_id";
@@ -104,12 +104,12 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ COLUMN_USER_ID + " TEXT, " 
 				+ COLUMN_HREF + " TEXT, " 
 				+ COLUMN_SIZE + " TEXT, " 
-				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TableUser.NAME + "(" + TableUser.COLUMN_ID + "), "
+				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + UserTable.NAME + "(" + UserTable.COLUMN_ID + "), "
 				+ "PRIMARY KEY(" + COLUMN_USER_ID + ", " + COLUMN_SIZE + "));";
 	}	
 	
 	// TABLE USER
-	private static class TableUser {
+	private static class UserTable {
 		public static final String NAME = "User";
 		
 		public static final String COLUMN_ID = "id";
@@ -138,22 +138,22 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(TableStatus.CREATE);
-		database.execSQL(TableUser.CREATE);
-		database.execSQL(TableLink.CREATE);
-		database.execSQL(TableThumbnail.CREATE);
-		database.execSQL(TableAppUser.CREATE);
+		database.execSQL(StatusTable.CREATE);
+		database.execSQL(UserTable.CREATE);
+		database.execSQL(LinkTable.CREATE);
+		database.execSQL(ThumbnailTable.CREATE);
+		database.execSQL(AppUserTable.CREATE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(DbHelper.class.getName(), 
 				"Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + TableStatus.NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TableLink.NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TableUser.NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TableThumbnail.NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TableAppUser.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + StatusTable.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + LinkTable.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + UserTable.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + ThumbnailTable.NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + AppUserTable.NAME);
 		onCreate(db);
 	}
 	
@@ -170,11 +170,11 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();  
         Cursor cursor;  
   
-        cursor = db.query(TableStatus.NAME, null, 
-        		TableStatus.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + "?", 
+        cursor = db.query(StatusTable.NAME, null, 
+        		StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + "?", 
         		new String[] {String.valueOf(timestamp)}, 
         		null, null, 
-        		TableStatus.COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
+        		StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
         		String.valueOf(count));  
   
     	while(cursor.moveToNext()) {
@@ -196,11 +196,11 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
-		cursor = db.query(TableStatus.NAME, null, 
-				TableStatus.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + " ? AND " + TableStatus.COLUMN_LOGEABLE_TYPE + " = ?", 
+		cursor = db.query(StatusTable.NAME, null, 
+				StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + " ? AND " + StatusTable.COLUMN_LOGEABLE_TYPE + " = ?", 
 				new String[] {String.valueOf(timestamp), Status.LOGEABLE_TYPE_LECTURE}, 
 				null, null, 
-				TableStatus.COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
+				StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
@@ -222,11 +222,11 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
-		cursor = db.query(TableStatus.NAME, null, 
-				TableStatus.COLUMN_LAST_SEEN_AT_IN_MILLIS + (olderThan ? "<" : ">") + "? AND " + TableStatus.COLUMN_LAST_SEEN + " = 1", 
+		cursor = db.query(StatusTable.NAME, null, 
+				StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS + (olderThan ? "<" : ">") + "? AND " + StatusTable.COLUMN_LAST_SEEN + " = 1", 
 				new String[] {String.valueOf(timestamp)}, 
 				null, null, 
-				TableStatus.COLUMN_LAST_SEEN_AT_IN_MILLIS + " DESC", 
+				StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS + " DESC", 
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
@@ -245,22 +245,22 @@ public class DbHelper extends SQLiteOpenHelper {
 	private Status getCurrentStatusInCursor(Cursor cursor) {
 		Status status = new Status();
 
-		status.id = cursor.getString(cursor.getColumnIndex(TableStatus.COLUMN_ID));
-		status.type = cursor.getString(cursor.getColumnIndex(TableStatus.COLUMN_TYPE));
-		status.answers_count = cursor.getInt(cursor.getColumnIndex(TableStatus.COLUMN_ANSWERS_COUNT));
-		status.logeable_type = cursor.getString(cursor.getColumnIndex(TableStatus.COLUMN_LOGEABLE_TYPE));
-		status.text = cursor.getString(cursor.getColumnIndex(TableStatus.COLUMN_TEXT));
-		status.createdAtInMillis = cursor.getLong(cursor.getColumnIndex(TableStatus.COLUMN_CREATED_AT_IN_MILLIS));
-		status.lastSeenAtInMillis = cursor.getLong(cursor.getColumnIndex(TableStatus.COLUMN_LAST_SEEN_AT_IN_MILLIS));
+		status.id = cursor.getString(cursor.getColumnIndex(StatusTable.COLUMN_ID));
+		status.type = cursor.getString(cursor.getColumnIndex(StatusTable.COLUMN_TYPE));
+		status.answers_count = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_ANSWERS_COUNT));
+		status.logeable_type = cursor.getString(cursor.getColumnIndex(StatusTable.COLUMN_LOGEABLE_TYPE));
+		status.text = cursor.getString(cursor.getColumnIndex(StatusTable.COLUMN_TEXT));
+		status.createdAtInMillis = cursor.getLong(cursor.getColumnIndex(StatusTable.COLUMN_CREATED_AT_IN_MILLIS));
+		status.lastSeenAtInMillis = cursor.getLong(cursor.getColumnIndex(StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS));
 		
-		int lectureAreadySeen = cursor.getInt(cursor.getColumnIndex(TableStatus.COLUMN_TEXT));
+		int lectureAreadySeen = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_TEXT));
 		status.lectureAreadySeen = (lectureAreadySeen == 0) ? false : true;
 		
-		int lastSeen = cursor.getInt(cursor.getColumnIndex(TableStatus.COLUMN_TEXT));
+		int lastSeen = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_TEXT));
 		status.lastSeen = (lastSeen == 0) ? false : true;
 		
 		status.user = new User();
-		status.user.id = cursor.getInt(cursor.getColumnIndex(TableStatus.COLUMN_USER_ID));
+		status.user.id = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_USER_ID));
 		
 		return status;
 	}
@@ -269,15 +269,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		User user = new User();
 		
 		Cursor cursor;
-		cursor = db.query(TableUser.NAME, null, 
-				TableUser.COLUMN_ID + " = ?", 
+		cursor = db.query(UserTable.NAME, null, 
+				UserTable.COLUMN_ID + " = ?", 
 				new String[] {String.valueOf(status.user.id)}, 
 				null, null, null, null);
 		
 		if(cursor.moveToNext()) {
-			user.id = cursor.getInt(cursor.getColumnIndex(TableUser.COLUMN_ID));
-			user.first_name = cursor.getString(cursor.getColumnIndex(TableUser.COLUMN_FIRST_NAME));
-			user.last_name = cursor.getString(cursor.getColumnIndex(TableUser.COLUMN_LAST_NAME));
+			user.id = cursor.getInt(cursor.getColumnIndex(UserTable.COLUMN_ID));
+			user.first_name = cursor.getString(cursor.getColumnIndex(UserTable.COLUMN_FIRST_NAME));
+			user.last_name = cursor.getString(cursor.getColumnIndex(UserTable.COLUMN_LAST_NAME));
 			user.thumbnails = getThumbnails(db, status.user);
     	}
 		
@@ -288,15 +288,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		List<Thumbnail> thumbnails = new ArrayList<Thumbnail>();
 		
 		Cursor cursor;
-		cursor = db.query(TableThumbnail.NAME, null, 
-				TableThumbnail.COLUMN_USER_ID + " = ?", 
+		cursor = db.query(ThumbnailTable.NAME, null, 
+				ThumbnailTable.COLUMN_USER_ID + " = ?", 
 				new String[] {String.valueOf(user.id)}, 
 				null, null, null, null);
 		
 		while(cursor.moveToNext()) {
 			Thumbnail thumbnail = new Thumbnail();
-			thumbnail.size = cursor.getString(cursor.getColumnIndex(TableThumbnail.COLUMN_SIZE));
-			thumbnail.href = cursor.getString(cursor.getColumnIndex(TableThumbnail.COLUMN_HREF));
+			thumbnail.size = cursor.getString(cursor.getColumnIndex(ThumbnailTable.COLUMN_SIZE));
+			thumbnail.href = cursor.getString(cursor.getColumnIndex(ThumbnailTable.COLUMN_HREF));
 
 			thumbnails.add(thumbnail);
 		}
@@ -308,17 +308,17 @@ public class DbHelper extends SQLiteOpenHelper {
 		List<Link> links = new ArrayList<Link>();
 		
 		Cursor cursor;
-		cursor = db.query(TableLink.NAME, null, 
-				TableLink.COLUMN_STATUS_ID + " = ?", 
+		cursor = db.query(LinkTable.NAME, null, 
+				LinkTable.COLUMN_STATUS_ID + " = ?", 
 				new String[] {String.valueOf(status.id)}, 
 				null, null, null, null);
 		
 		while(cursor.moveToNext()) {
 			Link link = new Link();
-			link.rel = cursor.getString(cursor.getColumnIndex(TableLink.COLUMN_REL));
-			link.href = cursor.getString(cursor.getColumnIndex(TableLink.COLUMN_HREF));
-			link.name = cursor.getString(cursor.getColumnIndex(TableLink.COLUMN_NAME));
-			link.permalink = cursor.getString(cursor.getColumnIndex(TableLink.COLUMN_PERMALINK));
+			link.rel = cursor.getString(cursor.getColumnIndex(LinkTable.COLUMN_REL));
+			link.href = cursor.getString(cursor.getColumnIndex(LinkTable.COLUMN_HREF));
+			link.name = cursor.getString(cursor.getColumnIndex(LinkTable.COLUMN_NAME));
+			link.permalink = cursor.getString(cursor.getColumnIndex(LinkTable.COLUMN_PERMALINK));
 			
 			links.add(link);
     	}
@@ -330,9 +330,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();  
 		
 		ContentValues values = new ContentValues();
-		values.put(TableAppUser.COLUMN_ID , appUser.id);
+		values.put(AppUserTable.COLUMN_ID , appUser.id);
 		
-		long id = db.insert(TableAppUser.NAME, null, values);
+		long id = db.insertWithOnConflict(AppUserTable.NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 		
 		db.close();
 		
@@ -380,13 +380,13 @@ public class DbHelper extends SQLiteOpenHelper {
 		
 		// putting Status datas
 		ContentValues values = new ContentValues();
-		values.put(TableStatus.COLUMN_TEXT, status.text);
-		values.put(TableStatus.COLUMN_ID, status.id);
-		values.put(TableStatus.COLUMN_APP_USER_ID, appUserId);
-		values.put(TableStatus.COLUMN_USER_ID, status.user.id);
-		values.put(TableStatus.COLUMN_TYPE, status.type);
-		values.put(TableStatus.COLUMN_ANSWERS_COUNT, status.answers_count);
-		values.put(TableStatus.COLUMN_LOGEABLE_TYPE, status.logeable_type);
+		values.put(StatusTable.COLUMN_TEXT, status.text);
+		values.put(StatusTable.COLUMN_ID, status.id);
+		values.put(StatusTable.COLUMN_APP_USER_ID, appUserId);
+		values.put(StatusTable.COLUMN_USER_ID, status.user.id);
+		values.put(StatusTable.COLUMN_TYPE, status.type);
+		values.put(StatusTable.COLUMN_ANSWERS_COUNT, status.answers_count);
+		values.put(StatusTable.COLUMN_LOGEABLE_TYPE, status.logeable_type);
 		
 		if(status.createdAtInMillis == 0) {
 			try {
@@ -395,12 +395,12 @@ public class DbHelper extends SQLiteOpenHelper {
 				e.printStackTrace();
 			}
 		}
-		values.put(TableStatus.COLUMN_CREATED_AT_IN_MILLIS, status.createdAtInMillis);
+		values.put(StatusTable.COLUMN_CREATED_AT_IN_MILLIS, status.createdAtInMillis);
 		
-		values.put(TableStatus.COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
-		values.put(TableStatus.COLUMN_LAST_SEEN , status.lastSeen);
+		values.put(StatusTable.COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
+		values.put(StatusTable.COLUMN_LAST_SEEN , status.lastSeen);
 		
-		long id = db.insert(TableStatus.NAME, null, values);
+		long id = db.insertWithOnConflict(StatusTable.NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 		
 		// putting links datas
 		for(Link link : status.links) {
@@ -412,22 +412,22 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	private long putLink(SQLiteDatabase db, Link link, String statusId) {
 		ContentValues values = new ContentValues();
-		values.put(TableLink.COLUMN_STATUS_ID, statusId);
-		values.put(TableLink.COLUMN_REL, link.rel);
-		values.put(TableLink.COLUMN_HREF, link.href);
-		values.put(TableLink.COLUMN_NAME, link.name);
-		values.put(TableLink.COLUMN_PERMALINK, link.permalink);
+		values.put(LinkTable.COLUMN_STATUS_ID, statusId);
+		values.put(LinkTable.COLUMN_REL, link.rel);
+		values.put(LinkTable.COLUMN_HREF, link.href);
+		values.put(LinkTable.COLUMN_NAME, link.name);
+		values.put(LinkTable.COLUMN_PERMALINK, link.permalink);
 		
-		return db.insert(TableLink.NAME, null, values);	
+		return db.insertWithOnConflict(LinkTable.NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);	
 	}
 
 	private long putUser(SQLiteDatabase db, User user) {
 		ContentValues values = new ContentValues();
-		values.put(TableUser.COLUMN_ID, user.id);
-		values.put(TableUser.COLUMN_FIRST_NAME, user.first_name);
-		values.put(TableUser.COLUMN_LAST_NAME, user.last_name);
+		values.put(UserTable.COLUMN_ID, user.id);
+		values.put(UserTable.COLUMN_FIRST_NAME, user.first_name);
+		values.put(UserTable.COLUMN_LAST_NAME, user.last_name);
 		
-		long id = db.insert(TableUser.NAME, null, values);	
+		long id = db.insertWithOnConflict(UserTable.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);	
 
 		// putting thumbnails datas
 		for(Thumbnail thumbnail : user.thumbnails) {
@@ -439,21 +439,21 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	private long putThumbnail(SQLiteDatabase db, Thumbnail thumbnail, int userId) {
 		ContentValues values = new ContentValues();
-		values.put(TableThumbnail.COLUMN_USER_ID, userId);
-		values.put(TableThumbnail.COLUMN_HREF, thumbnail.href);
-		values.put(TableThumbnail.COLUMN_SIZE, thumbnail.size);
+		values.put(ThumbnailTable.COLUMN_USER_ID, userId);
+		values.put(ThumbnailTable.COLUMN_HREF, thumbnail.href);
+		values.put(ThumbnailTable.COLUMN_SIZE, thumbnail.size);
 		
-		return db.insert(TableThumbnail.NAME, null, values);	
+		return db.insertWithOnConflict(ThumbnailTable.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);	
 	}
 	
 	synchronized public long setStatusAsLastSeen(Status status) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 
         ContentValues statusValues = new ContentValues();
-        statusValues.put(TableStatus.COLUMN_LAST_SEEN, 1);
-        statusValues.put(TableStatus.COLUMN_LAST_SEEN_AT_IN_MILLIS, System.currentTimeMillis());
+        statusValues.put(StatusTable.COLUMN_LAST_SEEN, 1);
+        statusValues.put(StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS, System.currentTimeMillis());
         
-        long id = db.update(TableStatus.NAME, statusValues, TableStatus.COLUMN_ID + " = ?", new String[] {status.id});
+        long id = db.update(StatusTable.NAME, statusValues, StatusTable.COLUMN_ID + " = ?", new String[] {status.id});
         
         db.close();
 
@@ -462,13 +462,26 @@ public class DbHelper extends SQLiteOpenHelper {
         return id;
 	}
 	
+	synchronized public long updateStatusAnswersCount(String statusId, int answerCount) {
+		SQLiteDatabase db = this.getWritableDatabase();  
+		
+		ContentValues values = new ContentValues();
+		values.put(StatusTable.COLUMN_ANSWERS_COUNT, answerCount);
+		
+		long id = db.update(StatusTable.NAME, values, AppUserTable.COLUMN_ID + " = ?", new String[] {statusId});
+		
+		db.close();
+		
+		return id;
+	}
+	
 	synchronized public long setOldestStatusesWereDownloaded(String appUserId) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 		
 		ContentValues values = new ContentValues();
-		values.put(TableAppUser.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED, 1);
+		values.put(AppUserTable.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED, 1);
 		
-		long id = db.update(TableAppUser.NAME, values, TableAppUser.COLUMN_ID + " = ?", new String[] {appUserId});
+		long id = db.update(AppUserTable.NAME, values, AppUserTable.COLUMN_ID + " = ?", new String[] {appUserId});
 		
 		db.close();
 		
@@ -480,10 +493,10 @@ public class DbHelper extends SQLiteOpenHelper {
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		
-		Cursor cursor = db.query(TableAppUser.NAME, null, TableAppUser.COLUMN_ID + " = ?", new String[] {appUserId}, null, null, null);
+		Cursor cursor = db.query(AppUserTable.NAME, null, AppUserTable.COLUMN_ID + " = ?", new String[] {appUserId}, null, null, null);
         if (cursor.moveToFirst()) {  
-        	int value = cursor.getInt(cursor.getColumnIndex(TableAppUser.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED));
-        	oledestStatusesWereDownloaded = (value == 0) ? false : true;
+        	int value = cursor.getInt(cursor.getColumnIndex(AppUserTable.COLUMN_OLDEST_STATUSES_WERE_DOWNLOADED));
+        	oledestStatusesWereDownloaded = (value != 0);
         }
         
         cursor.close();  
@@ -514,9 +527,9 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor;  
         
         String query = new StringBuffer("SELECT MAX(").
-        		append(TableStatus.COLUMN_CREATED_AT_IN_MILLIS).
+        		append(StatusTable.COLUMN_CREATED_AT_IN_MILLIS).
         		append(") FROM ").
-        		append(TableStatus.NAME).
+        		append(StatusTable.NAME).
         		toString();
         
         cursor = db.rawQuery(query, null);

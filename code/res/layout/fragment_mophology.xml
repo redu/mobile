@@ -5,14 +5,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <ImageButton
+    <android.widget.Button
         android:id="@+id/btNovoModulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:background="@null"
-        android:src="@drawable/bt_novomodulo" />
+        android:text="Novo Módulo"
+        android:background="@drawable/bt_gray"
+        android:layout_margin="12dp" />
+	<View
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:background="@drawable/img_divider" />
+    <ExpandableListView
+        android:id="@+id/elvSubject"
+        android:layout_width="match_parent"
+        android:background="#fff"
+        android:divider="@null"
+        android:layout_height="wrap_content" >
+    </ExpandableListView>
+>>>>>>> 7e3d3b1d16e9a4fea91fa6ccc2f3820120f1f846
 
     <View
         android:layout_width="wrap_content"
