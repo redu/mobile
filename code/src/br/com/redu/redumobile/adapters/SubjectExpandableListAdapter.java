@@ -17,6 +17,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.LectureActivity;
@@ -29,11 +30,13 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	List<List<Lecture>> mLectures;
 	Subject mCurrentSubject;
 	Dialog mDialogInfo;
+	Space mSpace;
 	
-	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures) {
+	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures, Space space) {
 		mContext = context;
 		mSubjects = subjects;
 		mLectures = lectures;
+		mSpace = space;
 	}
 	
 	@Override
@@ -74,10 +77,6 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvLecturesName);
 		tv.setText(lecture.name);
-		
-		//TODO PROGRESSO DA AULA IMPLEMENTAR
-		//ImageView iv = (ImageView) convertView.findViewById(R.id.ivIsFinalized);
-		
 		
 		convertView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -130,6 +129,8 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 				mDialogNewLecture = builder.create();
 		    	mDialogNewLecture.show();*/
 				Intent it = new Intent(mContext, UploadStep1Activity.class);
+				it.putExtra("id", mCurrentSubject.id);
+				it.putExtra(Space.class.getName(), mSpace);
 				mContext.startActivity(it);
 			}
 		});
