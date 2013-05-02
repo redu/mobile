@@ -254,10 +254,10 @@ public class DbHelper extends SQLiteOpenHelper {
 		status.lastSeenAtInMillis = cursor.getLong(cursor.getColumnIndex(StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS));
 		
 		int lectureAreadySeen = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_TEXT));
-		status.lectureAreadySeen = (lectureAreadySeen == 0) ? false : true;
+		status.lectureAreadySeen = (lectureAreadySeen != 0);
 		
-		int lastSeen = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_TEXT));
-		status.lastSeen = (lastSeen == 0) ? false : true;
+		int lastSeen = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_LAST_SEEN));
+		status.lastSeen = (lastSeen != 0);
 		
 		status.user = new User();
 		status.user.id = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_USER_ID));
@@ -346,7 +346,7 @@ public class DbHelper extends SQLiteOpenHelper {
         
         db.close();
         
-        notifyListenters();
+        notifyListenters(true);
         
         return id;
 	}
@@ -366,7 +366,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		
 		db.close();
 
-		notifyListenters();
+		notifyListenters(true);
 		
 		return ids;
 	}
@@ -457,7 +457,7 @@ public class DbHelper extends SQLiteOpenHelper {
         
         db.close();
 
-        notifyListenters();
+        notifyListenters(false);
         
         return id;
 	}
@@ -505,12 +505,16 @@ public class DbHelper extends SQLiteOpenHelper {
         return oledestStatusesWereDownloaded;
 	}
 
-	private void notifyListenters() {
+	private void notifyListenters(boolean inserting) {
 		if(mListeners != null) {
 			for(WeakReference<DbHelperListener> wrListener : mListeners) {
 				DbHelperListener listener = wrListener.get();
 				if(listener != null) {
-					listener.hasNewStatus();
+					if(inserting) {
+						listener.onStatusInserted();
+					} else {
+						listener.onStatusUpdated();
+					}
 				}
 			}
 		}

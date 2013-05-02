@@ -90,6 +90,16 @@ public class HomeNewLecturesFragment extends StatusListFragment  {
 	}
 
 	@Override
+	public void onStatusInserted() {
+		updateStatusesFromDb(false);
+	}
+
+	@Override
+	public void onStatusUpdated() {
+		// ignoring
+	}
+
+	@Override
 	protected long getOldestStatusTimestamp() {
 		int count = mAdapter.getCount();
 		if(count == 0) {

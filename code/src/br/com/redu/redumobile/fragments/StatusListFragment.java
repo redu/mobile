@@ -107,6 +107,9 @@ public abstract class StatusListFragment extends HomeFragment implements DbHelpe
 					
 					DbHelper dbHelper = ((DbHelperHolder) getActivity()).getDbHelper();
 					dbHelper.setStatusAsLastSeen(status);
+					
+					status.lastSeen = true;
+					mAdapter.notifyDataSetChanged();
 				}
 			}
 		});
@@ -150,11 +153,6 @@ public abstract class StatusListFragment extends HomeFragment implements DbHelpe
 	
 	protected void showNewStatusMessage() {
 		mLlNewStatus.setVisibility(View.VISIBLE);
-	}
-	
-	@Override
-	public void hasNewStatus() {
-		updateStatusesFromDb(false);
 	}
 	
 	protected void updateStatusesFromDb(boolean olderThan) {
