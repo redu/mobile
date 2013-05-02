@@ -89,6 +89,16 @@ public class HomeLastSeenFragment extends StatusListFragment {
 	}
 
 	@Override
+	public void onStatusInserted() {
+		// ignoring
+	}
+
+	@Override
+	public void onStatusUpdated() {
+		updateStatusesFromDb(false);
+	}
+	
+	@Override
 	protected long getOldestStatusTimestamp() {
 		int count = mAdapter.getCount();
 		if(count == 0) {

@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.db;
 
 public interface DbHelperListener {
-	public void hasNewStatus();
+	public void onStatusInserted();
+	public void onStatusUpdated();
 }

@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -90,7 +90,7 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		alert.show();
 	}
 
-	class MainAdapter extends FragmentPagerAdapter {
+	class MainAdapter extends FragmentStatePagerAdapter {
 		private final HomeFragment[] fragments;
 
 		public MainAdapter(FragmentManager fm) {
