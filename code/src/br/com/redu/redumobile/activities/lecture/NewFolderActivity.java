@@ -24,6 +24,7 @@ public class NewFolderActivity extends BaseActivity{
 	
 	Context mContext = this;
 	Space space;
+	Folder folder;
 	String superFolderId;
 	ProgressDialog dialog;
 	
@@ -31,18 +32,23 @@ public class NewFolderActivity extends BaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_folder);
-		superFolderId = getIntent().getExtras().getString("id");
+		folder = (Folder) getIntent().getExtras().get(Folder.class.getName());
+		
 		space = (Space) getIntent().getExtras().get(Space.class.getName());
 		mEtFolder = (EditText) findViewById(R.id.etFolder);
 		TextView title = (TextView) findViewById(R.id.tv_title_action_bar);
 		title.setText(space.name);
+		if (folder == null){
+			superFolderId = getIntent().getExtras().getString("id");
+		}else{
+			mEtFolder.setText(folder.name);
+		}
 		addActionToActionBar(R.drawable.ic_add, new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String text = mEtFolder.getText().toString();
 				if(text.length() <= NUM_MAX_CHARACERS) {
-					new SaveFolder().execute(text);
-					
+						new SaveFolder().execute(text);
 				}
 			}
 		});
@@ -54,15 +60,20 @@ public class NewFolderActivity extends BaseActivity{
 		
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			dialog = ProgressDialog.show(mContext,"Redu","Adicionando diretório...", false, true);
+			if (folder == null)
+				dialog = ProgressDialog.show(mContext,"Redu","Adicionando diretório...", false, true);
+			else
+				dialog = ProgressDialog.show(mContext,"Redu","Alterando diretório...", false, true);
 			dialog.setIcon(R.drawable.ic_launcher);
 			dialog.setCancelable(false);
 			super.onPreExecute();
 		}
 		protected Void doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			redu.postFolder(text[0], superFolderId);
+			if (folder == null)
+				redu.postFolder(text[0], superFolderId);
+			else
+				redu.editFolder(text[0], folder.id);
 			return null;
 		}
 		@Override
