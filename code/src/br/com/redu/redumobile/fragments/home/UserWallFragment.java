@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.List;
 
@@ -10,11 +10,12 @@ import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.fragments.StatusListFragment;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeWallFragment extends StatusListFragment {
+public class UserWallFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,11 +84,6 @@ public class HomeWallFragment extends StatusListFragment {
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
 		return dbHelper.getStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
-	}
-
-	@Override
-	public Type getType() {
-		return Type.Wall;
 	}
 
 	@Override
