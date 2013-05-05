@@ -2,7 +2,6 @@ package br.com.redu.redumobile.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -42,23 +41,13 @@ public abstract class BaseActivity extends FragmentActivity {
 		mActionBar.setUpClass(upClass);
 	}
 
-	protected void addActionToActionBar(int drawableResId,
+	protected View addActionToActionBar(int drawableResId,
 			OnClickListener clickAction) {
-		mActionBar.addAction(drawableResId, clickAction);
+		return mActionBar.addAction(drawableResId, clickAction);
 	}
 
 	protected void setActionBarTitle(String title) {
 		mActionBar.setTitle(title);
-	}
-
-	public void onSettingsClicked(View v) {
-		Intent i = new Intent(this, SettingsActivity.class);
-		startActivity(i);
-	}
-	
-	public void onEnvironmentClicked(View v) {
-		Intent i = new Intent(this, EnvironmentActivity.class);
-		startActivity(i);
 	}
 	
 	@SuppressWarnings("unchecked")

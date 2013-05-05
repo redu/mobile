@@ -1,14 +1,25 @@
 package br.com.redu.redumobile.activities;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.db.DbHelper;
@@ -18,6 +29,7 @@ import br.com.redu.redumobile.fragments.HomeFragment;
 import br.com.redu.redumobile.fragments.HomeLastSeenFragment;
 import br.com.redu.redumobile.fragments.HomeNewLecturesFragment;
 import br.com.redu.redumobile.fragments.HomeWallFragment;
+import br.com.redu.redumobile.util.PinCodeHelper;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
@@ -36,6 +48,9 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	static final int ITEM_NEW_LECTURES = 1;
 	static final int ITEM_WALL = 2;
 	static final int ITEM_ENVIRONMENTS = 3;
+	
+	private View popupMenuButton;
+	private PopupWindow popupWindow;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +58,13 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 
 		setActionBarTitle("Redu");
 
+		popupMenuButton = addActionToActionBar(R.drawable.ic_menu, new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onPopupMenuClicked();
+			}
+		});
+		
 		// START BuzzNotify
 		int openAppStatus = AnalyticsManager.onOpenApp(this);
 		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
@@ -63,33 +85,82 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		int itemChecked = getIntent().getIntExtra(ITEM_EXTRA_PARAM, ITEM_WALL);
 		indicator.setCurrentItem(itemChecked);
 		
-//		showWebDialog("Redu Mobile", "http://redu.com.br/#modal-sign-up");
-
+		initializePopupMenu();
 	}
 	
-	@SuppressLint("SetJavaScriptEnabled")
-	private void showWebDialog(String title, String url) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		onPopupMenuClicked();
+		return false;
+	}
 
-		alert.setTitle(title);
-		WebView wv = new WebView(this);
-		wv.getSettings().setJavaScriptEnabled(true);
-//		wv.setHorizontalScrollBarEnabled(false);
-		wv.loadUrl(url);
+	private void onPopupMenuClicked() {
+		if (popupWindow.isShowing()) {
+			popupWindow.dismiss();
+		} else {
+			popupWindow.showAsDropDown(popupMenuButton);
+		}
+	}
+	
+	private void initializePopupMenu() {
+		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
 
-		wv.setWebViewClient(new WebViewClient() {
+		ListView popupMenuContent = (ListView) inflater.inflate(
+				R.layout.popup_menu, null);
+
+		popupMenuContent.setAdapter(new ArrayAdapter<String>(getApplicationContext(), 
+				R.layout.popup_menu_item, 
+				new String[] {"Configurações", "Termos de uso", "Privacidade", "Sair"}));
+		
+		popupMenuContent.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				view.loadUrl(url);
-				return true;
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Intent i = null;
+				
+				switch (position) {
+				case 0:
+					i = new Intent(getApplicationContext(), SettingsActivity.class);
+					break;
+				case 1:
+					i = new Intent(getApplicationContext(), TermsOfUseActivity.class);
+					break;
+				case 2:
+					i = new Intent(getApplicationContext(), PrivacyActivity.class);
+					break;
+				case 3:
+					i = new Intent(getApplicationContext(), LoginWebViewActivity.class);
+					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					PinCodeHelper.clearPinCode(getApplicationContext());
+					break;
+				}
+				
+				startActivity(i);
 			}
 		});
 
-		alert.setView(wv);
-
-		alert.show();
+		popupWindow = new PopupWindow(getApplicationContext());
+		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(true);
+		popupWindow.setWidth((int) dipToPx(200, getResources()));
+		popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+		popupWindow.setContentView(popupMenuContent);
+		popupWindow.setTouchInterceptor(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+					popupWindow.dismiss();
+					return true;
+				}
+				return false;
+			}
+		});
 	}
-
+	
+	public float dipToPx(int dip, Resources res) {
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, res.getDisplayMetrics());
+	}
+	
 	class MainAdapter extends FragmentStatePagerAdapter {
 		private final HomeFragment[] fragments;
 
@@ -119,7 +190,7 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 			return fragments[position];
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		DbHelper.getInstance(this).close();
