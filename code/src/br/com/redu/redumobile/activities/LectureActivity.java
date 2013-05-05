@@ -50,8 +50,7 @@ public class LectureActivity extends BaseActivity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_lecture);
+		super.onCreate(savedInstanceState, R.layout.activity_lecture);
 		
 		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);

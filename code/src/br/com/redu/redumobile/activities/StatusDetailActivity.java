@@ -4,13 +4,10 @@ import java.util.List;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.Html;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WebCachedImageView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,18 +19,18 @@ import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.StatusDetailAdapter;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.DateUtil;
+import br.com.redu.redumobile.widgets.StatusComposer;
+import br.com.redu.redumobile.widgets.StatusComposer.OnStatusComposerListener;
 
 public class StatusDetailActivity extends BaseActivity {
-
-	private static final int NUM_MAX_CHARACERS = 800;
 
 	public static final String EXTRAS_STATUS = "EXTRAS_STATUS";
 	
 	private LayoutInflater mInflater;
 	
 	private ListView mListView;
+	
 	private StatusDetailAdapter mAdapter;
-	private EditText mEditText;
 	private View mFooterLoadingAnswers;
 	
 	private Status mStatus;
@@ -53,34 +50,18 @@ public class StatusDetailActivity extends BaseActivity {
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.addHeaderView(createStatusHeaderView(mStatus));
 	
+		((StatusComposer) findViewById(R.id.status_composer)).setOnStatusComposerListener(new OnStatusComposerListener() {
+			@Override
+			public void onSendClicked(String text) {
+				new PostAnswerTask().execute(mStatus.id, text);
+			}
+		});
+		
 		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
 		mListView.setAdapter(mAdapter);
 
 		if(mStatus.answers_count > 0) {
 			new LoadAnswersStatus(mStatus.id).execute();
-		}
-		
-		final TextView tvTextCount = (TextView) findViewById(R.id.tv_text_count);
-		mEditText = (EditText) findViewById(R.id.et_text);
-		mEditText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				int numRemainingChars = NUM_MAX_CHARACERS - s.length();
-				tvTextCount.setText(String.valueOf(numRemainingChars));
-			}
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-	}
-
-	public void onSendClicked(View v) {
-		String text = mEditText.getText().toString();
-		if(text.length() <= NUM_MAX_CHARACERS) {
-			new PostAnswerTask().execute(mStatus.id, text);
 		}
 	}
 	
