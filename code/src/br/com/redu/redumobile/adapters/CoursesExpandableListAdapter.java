@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import br.com.developer.redu.models.Course;
 import br.com.developer.redu.models.Space;
@@ -91,9 +90,9 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvTitle);
 		if(getChildrenCount(groupPosition) != 0)
-			tv.setText(Html.fromHtml(mCourses.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+getChildrenCount(groupPosition)+" Disciplinas</small></font>"));
+			tv.setText(Html.fromHtml("<b>" + mCourses.get(groupPosition).name + "</b><br/><font color=\"#CCCCCC\"><small>" + getChildrenCount(groupPosition) + " Disciplinas</small></font>"));
 		else
-			tv.setText(Html.fromHtml(mCourses.get(groupPosition).name+"<br/>"+"<font color=\"#CCCCCC\"><small> Ainda não há Disciplinas neste Curso</small></font>"));
+			tv.setText(Html.fromHtml("<b>" + mCourses.get(groupPosition).name + "</b><br/><font color=\"#CCCCCC\"><small> Ainda não há Disciplinas neste Curso</small></font>"));
 		//ImageView setaCourse = (ImageView) convertView.findViewById(R.id.iv_seta_course); 
 		
 		return convertView;
