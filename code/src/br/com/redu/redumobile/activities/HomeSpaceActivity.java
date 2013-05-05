@@ -39,7 +39,7 @@ public class HomeSpaceActivity extends BaseActivity {
     private ViewPager vp;
     
 	@Override
-	protected void onRestart() {
+	public void onRestart() {
 		super.onRestart();
 		mAdapter.notifyDataSetChanged();
 	}

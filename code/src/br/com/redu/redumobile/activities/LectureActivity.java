@@ -7,13 +7,16 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.util.DownloadHelper;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -45,6 +48,8 @@ public class LectureActivity extends BaseActivity{
 	private ProgressDialog mProgressDialog;
 	
 	private AlertDialog alertDialog;
+	
+	private Context mContext = this;
 	
 	DownloadFile df;
 	
@@ -215,7 +220,7 @@ public class LectureActivity extends BaseActivity{
 		mBtIsDone.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 			}
 		});
 		
@@ -322,6 +327,24 @@ public class LectureActivity extends BaseActivity{
 	    		
 	    }
 	    
+	}
+	
+class LoadProgress extends AsyncTask<String, Void, Void> {
+		
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+		}
+		protected Void doInBackground(String... text) {
+			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+			//redu.getProgress(mLecture.id);
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+		};
 	}
 	
 }

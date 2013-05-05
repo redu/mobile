@@ -31,7 +31,6 @@ import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 public class MorphologyFragment extends Fragment {
 	
 	private User mUser;
-	private int mCurrentPage;
 	private Space mSpace;
 	
 	private List<Subject> mEnrollmentedSubjects;
@@ -44,7 +43,6 @@ public class MorphologyFragment extends Fragment {
 	
 	
 	public MorphologyFragment() {
-		mCurrentPage = 0;
 	}
 	
 	@Override

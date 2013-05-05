@@ -38,6 +38,7 @@ import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.HomeSpaceActivity;
 import br.com.redu.redumobile.activities.HomeSpaceActivity.SupportMaterialFragmentListener;
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadFileFolderActivity;
@@ -389,6 +390,8 @@ public class SupportMaterialFragment extends Fragment {
 			mProgressdialogRemove.dismiss();
 			//TODO CHAMAR O NOTIFYDATASETCHANGED DA ACTIVITY
 			mAdapter.notifyDataSetChanged();
+			HomeSpaceActivity activity = (HomeSpaceActivity) getActivity();
+			activity.onRestart();
 		};
 	}
 
