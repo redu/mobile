@@ -267,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mural"
-                    android:textColor="@color/cinzaClaro"
+                    android:textColor="@color/greyDark"
                     android:background="@drawable/bt_bottom_gray" />
 
                 <Button

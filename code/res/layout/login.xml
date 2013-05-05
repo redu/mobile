@@ -30,7 +30,7 @@
 			<View
 		        android:layout_width="match_parent"
 		        android:layout_height="1dip"
-		        android:background="@color/cinzaClaro" />
+		        android:background="@color/greyLight" />
 			<LinearLayout 
 			    android:layout_width="match_parent"
 			    android:layout_height="0dip"
@@ -44,27 +44,27 @@
 		      		android:layout_height="wrap_content"
 		      		android:text="Login ou email"
 		      		android:textSize="12sp"
-		      		android:textColor="@color/cinzaEscuro"
+		      		android:textColor="@color/greyDark"
 		      		android:layout_marginTop="25dp"/>
 			    <EditText 
 			        android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
 		      		android:text="Seu login ou email cadastrado"
 		      		android:textSize="12sp"
-		      		android:textColor="@color/cinzaClaro"/>
+		      		android:textColor="@color/greyDark"/>
 			    <TextView 
 			        android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
 		      		android:text="Senha"
 		      		android:layout_marginTop="15dp"
-		      		android:textColor="@color/cinzaEscuro"
+		      		android:textColor="@color/greyDark"
 		      		android:textSize="12sp"/>
 			    <EditText 
 			        android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
 		      		android:text="Sua senha"
 		      		android:textSize="12sp"
-		      		android:textColor="@color/cinzaClaro"/>
+		      		android:textColor="@color/greyDark"/>
 		    	<FrameLayout 
 		    	    android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
@@ -76,13 +76,13 @@
 		    	        android:layout_gravity="left"
 		    	        android:textSize="12sp"
 		    	        android:text="Mostrar Senha"
-		    	        android:textColor="@color/cinzaEscuro" />
+		    	        android:textColor="@color/greyDark" />
 	
 		    	    <TextView 
 		    	        android:layout_width="wrap_content"
 			      		android:layout_height="wrap_content"
 			      		android:layout_gravity="right"
-			      		android:textColor="@color/azul"
+			      		android:textColor="@color/blue"
 			      		android:textSize="12sp"
 			      		android:clickable="true"
 			      		android:background="@null"

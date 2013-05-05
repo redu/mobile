@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_action_button"
-    android:divider="@color/cinzaClaro"
+    android:divider="@color/greyLight"
     android:dividerHeight="1dip"
     android:padding="10dip"
     android:text="DDSV "
-    android:textColor="@color/azul"
+    android:textColor="@color/blue"
     android:textSize="16dip" />
