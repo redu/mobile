@@ -9,7 +9,6 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WebCachedImageView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -36,6 +35,8 @@ public class StatusDetailActivity extends BaseActivity {
 	private StatusDetailAdapter mAdapter;
 	private EditText mEditText;
 	private View mFooterLoadingAnswers;
+	
+	private Status mStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +44,20 @@ public class StatusDetailActivity extends BaseActivity {
 		setActionBarTitle("Ambientes");
 
 		Bundle extras = getIntent().getExtras();
-		final Status status = (Status) extras.get(EXTRAS_STATUS);
+		mStatus = (Status) extras.get(EXTRAS_STATUS);
 
 		mInflater = LayoutInflater.from(this);
 		
 		mFooterLoadingAnswers = mInflater.inflate(R.layout.status_detail_footer_loading_answers, null);
 		
 		mListView = (ListView) findViewById(R.id.list);
-		mListView.addHeaderView(createStatusHeaderView(status));
+		mListView.addHeaderView(createStatusHeaderView(mStatus));
 	
 		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
 		mListView.setAdapter(mAdapter);
 
-		if(status.answers_count > 0) {
-			new LoadAnswersStatus(status.id).execute();
+		if(mStatus.answers_count > 0) {
+			new LoadAnswersStatus(mStatus.id).execute();
 		}
 		
 		final TextView tvTextCount = (TextView) findViewById(R.id.tv_text_count);
@@ -67,27 +68,22 @@ public class StatusDetailActivity extends BaseActivity {
 				int numRemainingChars = NUM_MAX_CHARACERS - s.length();
 				tvTextCount.setText(String.valueOf(numRemainingChars));
 			}
-			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
-			
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		
-		addActionToActionBar(R.drawable.ic_add, new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String text = mEditText.getText().toString();
-				if(text.length() <= NUM_MAX_CHARACERS) {
-					new PostAnswerTask().execute(status.id, text);
-				}
-			}
-		});
 	}
 
+	public void onSendClicked(View v) {
+		String text = mEditText.getText().toString();
+		if(text.length() <= NUM_MAX_CHARACERS) {
+			new PostAnswerTask().execute(mStatus.id, text);
+		}
+	}
+	
 	private View createStatusHeaderView(Status status) {
 		View v = mInflater.inflate(R.layout.status_detail_header_original_status, null);
 
@@ -137,12 +133,6 @@ public class StatusDetailActivity extends BaseActivity {
 		}
 		
 		return v;
-	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		
 	}
 
 	class LoadAnswersStatus extends

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,11 +79,11 @@ public class ActionBar extends FrameLayout {
 		mClassRef = classRef;
 	}
 
-	public void addAction(int drawableResId, OnClickListener clickAction) {
+	public View addAction(int drawableResId, OnClickListener clickAction) {
 
 		ImageButton ib = new ImageButton(getContext());
 		ib.setImageResource(drawableResId);
-		ib.setBackgroundColor(Color.TRANSPARENT);
+		ib.setBackgroundResource(R.drawable.bg_action_button);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT );
@@ -92,6 +91,8 @@ public class ActionBar extends FrameLayout {
 		ib.setOnClickListener(clickAction);
 
 		mContent.addView(ib, params);
+		
+		return ib;
 	}
 
 }

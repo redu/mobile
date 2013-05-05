@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WebCachedImageView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import br.com.developer.redu.models.Environment;
@@ -15,28 +16,26 @@ import br.com.redu.redumobile.R;
 public class EnviromentListAdapter extends BaseAdapter {
 
 	final private LayoutInflater mInflater;
-	final private Context mContext;
 	
-	private List<Environment> mEnviroment;
+	private List<Environment> mEnviroments;
 	
 	public EnviromentListAdapter(Context context, List<Environment> enviroments) {
-		mContext = context;
 		mInflater = LayoutInflater.from(context);
-		mEnviroment = enviroments; 
+		mEnviroments = enviroments; 
 	}
 	
 	@Override
 	public int getCount() {
-		if(mEnviroment == null) {
+		if(mEnviroments == null) {
 			return 0;
 		}
 				
-		return mEnviroment.size();
+		return mEnviroments.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mEnviroment.get(position);
+		return mEnviroments.get(position);
 	}
 
 	@Override
@@ -54,11 +53,20 @@ public class EnviromentListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView environment = (TextView) mInflater.inflate(R.layout.enviroment_list_row, null);
-		if (mEnviroment.get(position).courses_count.equals("0"))
-			environment.setText(Html.fromHtml(mEnviroment.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>Ambiente vazio, Não há Cursos</small></font>"));
-		else 
-			environment.setText(Html.fromHtml(mEnviroment.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+mEnviroment.get(position).courses_count+" Cursos</small></font>"));
-		return environment;
+		View v = mInflater.inflate(R.layout.enviroment_list_row, null);
+		TextView tvEnvironment = (TextView) v.findViewById(R.id.tv_environment);
+		WebCachedImageView ivThubmnail = (WebCachedImageView) v.findViewById(R.id.iv_thumbnail);
+		
+		Environment environment = mEnviroments.get(position);
+		
+		if (environment.courses_count.equals("0")) {
+			tvEnvironment.setText(Html.fromHtml(mEnviroments.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>Ambiente vazio, Não há Cursos</small></font>"));
+		} else { 
+			tvEnvironment.setText(Html.fromHtml(mEnviroments.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>"+mEnviroments.get(position).courses_count+" Cursos</small></font>"));
+		}
+		
+		ivThubmnail.setImageUrl(environment.getThumbnailUrl());
+		
+		return v;
 	}
 }
