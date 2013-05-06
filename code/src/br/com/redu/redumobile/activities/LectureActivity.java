@@ -23,6 +23,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,11 +33,11 @@ public class LectureActivity extends BaseActivity{
 	
 	private TextView mTvSubject;
 	private TextView mTvLecture;
-	private ImageView mBtEdit;
-	private ImageView mBtRemove;
+	private Button mBtEdit;
+	private Button mBtRemove;
 	
-	private ImageView mBtIsDone;
-	private ImageView mBtWall;
+	private Button mBtIsDone;
+	private Button mBtWall;
 	
 	private Lecture mLecture;
 	private Subject mSubject;
@@ -45,27 +46,36 @@ public class LectureActivity extends BaseActivity{
 	
 	private AlertDialog alertDialog;
 	
+	DownloadFile df;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_lecture);
+		super.onCreate(savedInstanceState, R.layout.activity_lecture);
 		
 		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
-		mBtEdit = (ImageView) findViewById(R.id.btEdit);
-		mBtRemove = (ImageView) findViewById(R.id.btRemove);
+		mBtEdit = (Button) findViewById(R.id.btEdit);
+		mBtRemove = (Button) findViewById(R.id.btRemove);
 		/*mIvImage = (ImageView) findViewById(R.id.ivImage);
 		mTvFileName = (TextView) findViewById(R.id.tvFileName);*/
 		
-		mBtIsDone = (ImageView) findViewById(R.id.btIsDone);
-		mBtWall = (ImageView) findViewById(R.id.btWall);
+		mBtIsDone = (Button) findViewById(R.id.btIsDone);
+		mBtWall = (Button) findViewById(R.id.btWall);
 		
 		mProgressDialog = new ProgressDialog(this);
 		mProgressDialog.setMessage("Aguarde...");
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		
+		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	df.cancel(true);
+		    	df.running = false;
+		        dialog.dismiss();
+		    }
+		});
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				this);
@@ -147,7 +157,8 @@ public class LectureActivity extends BaseActivity{
 							e.printStackTrace();
 						}
 					}else{
-						new DownloadFile().execute(lecture);
+						df = new DownloadFile();
+						df.execute(lecture);
 					}
 				}
 			});
@@ -210,14 +221,18 @@ public class LectureActivity extends BaseActivity{
 		mBtWall.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				Intent i = new Intent(LectureActivity.this, LectureWallActivity.class);
+				i.putExtra(LectureWallActivity.EXTRAS_LECTURE, mLecture);
+				startActivity(i);
 			}
 		});
 		
 	}
 
 	private class DownloadFile extends AsyncTask<Lecture, Integer, java.io.File> {
-	    @Override
+		private volatile boolean running = true;
+
+		@Override
 	    protected java.io.File doInBackground(Lecture... lecture) {
 	        try {
 	        	
@@ -253,6 +268,13 @@ public class LectureActivity extends BaseActivity{
 	            while ((count = input.read(data)) != -1) {
 	                total += count;
 	                // publishing the progress....
+	                if (!running){
+	                	output.flush();
+	    	            output.close();
+	    	            input.close();
+	    	            filling.delete();
+	                	return null;
+	                }
 	                publishProgress((int) (total * 100 / fileLength));
 	                output.write(data, 0, count);
 	            }
@@ -264,6 +286,11 @@ public class LectureActivity extends BaseActivity{
 	        } catch (Exception e) {
 	        }
 	        return null;
+	    }
+		
+		@Override
+	    protected void onCancelled() {
+	        running = false;    
 	    }
 	    
 	    @Override
@@ -283,7 +310,7 @@ public class LectureActivity extends BaseActivity{
 	    	super.onPostExecute(file);
 	    	mProgressDialog.setProgress(0);
 	    	mProgressDialog.dismiss();
-	    	if (this != null){
+	    	if (this != null && file != null){
 	    		try {
 					Intent it = DownloadHelper.loadDocInReader(file);
 					startActivity(it);

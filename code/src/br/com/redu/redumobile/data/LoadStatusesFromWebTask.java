@@ -78,16 +78,35 @@ public class LoadStatusesFromWebTask implements Task {
 				String pageStr = String.valueOf(page);
 				
 				List<Status> statuses = new ArrayList<Status>();
-				statuses.addAll(redu.getStatusesTimelineByUser(userId, Status.TYPE_ACTIVITY, pageStr));
-				statuses.addAll(redu.getStatusesTimelineByUser(userId, Status.TYPE_HELP, pageStr));
-				statuses.addAll(redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_COURSE, pageStr));
-				statuses.addAll(redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr));
-				statuses.addAll(redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr));
+				List<Status> temp;
+				temp = redu.getStatusesTimelineByUser(userId, Status.TYPE_ACTIVITY, pageStr);
+				if(temp != null) {
+					statuses.addAll(temp);
+				}
+				
+				temp = redu.getStatusesTimelineByUser(userId, Status.TYPE_HELP, pageStr);
+				if(temp != null) {
+					statuses.addAll(temp);
+				}
+				
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_COURSE, pageStr);
+				if(temp != null) {
+					statuses.addAll(temp);
+				}
+				
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr);
+				if(temp != null) {
+					statuses.addAll(temp);
+				}
+				
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr);
+				if(temp != null) {
+					statuses.addAll(temp);
+				}
 	
 				if (statuses.size() == 0) {
 					dbHelper.setOldestStatusesWereDownloaded(userId);
 					loadNextPage = false;
-					
 				} else {
 					for (Status status : statuses) {
 						try {

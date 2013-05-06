@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.activities.lecture;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,10 +23,10 @@ public class NewFolderActivity extends BaseActivity{
 	private static final int NUM_MAX_CHARACERS = 30;
 	
 	Context mContext = this;
-	Toast toast;
 	Space space;
 	String superFolderId;
-
+	ProgressDialog dialog;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,6 +42,7 @@ public class NewFolderActivity extends BaseActivity{
 				String text = mEtFolder.getText().toString();
 				if(text.length() <= NUM_MAX_CHARACERS) {
 					new SaveFolder().execute(text);
+					
 				}
 			}
 		});
@@ -48,18 +50,25 @@ public class NewFolderActivity extends BaseActivity{
 	}
 	
 	class SaveFolder extends AsyncTask<String, Void, Void> {
+		
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			dialog = ProgressDialog.show(mContext,"Redu","Adicionando diretório...", false, true);
+			dialog.setIcon(R.drawable.ic_launcher);
+			dialog.setCancelable(false);
+			super.onPreExecute();
+		}
 		protected Void doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			Folder f = redu.postFolder(text[0], superFolderId);
-			if (f != null){
-				toast = Toast.makeText(mContext, "Pasta "+f.name+" Adicionada", Toast.LENGTH_LONG);
-				toast.show();
-			}
+			redu.postFolder(text[0], superFolderId);
 			return null;
 		}
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			dialog.dismiss();
 			finish();
 		};
 	}

@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.List;
 
@@ -10,11 +10,12 @@ import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.fragments.StatusListFragment;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeWallFragment extends StatusListFragment {
+public class NewLecturesFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,6 @@ public class HomeWallFragment extends StatusListFragment {
 		LoadingStatusesManager.add(new OnLoadStatusesListener() {
 			@Override
 			public void onStart() {
-			
 			}
 			
 			@Override
@@ -72,22 +72,27 @@ public class HomeWallFragment extends StatusListFragment {
 	
 	@Override
 	public String getTitle() {
-		return "Início";
+		return "Novas Aulas";
 	}
 
 	@Override
-	public String getEmptyListMessage() {
-		return "Não há novidades, comece a fazer parte dos Ambientes e Cursos para interagir com outras pessoas";
+	protected String getEmptyListMessage() {
+		return "Não há Novas Aulas";
 	}
-	
+
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+		return dbHelper.getNewLecturesStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
 	}
 
 	@Override
-	public Type getType() {
-		return Type.Wall;
+	public void onStatusInserted() {
+		updateStatusesFromDb(false);
+	}
+
+	@Override
+	public void onStatusUpdated() {
+		// ignoring
 	}
 
 	@Override

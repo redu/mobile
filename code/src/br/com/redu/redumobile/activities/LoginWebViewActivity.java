@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.activities.login;
+package br.com.redu.redumobile.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,8 +11,6 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.activities.BaseActivity;
-import br.com.redu.redumobile.activities.HomeActivity;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.PinCodeHelper;
 

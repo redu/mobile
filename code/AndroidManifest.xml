@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.login.LoginWebViewActivity"
+            android:name=".activities.LoginWebViewActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" 
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -54,6 +54,12 @@
         <activity android:name=".activities.StatusDetailActivity" >
         </activity>
         <activity android:name=".activities.RespondStatusActivity" >
+        </activity>
+        <activity android:name=".activities.LectureWallActivity" >
+        </activity>
+        <activity android:name=".activities.PostStatusOnSpaceWallActivity" >
+        </activity>
+        <activity android:name=".activities.PostStatusOnLectureWallActivity" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"

@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.List;
 
@@ -6,13 +6,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 import br.com.developer.redu.models.Status;
+import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.fragments.StatusListFragment;
 
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeLastSeenFragment extends StatusListFragment {
+public class UserWallFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,7 @@ public class HomeLastSeenFragment extends StatusListFragment {
 		LoadingStatusesManager.add(new OnLoadStatusesListener() {
 			@Override
 			public void onStart() {
+			
 			}
 			
 			@Override
@@ -62,32 +66,36 @@ public class HomeLastSeenFragment extends StatusListFragment {
 		Activity activity = getActivity();
 		if(activity != null) {
 			isWaitingNotification = true;
-			mAdapter.clear();
-			updateStatusesFromDb(false);
+			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
 			mRefreshView = refreshView;
 		}
 	}
 	
 	@Override
 	public String getTitle() {
-		return "Últimos Visualizados";
+		return "Início";
 	}
 
 	@Override
-	public Type getType() {
-		return Type.LastSeen;
+	public String getEmptyListMessage() {
+		return "Não há novidades, comece a fazer parte dos Ambientes e Cursos para interagir com outras pessoas";
 	}
-
-	@Override
-	protected String getEmptyListMessage() {
-		return "Não há Comentários ou Pedidos de Ajuda recentemente visualizados";
-	}
-
+	
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getLastSeenStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+		return dbHelper.getStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
 	}
 
+	@Override
+	public void onStatusInserted() {
+		updateStatusesFromDb(false);
+	}
+
+	@Override
+	public void onStatusUpdated() {
+		// ignoring
+	}
+	
 	@Override
 	protected long getOldestStatusTimestamp() {
 		int count = mAdapter.getCount();
@@ -95,15 +103,16 @@ public class HomeLastSeenFragment extends StatusListFragment {
 			return System.currentTimeMillis();
 		}
 		
-		return ((Status) mAdapter.getItem(count-1)).lastSeenAtInMillis;
+		return ((Status) mAdapter.getItem(count-1)).createdAtInMillis;
 	}
 	
 	@Override
 	protected long getEarliestStatusTimestamp() {
-		if(mAdapter.isEmpty()) {
+		int count = mAdapter.getCount();
+		if(count == 0) {
 			return 0;
 		}
 		
-		return ((Status) mAdapter.getItem(0)).lastSeenAtInMillis;
+		return ((Status) mAdapter.getItem(0)).createdAtInMillis;
 	}
 }

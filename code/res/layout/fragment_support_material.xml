@@ -1,103 +1,72 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context=".MainActivity" >
-    
-    <RelativeLayout
-        android:id="@+id/rlIndice"  
-        android:layout_width="match_parent"
-   		android:layout_height="wrap_content"
-   		android:padding="5dp" 
-   		android:background="#ffffff">
-        
-	    <TextView
-	        android:id="@+id/tvIndice"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:gravity="center_vertical"
-	        android:drawableLeft="@drawable/ic_file"
-	        android:text="Índice"
-	        android:textAppearance="?android:attr/textAppearanceLarge"
-	        android:textColor="#cccccc"
-	        android:textSize="20dp" />
-	    
-	    <ImageButton
-	        android:id="@+id/ibBack"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="32dp"
-	        android:background="@null"
-	        android:src="@drawable/ic_seta_back" />
-	    
-	    <ImageButton 
-	        android:id="@+id/ibMore"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="end"
-	        android:src="@drawable/ic_add2"
-	        android:background="@null"
-	        android:layout_alignParentRight="true"
-	        />
-	    
-    </RelativeLayout>
-    <View
-	    android:layout_width="wrap_content"
-	    android:layout_height="1dp"
-	    android:background="#e7e7e7" />
-<!--     <RelativeLayout  
-        android:layout_width="match_parent"
-   		android:layout_height="wrap_content"
-   		android:padding="5dp"
-		android:background="#ffffff"
-   		>
-        
-	    <TextView 
-		    android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-		    android:id="@+id/tvSupportFolderInner"
-		    android:layout_alignParentLeft="true"
-		    android:gravity="center_vertical"
-		    android:drawableLeft="@drawable/ic_folder"
-		    android:text="Pasta Qualquer"
-		    android:textColor="#36ACD5"
-		    android:textSize="16dp" />
-	    
-	    
-	    
-	    <ImageButton 
-	        android:id="@+id/ibMoreFolder"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="end"
-	        android:src="@drawable/ic_add"
-	        android:background="@null"
-	        android:layout_alignParentRight="true"
-	        />
+    android:layout_height="match_parent" >
 
-	    <ImageButton
-	        android:id="@+id/ibBack"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="32dp"
-	        android:background="@null"
-	        android:src="@drawable/ic_back" />
-
-    </RelativeLayout> -->
-    
-	
-    <ListView
-        android:id="@+id/lvFiles"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:divider="#e7e7e7"
-        android:dividerHeight="1dp">
-	    
-    </ListView>
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context=".MainActivity" >
 
-</LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rlIndice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/tvIndice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/ic_file"
+                android:gravity="center_vertical"
+                android:text="Índice"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#cccccc"
+                android:textSize="20dp" />
+
+            <ImageButton
+                android:id="@+id/ibBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="32dp"
+                android:background="@null"
+                android:src="@drawable/ic_seta_back" />
+
+            <ImageButton
+                android:id="@+id/ibMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:background="@null"
+                android:src="@drawable/ic_add2" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#e7e7e7" />
+
+        <ListView
+            android:id="@+id/lvFiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="#e7e7e7"
+            android:dividerHeight="1dp"
+            android:visibility="gone" >
+        </ListView>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

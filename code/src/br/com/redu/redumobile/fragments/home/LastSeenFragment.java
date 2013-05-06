@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.List;
 
@@ -6,15 +6,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 import br.com.developer.redu.models.Status;
-import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.fragments.StatusListFragment;
 
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeNewLecturesFragment extends StatusListFragment  {
+public class LastSeenFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,31 +63,37 @@ public class HomeNewLecturesFragment extends StatusListFragment  {
 		Activity activity = getActivity();
 		if(activity != null) {
 			isWaitingNotification = true;
-			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
+			mAdapter.clear();
+			updateStatusesFromDb(false);
 			mRefreshView = refreshView;
 		}
 	}
 	
 	@Override
 	public String getTitle() {
-		return "Novas Aulas";
-	}
-
-	@Override
-	public Type getType() {
-		return Type.NewLectures;
+		return "Últimos Visualizados";
 	}
 
 	@Override
 	protected String getEmptyListMessage() {
-		return "Não há Novas Aulas";
+		return "Não há Comentários ou Pedidos de Ajuda recentemente visualizados";
 	}
 
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getNewLecturesStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+		return dbHelper.getLastSeenStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
 	}
 
+	@Override
+	public void onStatusInserted() {
+		// ignoring
+	}
+
+	@Override
+	public void onStatusUpdated() {
+		updateStatusesFromDb(false);
+	}
+	
 	@Override
 	protected long getOldestStatusTimestamp() {
 		int count = mAdapter.getCount();
@@ -96,17 +101,15 @@ public class HomeNewLecturesFragment extends StatusListFragment  {
 			return System.currentTimeMillis();
 		}
 		
-		return ((Status) mAdapter.getItem(count-1)).createdAtInMillis;
+		return ((Status) mAdapter.getItem(count-1)).lastSeenAtInMillis;
 	}
 	
 	@Override
 	protected long getEarliestStatusTimestamp() {
-		int count = mAdapter.getCount();
-		if(count == 0) {
+		if(mAdapter.isEmpty()) {
 			return 0;
 		}
 		
-		return ((Status) mAdapter.getItem(0)).createdAtInMillis;
+		return ((Status) mAdapter.getItem(0)).lastSeenAtInMillis;
 	}
 }
-

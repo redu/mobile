@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WebCachedImageView;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -37,6 +38,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 	private TextView mTvEmptyList;
 	
 	private TextView mTvEnvironment;
+	private WebCachedImageView mIvThumbnail;
 	private ProgressBar mProgressBar;
 	private ExpandableListView mListView;
 	private CoursesExpandableListAdapter mAdapter;
@@ -67,6 +69,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		mTvEmptyList = (TextView) v.findViewById(R.id.tv_empty_list);
 		mTvEnvironment = (TextView) v.findViewById(R.id.tvEnvironment);
+		mIvThumbnail = (WebCachedImageView) v.findViewById(R.id.iv_thumbnail);
 		
 		mListView = (ExpandableListView) v.findViewById(R.id.list);
 		mListView.setOnChildClickListener(new OnChildClickListener() {
@@ -111,6 +114,9 @@ public class CoursesAndSpacesFragment extends Fragment {
 				if (getActivity() != null){
 					mTvEnvironment.setText(mEnvironment.name);
 					mTvEnvironment.setVisibility(View.VISIBLE);
+					
+					mIvThumbnail.setImageUrl(mEnvironment.getThumbnailUrl());
+					mIvThumbnail.setVisibility(View.VISIBLE);
 					
 					if(mEnrollmentedCourses.isEmpty()) {
 						mTvEmptyList.setVisibility(View.VISIBLE);

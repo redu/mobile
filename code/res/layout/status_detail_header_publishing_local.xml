@@ -17,11 +17,11 @@
         android:paddingTop="5dip"
         android:text="Aula Lipsum"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/azul" />
+        android:textColor="@color/blue" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:background="@color/cinzaClaro" />
+        android:background="@color/greyLight" />
 
 </LinearLayout>

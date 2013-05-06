@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,9 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.EnvironmentActivity;
 import br.com.redu.redumobile.adapters.EnviromentListAdapter;
+import br.com.redu.redumobile.fragments.TitlableFragment;
 
-public class EnvironmentFragment extends HomeFragment {
+public class EnvironmentFragment extends TitlableFragment {
 
 	private static final String ENVIRONMENTS_SAVED = "ENVIRONMENTS_SAVED";
 	

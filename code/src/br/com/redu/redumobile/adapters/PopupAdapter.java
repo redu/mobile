@@ -101,6 +101,7 @@ public class PopupAdapter extends BaseAdapter {
 					Intent it = new Intent(mContext, UploadStep2Activity.class);
 					it.putExtra(Space.class.getName(), space);
 					it.putExtra("id", id);
+					it.putExtra("type", "video");
 					mContext.startActivity(it);
 				}
 			}); 
@@ -113,6 +114,7 @@ public class PopupAdapter extends BaseAdapter {
 					Intent it = new Intent(mContext, UploadStep2Activity.class);
 					it.putExtra(Space.class.getName(), space);
 					it.putExtra("id", id);
+					it.putExtra("type", "foto");
 					mContext.startActivity(it);
 				}
 			});  
@@ -125,6 +127,7 @@ public class PopupAdapter extends BaseAdapter {
 					Intent it = new Intent(mContext, UploadStep2Activity.class);
 					it.putExtra(Space.class.getName(), space);
 					it.putExtra("id", id);
+					it.putExtra("type", "audio");
 					mContext.startActivity(it);
 				}
 			}); 
@@ -142,7 +145,7 @@ public class PopupAdapter extends BaseAdapter {
 			}); 
 		}
 		if (values[position].equals("Escolher da Galeria")){
-			iv.setImageResource(R.drawable.ic_galeria);
+			iv.setImageResource(R.drawable.ic_galery);
 			tv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

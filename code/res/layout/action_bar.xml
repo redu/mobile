@@ -5,48 +5,30 @@
     android:background="@drawable/bg_actionbar"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="5dip">
+    android:paddingBottom="5dip" >
 
     <ImageButton
         android:id="@+id/b_up"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Up"  
+        android:layout_height="match_parent"
+        android:background="@null"
         android:src="@drawable/ic_logo_redu_back"
-        android:background="@null" />
-
+        android:text="Up" />
 
     <TextView
         android:id="@+id/tv_title_action_bar"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingLeft="7dip"
-        android:textColor="#858585"
-        android:textSize="20dip"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
         android:ellipsize="marquee"
-        android:freezesText="true"
-        android:marqueeRepeatLimit="marquee_forever"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        />
-
-<!--     <ImageButton -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:background="@null" -->
-<!--         android:onClick="onEnvironmentClicked" -->
-<!--         android:padding="7dip" -->
-<!--         android:src="@drawable/btn_enviroments_selector" /> -->
-        
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:onClick="onSettingsClicked"
-        android:padding="7dip"
-        android:src="@drawable/btn_settings_selector" />
+        android:freezesText="true"       
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingLeft="7dip"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="#858585"
+        android:textSize="20dip" />
 
 </LinearLayout>

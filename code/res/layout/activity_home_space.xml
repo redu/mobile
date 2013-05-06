@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/action_bar"
-        app:showCaret="false"
         app:title="DISCIPLINA" />
 	
     <!-- RadioGroup
@@ -65,15 +64,15 @@
             android:id="@+id/titles2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/azul"
+            android:textColor="@color/blue"
             android:textSize="22dip"
             app:footerPadding="10dip"
-            app:footerColor="@color/azul"
+            app:footerColor="@color/blue"
             app:footerIndicatorHeight="3dip"
             app:footerIndicatorStyle="underline"
             app:footerLineHeight="1dip"
             app:selectedBold="false"
-            app:selectedColor="@color/azul"
+            app:selectedColor="@color/blue"
             app:titlePadding="80dip"
             android:background="#F7F7F7" />
 

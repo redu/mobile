@@ -24,4 +24,10 @@ public class UploadStep1Activity extends Activity{
 		lv.setAdapter(new PopupAdapter(this, str,superId, space));
 	}
 	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		finish();
+	}
+	
 }

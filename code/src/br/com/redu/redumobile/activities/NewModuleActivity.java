@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ public class NewModuleActivity extends BaseActivity {
 	private static final int NUM_MAX_CHARACERS_NAME = 30;
 	private static final int NUM_MAX_CHARACERS_DESCRIPTION = 250;
 	private Context mContext = this;
-	public Toast toast;
+	public ProgressDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +44,7 @@ public class NewModuleActivity extends BaseActivity {
 						&& description.length() <= NUM_MAX_CHARACERS_DESCRIPTION) {
 					new SaveModule().execute(name, description);
 				} else {
-					Toast toast = Toast.makeText(mContext,
-							"Verifique a quantidade máxima de caracteres",
-							Toast.LENGTH_LONG);
+					Toast toast = Toast.makeText(mContext, "Você ultrapassou a quantidade máxima de caracteres...", Toast.LENGTH_LONG);
 					toast.show();
 				}
 			}
@@ -53,20 +52,25 @@ public class NewModuleActivity extends BaseActivity {
 	}
 
 	class SaveModule extends AsyncTask<String, Void, Void> {
+		
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(mContext,"Redu","Adicionando Módulo...", false, true);
+			dialog.setIcon(R.drawable.ic_launcher);
+			dialog.setCancelable(false);
+			super.onPreExecute();
+		}
+
 		protected Void doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			Subject s = redu.postSubject(space.id, text[0], text[1]);
-			/*if (s != null) {
-				toast = Toast.makeText(mContext, "Módulo " + s.name
-						+ " Adicionado", Toast.LENGTH_LONG);
-				toast.show();
-			}*/
+			redu.postSubject(space.id, text[0], text[1]);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			dialog.dismiss();
 			finish();
 		};
 	}
