@@ -55,7 +55,11 @@
         </activity>
         <activity android:name=".activities.RespondStatusActivity" >
         </activity>
+        <activity android:name=".activities.LectureWallActivity" >
+        </activity>
         <activity android:name=".activities.PostStatusOnSpaceWallActivity" >
+        </activity>
+        <activity android:name=".activities.PostStatusOnLectureWallActivity" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"

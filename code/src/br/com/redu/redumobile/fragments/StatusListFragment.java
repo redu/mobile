@@ -18,11 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.DbHelperHolderActivity;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.db.DbHelperListener;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -55,9 +55,8 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-
 		if (activity != null) {
-			((DbHelperHolder) activity).getDbHelper().addDbHelperListener(this);
+			((DbHelperHolderActivity) activity).getDbHelper().addDbHelperListener(this);
 		}
 	}
 
@@ -108,8 +107,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
 					startActivity(i);
 
-					DbHelper dbHelper = ((DbHelperHolder) getActivity())
-							.getDbHelper();
+					DbHelper dbHelper = ((DbHelperHolderActivity) getActivity()).getDbHelper();
 					dbHelper.setStatusAsLastSeen(status);
 
 					status.lastSeen = true;
@@ -177,10 +175,10 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			List<br.com.developer.redu.models.Status> statuses = null;
 
 			Activity activity = getActivity();
-			if (activity != null && activity instanceof DbHelperHolder) {
+			if (activity != null && activity instanceof DbHelperHolderActivity) {
 				long timestamp = getTimestamp(mOlderThan);
 
-				DbHelper dbHelper = ((DbHelperHolder) activity).getDbHelper();
+				DbHelper dbHelper = ((DbHelperHolderActivity) activity).getDbHelper();
 				statuses = getStatuses(dbHelper, timestamp, mOlderThan);
 			}
 

@@ -22,8 +22,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
-import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.fragments.TitlableFragment;
 import br.com.redu.redumobile.fragments.home.EnvironmentFragment;
 import br.com.redu.redumobile.fragments.home.LastSeenFragment;
@@ -36,7 +34,7 @@ import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class HomeActivity extends BaseActivity implements DbHelperHolder {
+public class HomeActivity extends DbHelperHolderActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
@@ -52,8 +50,6 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	private View popupMenuButton;
 	private PopupWindow popupWindow;
 	
-	private DbHelper mDbHelper;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_home);
@@ -86,8 +82,6 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 		
 		int itemChecked = getIntent().getIntExtra(ITEM_EXTRA_PARAM, ITEM_WALL);
 		indicator.setCurrentItem(itemChecked);
-		
-		mDbHelper = DbHelper.getInstance(this);
 		
 		initializePopupMenu();
 	}
@@ -194,16 +188,4 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 			return fragments[position];
 		}
 	}
-
-	@Override
-	protected void onDestroy() {
-		mDbHelper.close();
-		super.onDestroy();
-	}
-
-	@Override
-	public DbHelper getDbHelper() {
-		return mDbHelper;
-	}
-
 }

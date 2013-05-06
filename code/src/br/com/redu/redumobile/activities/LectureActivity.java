@@ -221,7 +221,9 @@ public class LectureActivity extends BaseActivity{
 		mBtWall.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				Intent i = new Intent(LectureActivity.this, LectureWallActivity.class);
+				i.putExtra(LectureWallActivity.EXTRAS_LECTURE, mLecture);
+				startActivity(i);
 			}
 		});
 		

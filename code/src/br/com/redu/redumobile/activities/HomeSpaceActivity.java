@@ -10,8 +10,6 @@ import android.support.v4.view.ViewPager;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.db.DbHelperHolder;
 import br.com.redu.redumobile.fragments.space.MorphologyFragment;
 import br.com.redu.redumobile.fragments.space.SpaceWallFragment;
 import br.com.redu.redumobile.fragments.space.SupportMaterialFragment;
@@ -19,7 +17,7 @@ import br.com.redu.redumobile.fragments.space.SupportMaterialFragment;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class HomeSpaceActivity extends BaseActivity implements DbHelperHolder {
+public class HomeSpaceActivity extends DbHelperHolderActivity {
 
 	public interface SupportMaterialFragmentListener {
 	    void onSwitchToNextFragment(Folder folder);
@@ -36,8 +34,6 @@ public class HomeSpaceActivity extends BaseActivity implements DbHelperHolder {
 	static final int ITEM_WALL = 1;
 	static final int ITEM_SUPPORT_MATERIAL = 2;
 	
-	private DbHelper mDbHelper;
-
     private PageIndicator mIndicator;
     public MainAdapter mAdapter;
     private ViewPager mVp;
@@ -62,8 +58,6 @@ public class HomeSpaceActivity extends BaseActivity implements DbHelperHolder {
 		mIndicator.setViewPager(mVp);
 		
 		mIndicator.setCurrentItem(itemChecked);
-		
-		mDbHelper = DbHelper.getInstance(this);
 	}
     
 	@Override
@@ -145,16 +139,4 @@ public class HomeSpaceActivity extends BaseActivity implements DbHelperHolder {
 			super.onBackPressed();
 		}
 	}
-
-	@Override
-	protected void onDestroy() {
-		mDbHelper.close();
-		super.onDestroy();
-	}
-
-	@Override
-	public DbHelper getDbHelper() {
-		return mDbHelper;
-	}
-	
 }

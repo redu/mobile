@@ -272,7 +272,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getStatusByLecture(long timestamp, boolean olderThan, int count, String lectureId) {
+	synchronized public List<Status> getStatusByLecture(long timestamp, boolean olderThan, int count, int lectureId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  

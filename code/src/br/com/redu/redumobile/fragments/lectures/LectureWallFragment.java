@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments.space;
+package br.com.redu.redumobile.fragments.lectures;
 
 import java.util.List;
 
@@ -9,29 +9,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.DbHelperHolderActivity;
-import br.com.redu.redumobile.activities.PostStatusOnSpaceWallActivity;
+import br.com.redu.redumobile.activities.PostStatusOnLectureWallActivity;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.fragments.StatusListFragment;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class SpaceWallFragment extends StatusListFragment {
+public class LectureWallFragment extends StatusListFragment {
 
-	public static final String SPACE_EXTRAS = "SPACE_EXTRAS";
+	public static final String EXTRAS_LECTURE = "LECTURE_EXTRAS";
 	
-	private Space mSpace;
+	private Lecture mLecture;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		mSpace = (Space) getArguments().get(SPACE_EXTRAS);
+		mLecture = (Lecture) getArguments().get(EXTRAS_LECTURE);
 		((DbHelperHolderActivity) activity).getDbHelper().addDbHelperListener(this);
 	}
 	
@@ -40,18 +39,28 @@ public class SpaceWallFragment extends StatusListFragment {
 			Bundle savedInstanceState) {
 		View v = super.onCreateView(inflater, container, savedInstanceState);
 		
-		Button btComment = (Button) inflater.inflate(R.layout.space_wall_footer, null);
-		btComment.setOnClickListener(new OnClickListener() {
+		LinearLayout llFooter = (LinearLayout) inflater.inflate(R.layout.lecture_wall_footer, null);
+		llFooter.findViewById(R.id.bt_comment).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getActivity(), PostStatusOnSpaceWallActivity.class);
-				i.putExtra(PostStatusOnSpaceWallActivity.EXTRAS_SPACE, mSpace);
+				Intent i = new Intent(getActivity(), PostStatusOnLectureWallActivity.class);
+				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_LECTURE, mLecture);
+				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_STATUS_IS_HELP_TYPE, false);
+				startActivity(i);
+			}
+		});
+		llFooter.findViewById(R.id.bt_ask_help).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getActivity(), PostStatusOnLectureWallActivity.class);
+				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_LECTURE, mLecture);
+				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_STATUS_IS_HELP_TYPE, true);
 				startActivity(i);
 			}
 		});
 		
 		LinearLayout llContent = (LinearLayout) v.findViewById(R.id.ll_content);
-		llContent.addView(btComment);
+		llContent.addView(llFooter);
 		
 		return v;
 	}
@@ -79,13 +88,13 @@ public class SpaceWallFragment extends StatusListFragment {
 
 	@Override
 	protected String getEmptyListMessage() {
-		return "O mural desta disciplina está vazio.\nSeja o primeiro a comentar.";
+		return "O mural desta aula está sem Comentários ou Pedidos de Ajuda, seja o primeiro a falar algo.";
 	}
 
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp,
 			boolean olderThan) {
-		return dbHelper.getStatusBySpace(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, mSpace.id);
+		return dbHelper.getStatusByLecture(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, mLecture.id);
 	}
 
 	@Override
