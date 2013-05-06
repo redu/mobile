@@ -8,7 +8,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/bt_bottom_gray"
+        android:background="@drawable/bg_bottom_gray"
         android:text="Pedir ajuda"
         android:textColor="@color/orange"
         android:textSize="16dip" />
@@ -18,7 +18,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/bt_bottom_gray"
+        android:background="@drawable/bg_bottom_gray"
         android:text="Comentar"
         android:textColor="@color/blue"
         android:textSize="16dip" />

@@ -101,6 +101,7 @@
 		        android:layout_width="0dip"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
+		        android:textColor="@color/blue"
 		        android:text="Cadastrar-se"
 		        android:background="@drawable/bt_bottom_gray" />
 		
@@ -109,6 +110,7 @@
 		        android:layout_width="0dip"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
+		        android:textColor="#fff"
 		        android:text="Cadastrar-se"
 		        android:background="@drawable/bt_bottom_green" />
 		</LinearLayout>
