@@ -22,13 +22,11 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
-import br.com.redu.redumobile.db.DbHelper;
-import br.com.redu.redumobile.db.DbHelperHolder;
-import br.com.redu.redumobile.fragments.EnvironmentFragment;
-import br.com.redu.redumobile.fragments.HomeFragment;
-import br.com.redu.redumobile.fragments.HomeLastSeenFragment;
-import br.com.redu.redumobile.fragments.HomeNewLecturesFragment;
-import br.com.redu.redumobile.fragments.HomeWallFragment;
+import br.com.redu.redumobile.fragments.TitlableFragment;
+import br.com.redu.redumobile.fragments.home.EnvironmentFragment;
+import br.com.redu.redumobile.fragments.home.LastSeenFragment;
+import br.com.redu.redumobile.fragments.home.NewLecturesFragment;
+import br.com.redu.redumobile.fragments.home.UserWallFragment;
 import br.com.redu.redumobile.util.PinCodeHelper;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
@@ -36,7 +34,7 @@ import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class HomeActivity extends BaseActivity implements DbHelperHolder {
+public class HomeActivity extends DbHelperHolderActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
@@ -51,7 +49,7 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	
 	private View popupMenuButton;
 	private PopupWindow popupWindow;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_home);
@@ -162,16 +160,16 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 	}
 	
 	class MainAdapter extends FragmentStatePagerAdapter {
-		private final HomeFragment[] fragments;
+		private final TitlableFragment[] fragments;
 
 		public MainAdapter(FragmentManager fm) {
 			super(fm);
 
-			fragments = new HomeFragment[NUM_ITEMS];
+			fragments = new TitlableFragment[NUM_ITEMS];
 
-			fragments[ITEM_NEW_LECTURES] = new HomeNewLecturesFragment();
-			fragments[ITEM_LAST_SEEN_STATUS] = new HomeLastSeenFragment();
-			fragments[ITEM_WALL] = new HomeWallFragment();
+			fragments[ITEM_NEW_LECTURES] = new NewLecturesFragment();
+			fragments[ITEM_LAST_SEEN_STATUS] = new LastSeenFragment();
+			fragments[ITEM_WALL] = new UserWallFragment();
 			fragments[ITEM_ENVIRONMENTS] = new EnvironmentFragment();
 		}
 
@@ -190,16 +188,4 @@ public class HomeActivity extends BaseActivity implements DbHelperHolder {
 			return fragments[position];
 		}
 	}
-
-	@Override
-	protected void onDestroy() {
-		DbHelper.getInstance(this).close();
-		super.onDestroy();
-	}
-
-	@Override
-	public DbHelper getDbHelper() {
-		return DbHelper.getInstance(this);
-	}
-
 }

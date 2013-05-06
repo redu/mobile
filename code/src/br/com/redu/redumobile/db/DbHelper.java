@@ -242,6 +242,66 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
+	synchronized public List<Status> getStatusBySpace(long timestamp, boolean olderThan, int count, String spaceId) {
+		List<Status> statuses = new ArrayList<Status>(count);  
+		
+		SQLiteDatabase db = this.getReadableDatabase();  
+		Cursor cursor;  
+
+		String query = "SELECT * FROM " + StatusTable.NAME + 
+				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + 
+				StatusTable.COLUMN_ID + " IN " + 
+					"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
+						" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_SPACE + "\" AND " + 
+						LinkTable.COLUMN_HREF + " = " + "\"http://www.redu.com.br/api/spaces/" + spaceId + "\")" + 
+				" ORDER BY " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC" +
+				" LIMIT " + count; 
+		
+		cursor = db.rawQuery(query, null);
+		
+		while(cursor.moveToNext()) {
+			Status status = getCurrentStatusInCursor(cursor);
+			status.user = getUser(db, status);
+			status.links = getLinks(db, status);
+			statuses.add(status);
+		}
+		
+		cursor.close();
+		db.close();
+		
+		return statuses;  
+	}
+	
+	synchronized public List<Status> getStatusByLecture(long timestamp, boolean olderThan, int count, int lectureId) {
+		List<Status> statuses = new ArrayList<Status>(count);  
+		
+		SQLiteDatabase db = this.getReadableDatabase();  
+		Cursor cursor;  
+		
+		String query = "SELECT * FROM " + StatusTable.NAME + 
+				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + 
+				StatusTable.COLUMN_ID + " IN " + 
+				"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
+				" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_LECTURE + "\" AND " + 
+				LinkTable.COLUMN_HREF + " LIKE " + "\"http://www.redu.com.br/api/lectures/" + lectureId + "%\")" + 
+				"ORDER BY " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC " +
+				"LIMIT " + count; 
+		
+		cursor = db.rawQuery(query, null);
+		
+		while(cursor.moveToNext()) {
+			Status status = getCurrentStatusInCursor(cursor);
+			status.user = getUser(db, status);
+			status.links = getLinks(db, status);
+			statuses.add(status);
+		}
+		
+		cursor.close();
+		db.close();
+		
+		return statuses;  
+	}
+	
 	private Status getCurrentStatusInCursor(Cursor cursor) {
 		Status status = new Status();
 

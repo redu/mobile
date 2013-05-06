@@ -10,7 +10,7 @@
     <ImageButton
         android:id="@+id/b_up"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@null"
         android:src="@drawable/ic_logo_redu_back"
         android:text="Up" />

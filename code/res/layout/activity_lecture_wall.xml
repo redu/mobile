@@ -10,20 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/action_bar"
-        app:title="Ambientes" />
+        app:showCaret="false"
+        app:title="Redu" />
 
-    <ListView
-        android:id="@+id/list"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:divider="@color/greyLight"
-        android:dividerHeight="1dip" >
-    </ListView>
-
-    <br.com.redu.redumobile.widgets.StatusComposer
-        android:id="@+id/status_composer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

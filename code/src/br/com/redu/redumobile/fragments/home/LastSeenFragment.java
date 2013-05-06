@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.List;
 
@@ -9,10 +9,11 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.fragments.StatusListFragment;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeLastSeenFragment extends StatusListFragment {
+public class LastSeenFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,6 @@ public class HomeLastSeenFragment extends StatusListFragment {
 	@Override
 	public String getTitle() {
 		return "Últimos Visualizados";
-	}
-
-	@Override
-	public Type getType() {
-		return Type.LastSeen;
 	}
 
 	@Override

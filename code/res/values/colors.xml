@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cinzaEscuro">#6D6E6F</color>
-    <color name="cinzaClaro">#B2B2B2</color>
     <color name="dividerColor">#E7E7E7</color>
+    <color name="greyDark">#6D6E6F</color>
+    <color name="greyLight">#B2B2B2</color>
     <color name="creme">#F7F7F7</color>
-    <color name="azul">#4CACD5</color>
+    <color name="blue">#4CACD5</color>
+    <color name="orange">#FF7C35</color>
 </resources>

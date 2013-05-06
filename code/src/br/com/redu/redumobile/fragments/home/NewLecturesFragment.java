@@ -1,4 +1,4 @@
-package br.com.redu.redumobile.fragments;
+package br.com.redu.redumobile.fragments.home;
 
 import java.util.List;
 
@@ -10,11 +10,12 @@ import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.LoadingStatusesManager;
 import br.com.redu.redumobile.data.OnLoadStatusesListener;
 import br.com.redu.redumobile.db.DbHelper;
+import br.com.redu.redumobile.fragments.StatusListFragment;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
-public class HomeNewLecturesFragment extends StatusListFragment  {
+public class NewLecturesFragment extends StatusListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,11 +76,6 @@ public class HomeNewLecturesFragment extends StatusListFragment  {
 	}
 
 	@Override
-	public Type getType() {
-		return Type.NewLectures;
-	}
-
-	@Override
 	protected String getEmptyListMessage() {
 		return "Não há Novas Aulas";
 	}
@@ -119,4 +115,3 @@ public class HomeNewLecturesFragment extends StatusListFragment  {
 		return ((Status) mAdapter.getItem(0)).createdAtInMillis;
 	}
 }
-
