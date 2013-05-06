@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Novo Módulo"
-        android:background="@drawable/bt_gray"
+        android:textColor="@color/blue"
+        android:background="@drawable/bg_gray"
         android:layout_margin="12dp" />
 	<View
                 android:layout_width="wrap_content"
@@ -24,7 +25,6 @@
         android:divider="@null"
         android:layout_height="wrap_content" >
     </ExpandableListView>
->>>>>>> 7e3d3b1d16e9a4fea91fa6ccc2f3820120f1f846
 
     <View
         android:layout_width="wrap_content"
@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:background="#fff"
             android:divider="@null"
+            
             android:visibility="gone" >
         </ExpandableListView>
 

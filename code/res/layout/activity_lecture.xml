@@ -61,17 +61,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        android:textColor="@color/blue"
                         android:text="Editar"
-                        android:background="@drawable/bt_gray" />
+                        android:background="@drawable/bg_gray" />
 
                     <Button
                         android:id="@+id/btRemove"
                         style="?android:attr/buttonStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/blue"
                         android:layout_margin="10dp"
                         android:text="Remover"
-                        android:background="@drawable/bt_gray" />
+                        android:background="@drawable/bg_gray" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -108,15 +110,17 @@
                     android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/btAcessarDocument"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    android:background="@null"
-                    android:src="@drawable/bt_acessar_aula" />
+                    android:text="Acessar Aula"
+                    android:textColor="@color/blue"
+                    android:background="@drawable/bg_gray" />
+                
             </LinearLayout>
 
             <!-- TIPO MEDIA -->
@@ -154,8 +158,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    android:background="@null"
-                    android:src="@drawable/bt_acessar_aula" />
+                    android:text="Acessar Aula"
+                    android:textColor="@color/blue"
+                    android:background="@drawable/bg_gray" />
+                
+                    
             </LinearLayout>
 
             <!-- TIPO PAGE -->
@@ -213,8 +220,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    android:background="@null"
-                    android:src="@drawable/bt_acessar_aula" />
+                    android:text="Acessar Aula"
+                    android:textColor="@color/blue"
+                    android:background="@drawable/bg_gray" />
             </LinearLayout>
             
             <!-- TIPO EXERCICE -->
@@ -245,15 +253,16 @@
                     android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/ibExercice"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    android:background="@null"
-                    android:src="@drawable/bt_acessar_aula" />
+                    android:text="Acessar Aula"
+                    android:textColor="@color/blue"
+                    android:background="@drawable/bg_gray" />
             </LinearLayout>
 
             <LinearLayout
@@ -267,16 +276,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mural"
-                    android:textColor="@color/greyDark"
-                    android:background="@drawable/bt_bottom_gray" />
+                    android:textColor="@color/blue"
+                    android:background="@drawable/bg_bottom_gray" />
 
                 <Button
                     android:id="@+id/btIsDone"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="#fff"
                     android:text="Finalizar Aula"
-                    android:background="@drawable/bt_bottom_green" />
+                    android:background="@drawable/bg_bottom_green" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

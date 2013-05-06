@@ -4,5 +4,5 @@
     android:text="Comentar"
     android:textSize="18dip"
     android:textColor="@color/blue"
-    android:background="@drawable/bt_bottom_gray" >
+    android:background="@drawable/bg_bottom_gray" >
 </Button>
