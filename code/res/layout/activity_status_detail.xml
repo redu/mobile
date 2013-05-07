@@ -21,6 +21,15 @@
         android:dividerHeight="1dip" >
     </ListView>
 
+    <TextView
+        android:id="@+id/tv_empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:gravity="center"
+        android:textColor="@color/greyLight"
+        android:visibility="gone" />
+
     <br.com.redu.redumobile.widgets.StatusComposer
         android:id="@+id/status_composer"
         android:layout_width="match_parent"

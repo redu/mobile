@@ -29,6 +29,7 @@ public class StatusDetailActivity extends BaseActivity {
 	private LayoutInflater mInflater;
 	
 	private ListView mListView;
+	private TextView mTvEmptyList;
 	
 	private StatusDetailAdapter mAdapter;
 	private View mFooterLoadingAnswers;
@@ -47,6 +48,9 @@ public class StatusDetailActivity extends BaseActivity {
 		
 		mFooterLoadingAnswers = mInflater.inflate(R.layout.status_detail_footer_loading_answers, null);
 		
+		mTvEmptyList = (TextView) findViewById(R.id.tv_empty_list);
+		mTvEmptyList.setText("Não há respostas, seja o primeiro a responder");
+		
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.addHeaderView(createStatusHeaderView(mStatus));
 	
@@ -60,10 +64,8 @@ public class StatusDetailActivity extends BaseActivity {
 		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
 		mListView.setAdapter(mAdapter);
 
-		if(mStatus.answers_count > 0) {
-			new LoadAnswersStatus(mStatus.id).execute();
-		}
-	}
+		new LoadAnswersStatus(mStatus.id).execute();
+  	}
 	
 	private View createStatusHeaderView(Status status) {
 		View v = mInflater.inflate(R.layout.status_detail_header_original_status, null);
@@ -148,12 +150,18 @@ public class StatusDetailActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> answers) {
-			if (answers != null && answers.size() > 0) {
-				DbHelper dbHelper = DbHelper.getInstance(StatusDetailActivity.this);
-				dbHelper.updateStatusAnswersCount(mStatusId, answers.size());
-					
-				mAdapter.addAll(answers);
-				mAdapter.notifyDataSetChanged();
+			if (answers != null) {
+				if (answers.size() > 0) {
+					DbHelper dbHelper = DbHelper.getInstance(StatusDetailActivity.this);
+					dbHelper.updateStatusAnswersCount(mStatusId, answers.size());
+						
+					mAdapter.addAll(answers);
+					mAdapter.notifyDataSetChanged();
+				} else {
+					mTvEmptyList.setVisibility(View.VISIBLE);
+				}
+			} else {
+				// TODO handler no internet problem connection
 			}
 			
 			mListView.removeFooterView(mFooterLoadingAnswers);
