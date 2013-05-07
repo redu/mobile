@@ -116,7 +116,6 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_module_row, null);
 		}
 		Subject subject = (Subject)getGroup(groupPosition);
-		Log.i("POSITION", Integer.toString(groupPosition));
 		ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
 		ibAdd.setTag(subject);
 		ibAdd.setOnClickListener(new OnClickListener() {
