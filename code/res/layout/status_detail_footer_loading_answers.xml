@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Carregando respostas…"
-        android:textColor="@color/greyDark" />
+        android:textColor="@color/gray_dark" />
 
     <ProgressBar
         android:layout_width="30dip"

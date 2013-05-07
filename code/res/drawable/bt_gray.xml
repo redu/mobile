@@ -2,9 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_pressed="false"
-         android:background="@drawable/bg_gray" />
+         android:drawable="@drawable/bt_gray_normal" />
     
     <item android:state_pressed="true" 
-        android:background="@drawable/bt_gray_active" />
+        android:drawable="@drawable/bt_gray_active" />
 
 </selector>

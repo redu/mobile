@@ -30,7 +30,7 @@
 			<View
 		        android:layout_width="match_parent"
 		        android:layout_height="1dip"
-		        android:background="@color/greyLight" />
+		        android:background="@color/gray_light" />
 			<LinearLayout 
 			    android:layout_width="match_parent"
 			    android:layout_height="0dip"
@@ -44,27 +44,27 @@
 		      		android:layout_height="wrap_content"
 		      		android:text="Login ou email"
 		      		android:textSize="12sp"
-		      		android:textColor="@color/greyDark"
+		      		android:textColor="@color/gray_dark"
 		      		android:layout_marginTop="25dp"/>
 			    <EditText 
 			        android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
 		      		android:text="Seu login ou email cadastrado"
 		      		android:textSize="12sp"
-		      		android:textColor="@color/greyDark"/>
+		      		android:textColor="@color/gray_dark"/>
 			    <TextView 
 			        android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
 		      		android:text="Senha"
 		      		android:layout_marginTop="15dp"
-		      		android:textColor="@color/greyDark"
+		      		android:textColor="@color/gray_dark"
 		      		android:textSize="12sp"/>
 			    <EditText 
 			        android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
 		      		android:text="Sua senha"
 		      		android:textSize="12sp"
-		      		android:textColor="@color/greyDark"/>
+		      		android:textColor="@color/gray_dark"/>
 		    	<FrameLayout 
 		    	    android:layout_width="match_parent"
 		      		android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
 		    	        android:layout_gravity="left"
 		    	        android:textSize="12sp"
 		    	        android:text="Mostrar Senha"
-		    	        android:textColor="@color/greyDark" />
+		    	        android:textColor="@color/gray_dark" />
 	
 		    	    <TextView 
 		    	        android:layout_width="wrap_content"

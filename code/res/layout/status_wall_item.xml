@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dip"
             android:text="Universidade > Faculdade > Centro > Disciplina > Aula Universidade > Faculdade > Centro Disciplina Aula"
-            android:textColor="@color/greyLight" />
+            android:textColor="@color/gray_light" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fulaninho do nome gigante comentou que "
-                    android:textColor="@color/greyDark" />
+                    android:textColor="@color/gray_dark" />
 
                 <TextView
                     android:id="@+id/tv_result_name"
@@ -58,7 +58,7 @@
                     android:layout_height="0dip"
                     android:layout_weight="1"
                     android:text="Há dois dias"
-                    android:textColor="@color/greyLight" />
+                    android:textColor="@color/gray_light" />
             </LinearLayout>
 
             <ImageView
@@ -85,7 +85,7 @@
             android:layout_gravity="right"
             android:layout_marginTop="5dip"
             android:text="3 Respostas"
-            android:textColor="@color/greyDark" />
+            android:textColor="@color/gray_dark" />
     </LinearLayout>
 
     <ImageView

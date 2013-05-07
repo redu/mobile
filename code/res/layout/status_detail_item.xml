@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/br.com.redu.redumobile"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/creme"
+    android:background="@color/cream"
     android:orientation="vertical"
     android:padding="15dip" >
 
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fulaninho"
-                android:textColor="@color/greyDark"
+                android:textColor="@color/gray_dark"
                 android:textStyle="bold" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_height="0dip"
                 android:layout_weight="1"
                 android:text="Há dois dias"
-                android:textColor="@color/greyLight" />
+                android:textColor="@color/gray_light" />
         </LinearLayout>
     </LinearLayout>
 
