@@ -24,8 +24,8 @@
     <TextView
         android:id="@+id/tv_empty_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dip"
+        android:layout_height="0dip"
+        android:layout_weight="1"
         android:gravity="center"
         android:textColor="@color/gray_light"
         android:visibility="gone" />

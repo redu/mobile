@@ -64,8 +64,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		final View v = inflater.inflate(R.layout.fragment_listview, container,
-				false);
+		final View v = inflater.inflate(R.layout.fragment_listview, container, false);
 
 		mTvEmptyList = (TextView) v.findViewById(R.id.tv_empty_list);
 
