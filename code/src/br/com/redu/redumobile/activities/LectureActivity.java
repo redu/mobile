@@ -117,7 +117,7 @@ public class LectureActivity extends BaseActivity{
 		LinearLayout layoutLecture;
 		if (mLecture.type.equals(Lecture.TYPE_CANVAS)) {
 			layoutLecture = (LinearLayout)findViewById(R.id.llCanvas);
-			ImageButton ibCanvas = (ImageButton) layoutLecture.findViewById(R.id.ibCanvas);
+			Button ibCanvas = (Button) layoutLecture.findViewById(R.id.ibCanvas);
 			ibCanvas.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -128,7 +128,7 @@ public class LectureActivity extends BaseActivity{
 			layoutLecture.setVisibility(View.VISIBLE);
 		}else if(mLecture.type.equals(Lecture.TYPE_EXERCISE)){
 			layoutLecture = (LinearLayout)findViewById(R.id.llExercice);
-			ImageButton ibAccess = (ImageButton) layoutLecture.findViewById(R.id.ibExercice);
+			Button ibAccess = (Button) layoutLecture.findViewById(R.id.ibExercice);
 			ibAccess.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -143,7 +143,7 @@ public class LectureActivity extends BaseActivity{
 			ivDocument.setImageResource(R.drawable.ic_doc_big);
 			TextView tvDocument = (TextView) layoutLecture.findViewById(R.id.tvDocument);
 			tvDocument.setText(mLecture.name);
-			ImageButton ibDocument = (ImageButton) layoutLecture.findViewById(R.id.btAcessarDocument);
+			Button ibDocument = (Button) layoutLecture.findViewById(R.id.btAcessarDocument);
 			ibDocument.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -174,7 +174,7 @@ public class LectureActivity extends BaseActivity{
 			ivMedia.setImageResource(R.drawable.ic_midia_big);
 			TextView tvMedia = (TextView) layoutLecture.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
-			ImageButton ibMedia = (ImageButton) layoutLecture.findViewById(R.id.ibAcessarMedia);
+			Button ibMedia = (Button) layoutLecture.findViewById(R.id.ibAcessarMedia);
 			ibMedia.setOnClickListener(new OnClickListener() {
 				
 				@Override
