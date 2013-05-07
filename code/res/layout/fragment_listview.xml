@@ -19,12 +19,12 @@
             android:layout_gravity="center"
             android:padding="7dip"
             android:text="Novos Status"
-            android:textColor="@color/greyDark" />
+            android:textColor="@color/gray_dark" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="@color/dividerColor" />
+            android:background="@color/divider_color" />
     </LinearLayout>
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:gravity="center"
-        android:textColor="@color/greyLight"
+        android:textColor="@color/gray_light"
         android:visibility="gone" />
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:divider="@color/dividerColor"
+        android:divider="@color/divider_color"
         android:dividerHeight="1dip" />
 
 </LinearLayout>

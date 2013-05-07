@@ -41,7 +41,7 @@
                 android:layout_marginLeft="7dip"
                 android:layout_weight="1"
                 android:text="Fulaninho pediu ajuda"
-                android:textColor="@color/greyDark" />
+                android:textColor="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/iv_help_icon"

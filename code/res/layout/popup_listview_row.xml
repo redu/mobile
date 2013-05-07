@@ -14,7 +14,7 @@
    	<View
               android:layout_height="fill_parent"
               android:layout_width="1dp"
-              android:background="@color/creme" />
+              android:background="@color/cream" />
    	
    	<TextView
    	    android:id="@+id/tv_insert_file_folder"

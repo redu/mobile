@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fulaninho pediu ajuda"
-                    android:textColor="@color/greyDark" />
+                    android:textColor="@color/gray_dark" />
 
                 <TextView
                     android:id="@+id/tv_date"
@@ -43,7 +43,7 @@
                     android:layout_height="0dip"
                     android:layout_weight="1"
                     android:text="Há dois dias"
-                    android:textColor="@color/greyLight" />
+                    android:textColor="@color/gray_light" />
             </LinearLayout>
 
             <ImageView
