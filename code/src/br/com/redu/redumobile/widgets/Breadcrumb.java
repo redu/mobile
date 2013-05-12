@@ -1,6 +1,5 @@
 package br.com.redu.redumobile.widgets;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,49 +33,17 @@ public class Breadcrumb extends EllipsizingTextView {
 	}
 	
 	public void setStatus(Status status) {
-		List<String> crumbs = getCrumbs(status);
+		List<String> crumbs = status.getBreadcrumbs();
 		
 		if(crumbs == null) {
 			setVisibility(View.GONE);
 		} else {
-			String breadcrumbs = makeBreadcrumbs(crumbs);
+			String breadcrumbs = composeBreadcrumbs(crumbs);
 			setText(Html.fromHtml(breadcrumbs));
 		}
 	}
-	
-	static private List<String> getCrumbs(Status status) {
-		String environment = status.getEnvironmentName();
-		String course = status.getCourseName();
-		String space = status.getSpaceName();
-		String subject = status.getSubjectName();
-		String lecture = status.getLectureName();
 		
-		List<String> crumbs = null;
-		if(environment != null) {
-			crumbs = new ArrayList<String>();
-			crumbs.add(environment);
-
-			if(course != null) {
-				crumbs.add(course);
-			
-				if(space != null) {
-					crumbs.add(space);
-				
-					if(subject != null) {
-						crumbs.add(subject);
-					
-						if(lecture != null) {
-							crumbs.add(lecture);
-						}
-					}
-				}
-			}
-		}
-		
-		return crumbs;
-	}
-	
-	static private String makeBreadcrumbs(List<String> crumbs) {
+	static private String composeBreadcrumbs(List<String> crumbs) {
 		StringBuffer sb = new StringBuffer();
 		
 		Iterator<String> it = crumbs.iterator();

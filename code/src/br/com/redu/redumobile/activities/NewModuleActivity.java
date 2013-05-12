@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 

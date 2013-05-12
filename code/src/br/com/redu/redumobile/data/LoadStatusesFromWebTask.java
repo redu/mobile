@@ -8,11 +8,12 @@ import org.scribe.exceptions.OAuthConnectionException;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.os.Bundle;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.activities.HomeActivity;
+import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.util.SettingsHelper;
@@ -44,7 +45,18 @@ public class LoadStatusesFromWebTask implements Task {
 			NotificationMessage notification = new NotificationMessage(getTitle(), status.text);
 			notification.setNotificationId(Integer.valueOf(status.id));
 			notification.setNotificationIconResource(R.drawable.ic_status_notification);
-			notification.setNotificationClickIntentClass(HomeActivity.class);
+			
+			Bundle extras = new Bundle();
+
+			if(status.isActivityType() || status.isHelpType()) {
+				notification.setNotificationClickIntentClass(StatusDetailActivity.class);
+				extras.putSerializable(StatusDetailActivity.EXTRAS_STATUS, status);
+				notification.setNotificationClickIntentBundle(extras);
+				
+			} else if(status.isLogType()) {
+				// TODO abrir notificacao de novas aulas 
+			}
+			
 			taskResult.addMessage(notification);
 		}
 		

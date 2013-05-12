@@ -11,12 +11,20 @@
         android:orientation="vertical"
         android:padding="15dip" >
 
+        <br.com.redu.redumobile.widgets.Breadcrumb
+            android:id="@+id/tv_breadcrumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dip"
+            android:text="Universidade > Faculdade > Centro > Disciplina > Aula Universidade > Faculdade > Centro Disciplina Aula"
+            android:textColor="@color/gray_light" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-			<WebCachedImageView
+            <WebCachedImageView
                 android:id="@+id/iv_photo"
                 android:layout_width="48dip"
                 android:layout_height="48dip"

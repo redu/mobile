@@ -14,7 +14,7 @@ import android.widget.TextView;
 import br.com.developer.redu.models.Course;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.activities.HomeSpaceActivity;
+import br.com.redu.redumobile.activities.SpaceActivity;
 
 public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -52,8 +52,8 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 		convertView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(mContext, HomeSpaceActivity.class);
-				i.putExtra(Space.class.getName(), space);
+				Intent i = new Intent(mContext, SpaceActivity.class);
+				i.putExtra(SpaceActivity.EXTRAS_SPACE, space);
 				mContext.startActivity(i);	
 			}
 		});
@@ -90,9 +90,9 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvTitle);
 		if(getChildrenCount(groupPosition) != 0)
-			tv.setText(Html.fromHtml("<b>" + mCourses.get(groupPosition).name + "</b><br/><font color=\"#CCCCCC\"><small>" + getChildrenCount(groupPosition) + " Disciplinas</small></font>"));
+			tv.setText(Html.fromHtml(mCourses.get(groupPosition).name + "<br/><font color=\"#CCCCCC\"><small>" + getChildrenCount(groupPosition) + " Disciplinas</small></font>"));
 		else
-			tv.setText(Html.fromHtml("<b>" + mCourses.get(groupPosition).name + "</b><br/><font color=\"#CCCCCC\"><small> Ainda não há Disciplinas neste Curso</small></font>"));
+			tv.setText(Html.fromHtml(mCourses.get(groupPosition).name + "<br/><font color=\"#CCCCCC\"><small> Ainda não há Disciplinas neste Curso</small></font>"));
 		//ImageView setaCourse = (ImageView) convertView.findViewById(R.id.iv_seta_course); 
 		
 		return convertView;

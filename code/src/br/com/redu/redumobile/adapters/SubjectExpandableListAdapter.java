@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -81,8 +80,8 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(mContext, LectureActivity.class);
-				i.putExtra(Lecture.class.getName(), lecture);
-				i.putExtra(Subject.class.getName(), subject);
+				i.putExtra(LectureActivity.EXTRAS_LECTURE, lecture);
+				i.putExtra(LectureActivity.EXTRAS_SUBJECT, subject);
 				mContext.startActivity(i);	
 			}
 		});
@@ -123,10 +122,6 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				/*Builder builder = new AlertDialog.Builder(mContext);
-				builder.setView(LayoutInflater.from(mContext).inflate(R.layout.popup_listview_row, null));
-				mDialogNewLecture = builder.create();
-		    	mDialogNewLecture.show();*/
 				Intent it = new Intent(mContext, UploadStep1Activity.class);
 				it.putExtra("id", mCurrentSubject.id);
 				it.putExtra(Space.class.getName(), mSpace);

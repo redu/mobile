@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
@@ -39,6 +40,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 
 	private TextView mTvEmptyList;
 	private LinearLayout mLlNewStatus;
+	private ProgressBar mProgressBar;
 
 	protected boolean isWaitingNotification;
 	protected PullToRefreshBase<ListView> mRefreshView;
@@ -89,11 +91,11 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			mAdapter = new StatusWallAdapter(getActivity());
 		}
 
+		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
+		
 		mListView = (PullToRefreshListView) v.findViewById(R.id.list);
 		mListView.setAdapter(mAdapter);
-
 		mListView.setOnRefreshListener(this);
-
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -204,6 +206,8 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			} else {
 				LoadingStatusesManager.notifyOnError(null);
 			}
+			
+			mProgressBar.setVisibility(View.GONE);
 		};
 	}
 }
