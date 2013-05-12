@@ -43,7 +43,7 @@ public class MorphologyFragment extends Fragment {
 	
 	
 	public MorphologyFragment() {
-//		mCurrentPage = 0;
+
 	}
 	
 	@Override

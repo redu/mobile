@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,7 +64,7 @@ public class LectureActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_lecture);
-		
+
 		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
 		mBtEdit = (Button) findViewById(R.id.btEdit);
@@ -83,7 +82,8 @@ public class LectureActivity extends BaseActivity {
 		final String lectureId = extras.getString(EXTRAS_LECTURE_ID);
 		final String subjectId = extras.getString(EXTRAS_SUBJECT_ID);
 		final String spaceId = extras.getString(EXTRAS_SPACE_ID);
-		final String environmentPath = extras.getString(EXTRAS_ENVIRONMENT_PATH);
+		final String environmentPath = extras
+				.getString(EXTRAS_ENVIRONMENT_PATH);
 
 		if (mLecture != null && mSubject != null) {
 			init();
@@ -92,7 +92,8 @@ public class LectureActivity extends BaseActivity {
 				@Override
 				protected Void doInBackground(Void... params) {
 					try {
-						DefaultReduClient redu = ReduApplication.getReduClient(LectureActivity.this);
+						DefaultReduClient redu = ReduApplication
+								.getReduClient(LectureActivity.this);
 						mSubject = redu.getSubject(subjectId);
 						mLecture = redu.getLecture(lectureId);
 						mSpace = redu.getSpace(spaceId);
@@ -106,8 +107,11 @@ public class LectureActivity extends BaseActivity {
 				protected void onPostExecute(Void param) {
 					if (mSubject != null && mLecture != null) {
 						Bundle extrasToUp = new Bundle();
-						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE, mSpace);
-						extrasToUp.putSerializable(SpaceActivity.EXTRAS_ENVIRONMENT_PATH, environmentPath);
+						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE,
+								mSpace);
+						extrasToUp.putSerializable(
+								SpaceActivity.EXTRAS_ENVIRONMENT_PATH,
+								environmentPath);
 						setUpClass(SpaceActivity.class, extrasToUp);
 
 						init();
@@ -159,14 +163,14 @@ public class LectureActivity extends BaseActivity {
 						});
 		alertDialog = alertDialogBuilder.create();
 	}
-	
+
 	private void init() {
 		initDialogs();
-		
+
 		LinearLayout layoutLecture;
 		if (mLecture.type.equals(Lecture.TYPE_CANVAS)) {
 			layoutLecture = (LinearLayout) findViewById(R.id.llCanvas);
-			ImageButton ibCanvas = (ImageButton) layoutLecture
+			Button ibCanvas = (Button) layoutLecture
 					.findViewById(R.id.ibCanvas);
 			ibCanvas.setOnClickListener(new OnClickListener() {
 
@@ -231,7 +235,7 @@ public class LectureActivity extends BaseActivity {
 			TextView tvMedia = (TextView) layoutLecture
 					.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
-			ImageButton ibMedia = (ImageButton) layoutLecture
+			Button ibMedia = (Button) layoutLecture
 					.findViewById(R.id.ibAcessarMedia);
 			ibMedia.setOnClickListener(new OnClickListener() {
 
@@ -268,14 +272,14 @@ public class LectureActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 			}
 		});
-		//String extension = mLecture.mimetype;
+		// String extension = mLecture.mimetype;
 
 		// mTvFileName.setText(mLecture.name+" Tipo:"+mLecture.type);
 
 		mBtIsDone.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+
 			}
 		});
 
@@ -389,6 +393,25 @@ public class LectureActivity extends BaseActivity {
 
 		}
 
+	}
+
+	class LoadProgress extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+		}
+
+		protected Void doInBackground(String... text) {
+			DefaultReduClient redu = ReduApplication.getReduClient(LectureActivity.this);
+			// redu.getProgress(mLecture.id);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+		};
 	}
 
 }

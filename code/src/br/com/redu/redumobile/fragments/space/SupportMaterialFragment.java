@@ -9,6 +9,8 @@ import java.net.URLConnection;
 import java.util.Collections;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -16,11 +18,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -32,11 +38,14 @@ import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.activities.SpaceActivity.SupportMaterialFragmentListener;
+import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadFileFolderActivity;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
 import br.com.redu.redumobile.util.DownloadHelper;
 
+@SuppressLint("ValidFragment")
 public class SupportMaterialFragment extends Fragment {
 	public static final String EXTRAS_FOLDER = "EXTRAS_FOLDER";
 	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
@@ -48,6 +57,8 @@ public class SupportMaterialFragment extends Fragment {
 	private Folder mFolder;
 
 	ProgressDialog mProgressDialog;
+	ProgressDialog mProgressdialogRemove;
+	private String folderRaizID;
 
 	DownloadFile df;
 
@@ -56,9 +67,14 @@ public class SupportMaterialFragment extends Fragment {
 	ListView lvFiles;
 	private SupportMaterialFragmentListener mListener;
 
-	public SupportMaterialFragment() {
+	Dialog dialog;
 
+	private SupportMaterialsAdapter mAdapter;
+
+	public SupportMaterialFragment() {
+		super();
 	}
+
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -73,7 +89,7 @@ public class SupportMaterialFragment extends Fragment {
 			mFolder = (Folder) args.get(EXTRAS_FOLDER);
 			mSpace = (Space) args.get(EXTRAS_SPACE);
 		}
-		
+
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 
 		mProgressDialog = new ProgressDialog(getActivity());
@@ -106,7 +122,7 @@ public class SupportMaterialFragment extends Fragment {
 			ibBack = (ImageButton) v.findViewById(R.id.ibBack);
 			ibBack.setVisibility(View.GONE);
 		}
-		
+
 		ImageButton ibMore = (ImageButton) v.findViewById(R.id.ibMore);
 		ibMore.setOnClickListener(new OnClickListener() {
 
@@ -118,12 +134,14 @@ public class SupportMaterialFragment extends Fragment {
 				if (mFolder != null)
 					it.putExtra("id", mFolder.id);
 				else
-					it.putExtra("id", mSpace.id);
+					it.putExtra("id", folderRaizID);
 				startActivity(it);
 			}
 		});
 
 		lvFiles = (ListView) v.findViewById(R.id.lvFiles);
+		registerForContextMenu(lvFiles);
+
 		lvFiles.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -133,26 +151,10 @@ public class SupportMaterialFragment extends Fragment {
 				if (obj instanceof Folder) {
 					Folder folder = (Folder) lvFiles
 							.getItemAtPosition(position);
-					/*
-					 * transaction.replace(R.id.fragment_container,
-					 * coursesAndServicesFragment);
-					 * transaction.addToBackStack(null);
-					 */
-					/*
-					 * FragmentTransaction transaction =
-					 * getActivity().getSupportFragmentManager
-					 * ().beginTransaction(); transaction.addToBackStack(null);
-					 */
-					/*
-					 * Fragment newFragment = new FolderMaterialFragment();
-					 * getChildFragmentManager
-					 * ().beginTransaction().replace(R.id.vp2, newFragment);
-					 */
 					mListener.onSwitchToNextFragment(folder);
 				} else {
 					File file = (File) lvFiles.getItemAtPosition(position);
 					File[] files = { file };
-					// mProgressDialog.show();
 					java.io.File f = new java.io.File(DownloadHelper
 							.getSupportMaterialPath(), file.name);
 					if (f.exists()) {
@@ -181,6 +183,61 @@ public class SupportMaterialFragment extends Fragment {
 		return v;
 	}
 
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		Object row = (Object) mAdapter.getItem(info.position);
+		switch (item.getItemId()) {
+		case R.id.edit:
+			if (row instanceof Folder) {
+				editFolder((Folder) row);
+			}
+			if (row instanceof File) {
+				editFile((File) row);
+			}
+			return true;
+		case R.id.delete:
+			if (row instanceof Folder) {
+				deleteFolder((Folder) row);
+			}
+			if (row instanceof File) {
+				deleteFile((File) row);
+			}
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		getActivity().getMenuInflater().inflate(R.drawable.menu, menu);
+	}
+
+	private void editFile(File file) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void deleteFile(File file) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void deleteFolder(Folder folder) {
+		new RemoveFolder().execute(folder.id);
+	}
+
+	private void editFolder(Folder folder) {
+		Intent it = new Intent(getActivity(), NewFolderActivity.class);
+		it.putExtra(Space.class.getName(), mSpace);
+		it.putExtra(Folder.class.getName(), folder);
+		startActivity(it);
+	}
+
 	public void setListener(SupportMaterialFragmentListener listener) {
 		mListener = listener;
 	}
@@ -200,23 +257,17 @@ public class SupportMaterialFragment extends Fragment {
 			folders.removeAll(Collections.singleton(null));
 			files = redu.getFilesByFolder(folderRaizID);
 			files.removeAll(Collections.singleton(null));
-			/* files = redu.getFilesByFolder(mSpace.) */
+
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			/*
-			 * List<String> array = new ArrayList<String>(); for (int i = 0; i <
-			 * folders.size() ; i++) { array.add(folders.get(i).name); } for
-			 * (int i = 0; i < files.size(); i++) {
-			 * array.add(files.get(i).name); }
-			 */
-			/* array.removeAll(Collections.singleton(null)); */
 			if (getActivity() != null) {
-				lvFiles.setAdapter(new SupportMaterialsAdapter(getActivity(),
-						folders, files));
+				mAdapter = new SupportMaterialsAdapter(getActivity(), folders,
+						files);
+				lvFiles.setAdapter(mAdapter);
 				lvFiles.setVisibility(View.VISIBLE);
 				mProgressBar.setVisibility(View.GONE);
 			}
@@ -252,13 +303,6 @@ public class SupportMaterialFragment extends Fragment {
 
 				// download the file
 				InputStream input = new BufferedInputStream(url.openStream());
-				// java.io.File sdCard =
-				// Environment.getExternalStorageDirectory();
-				/*
-				 * java.io.File dir = new File (sdCard.getAbsolutePath() +
-				 * "/dir1/dir2"); dir.mkdirs(); File file = new File(dir,
-				 * "filename");
-				 */
 				java.io.File filling = new java.io.File(newFolder, fileName);
 				OutputStream output = new FileOutputStream(filling);
 
@@ -324,10 +368,35 @@ public class SupportMaterialFragment extends Fragment {
 
 	}
 
-	/*
-	 * public static Fragment newInstance( SupportMaterialFragmentListener
-	 * firstPageFragmentListener) {
-	 * 
-	 * return null; }
-	 */
+	class RemoveFolder extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			mProgressdialogRemove = ProgressDialog.show(getActivity(), "Redu",
+					"Removendo material...", false, true);
+			mProgressdialogRemove.setIcon(R.drawable.ic_launcher);
+			mProgressdialogRemove.setCancelable(false);
+			super.onPreExecute();
+		}
+
+		protected Void doInBackground(String... text) {
+
+			DefaultReduClient redu = ReduApplication
+					.getReduClient(getActivity());
+			redu.deleteFolder(text[0]);
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			mProgressdialogRemove.dismiss();
+			//TODO CHAMAR O NOTIFYDATASETCHANGED DA ACTIVITY
+			mAdapter.notifyDataSetChanged();
+			SpaceActivity activity = (SpaceActivity) getActivity();
+			activity.onRestart();
+		};
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.crypto.spec.IvParameterSpec;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -134,27 +135,9 @@ public class PopupAdapter extends BaseAdapter {
 		}
 		if (values[position].equals("Gravar")){
 			iv.setImageResource(R.drawable.ic_midia);
-			tv.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent it = new Intent(mContext, UploadStep3Activity.class);
-					it.putExtra(Space.class.getName(), space);
-					it.putExtra("id", id);
-					mContext.startActivity(it);
-				}
-			}); 
 		}
 		if (values[position].equals("Escolher da Galeria")){
 			iv.setImageResource(R.drawable.ic_galery);
-			tv.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent it = new Intent(mContext, UploadStep3Activity.class);
-					it.putExtra(Space.class.getName(), space);
-					it.putExtra("id", id);
-					mContext.startActivity(it);
-				}
-			}); 
 		}
 		return ll;
 	}

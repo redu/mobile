@@ -109,7 +109,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	}
     
 	@Override
-	protected void onRestart() {
+	public void onRestart() {
 		super.onRestart();
 		mAdapter.notifyDataSetChanged();
 	}

@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,6 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	Context mContext;
 	List<Subject> mSubjects;
 	List<List<Lecture>> mLectures;
-	Subject mCurrentSubject;
 	Space mSpace;
 	
 	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures, Space space) {
@@ -115,22 +115,23 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		if(convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_module_row, null);
 		}
-		mCurrentSubject = mSubjects.get(groupPosition);
-		
+		Subject subject = (Subject)getGroup(groupPosition);
 		ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
+		ibAdd.setTag(subject);
 		ibAdd.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Intent it = new Intent(mContext, UploadStep1Activity.class);
-				it.putExtra("id", mCurrentSubject.id);
+				Subject subject = (Subject)v.getTag();
+				it.putExtra("id", subject.id);
 				it.putExtra(Space.class.getName(), mSpace);
 				mContext.startActivity(it);
 			}
 		});
 		
 		ImageView ivHelp = (ImageView) convertView.findViewById(R.id.iv_info);
-		
+		ivHelp.setTag(subject);
 		ivHelp.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -138,7 +139,8 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 				Builder builder = new AlertDialog.Builder(mContext);
 				View v2 = LayoutInflater.from(mContext).inflate(R.layout.popup_listview_row, null);
 				TextView tvInfo = (TextView)v2.findViewById(R.id.tv_insert_file_folder);
-				tvInfo.setText(mCurrentSubject.description);
+				Subject subject = (Subject) v.getTag();
+				tvInfo.setText(subject.description);
 				builder.setView(v2);
 				Dialog mDialogInfo = builder.create();
 		    	mDialogInfo.show();
@@ -146,7 +148,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		});
 		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvSuject);
-		tv.setText(Html.fromHtml(mCurrentSubject.name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildrenCount(groupPosition)+" Aulas</small></font>"));
+		tv.setText(Html.fromHtml(subject.name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildrenCount(groupPosition)+" Aulas</small></font>"));
 		return convertView;
 	}
 

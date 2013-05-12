@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".ReduApplication"
@@ -25,74 +26,97 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.LoginWebViewActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" 
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.HomeActivity"
             android:configChanges="orientation" >
-            
         </activity>
-        
-        <activity android:name=".activities.HomeSpaceActivity"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".activities.SpaceActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.MainActivity" >
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.EnvironmentActivity" >
+        <activity
+            android:name=".activities.EnvironmentActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.CoursesActivity" >
+        <activity
+            android:name=".activities.CoursesActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.SpaceActivity" >
+        <activity
+            android:name=".activities.SubjectActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.SubjectActivity" >
+        <activity
+            android:name=".activities.StatusDetailActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.StatusDetailActivity" >
+        <activity
+            android:name=".activities.RespondStatusActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.RespondStatusActivity" >
+        <activity
+            android:name=".activities.LectureWallActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.LectureWallActivity" >
+        <activity
+            android:name=".activities.PostStatusOnSpaceWallActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.PostStatusOnSpaceWallActivity" >
-        </activity>
-        <activity android:name=".activities.PostStatusOnLectureWallActivity" >
+        <activity
+            android:name=".activities.PostStatusOnLectureWallActivity"
+            android:configChanges="orientation" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
+            android:configChanges="orientation"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
-        <activity android:name=".activities.LectureActivity" >
+        <activity
+            android:name=".activities.LectureActivity"
+            android:configChanges="orientation" >
         </activity>
-        <activity android:name=".activities.lecture.UploadFileFolderActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait"
-             >
+        <activity
+            android:name=".activities.lecture.UploadFileFolderActivity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity android:name=".activities.lecture.UploadStep1Activity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".activities.lecture.UploadStep1Activity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity android:name=".activities.lecture.UploadStep2Activity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".activities.lecture.UploadStep2Activity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity android:name=".activities.lecture.UploadStep3Activity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".activities.lecture.UploadStep3Activity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity android:name=".activities.lecture.NewFolderActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".activities.lecture.NewFolderActivity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
-        <activity android:name=".activities.NewModuleActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".activities.NewModuleActivity"
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
-
 
         <!-- BuzzBox -->
         <receiver android:name="com.buzzbox.mob.android.scheduler.SchedulerReceiver" >
