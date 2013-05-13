@@ -14,15 +14,22 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 	
 	public static final String EXTRA_ENVIRONMENT = "EXTRA_ENVIRONMENT";
 	
+	private Environment mEnvironment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_environment);
 		
-		Bundle extras = getIntent().getExtras();
-		Environment environment = (Environment) extras.getSerializable(EXTRA_ENVIRONMENT);
-	
 		Bundle args = new Bundle();
-		args.putSerializable(CoursesAndSpacesFragment.EXTRAS_ENVIRONMENT, environment);
+		args.putInt(HomeActivity.ITEM_EXTRA_PARAM, HomeActivity.ITEM_ENVIRONMENTS);
+		
+		setUpClass(HomeActivity.class, args);
+		
+		Bundle extras = getIntent().getExtras();
+		mEnvironment = (Environment) extras.getSerializable(EXTRA_ENVIRONMENT);
+	
+		args = new Bundle();
+		args.putSerializable(CoursesAndSpacesFragment.EXTRAS_ENVIRONMENT, mEnvironment);
 
 		Fragment coursesAndServicesFragment = new CoursesAndSpacesFragment();
 		coursesAndServicesFragment.setArguments(args);
@@ -34,8 +41,8 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 
 	@Override
 	public void onSpaceSelected(Space space) {
-		Intent it = new Intent(EnvironmentActivity.this, HomeSpaceActivity.class);
-		it.putExtra(Space.class.getName(), space);
+		Intent it = new Intent(EnvironmentActivity.this, SpaceActivity.class);
+		it.putExtra(SpaceActivity.EXTRAS_SPACE, space);
 		startActivity(it);
 	}
 }

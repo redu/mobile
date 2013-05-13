@@ -80,8 +80,8 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(mContext, LectureActivity.class);
-				i.putExtra(Lecture.class.getName(), lecture);
-				i.putExtra(Subject.class.getName(), subject);
+				i.putExtra(LectureActivity.EXTRAS_LECTURE, lecture);
+				i.putExtra(LectureActivity.EXTRAS_SUBJECT, subject);
 				mContext.startActivity(i);	
 			}
 		});

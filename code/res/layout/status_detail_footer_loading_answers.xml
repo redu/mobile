@@ -7,12 +7,14 @@
     android:orientation="horizontal" >
 
     <TextView
+        android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Carregando respostas…"
         android:textColor="@color/gray_dark" />
 
     <ProgressBar
+        android:id="@+id/pb"
         android:layout_width="30dip"
         android:layout_height="30dip"
         android:layout_gravity="center"

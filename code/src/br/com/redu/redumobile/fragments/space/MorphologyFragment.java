@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,7 +30,8 @@ import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 
 public class MorphologyFragment extends Fragment {
 	
-	private User mUser;
+	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
+	
 	private Space mSpace;
 	
 	private List<Subject> mEnrollmentedSubjects;
@@ -45,6 +45,7 @@ public class MorphologyFragment extends Fragment {
 	
 	
 	public MorphologyFragment() {
+
 	}
 	
 	@Override
@@ -65,9 +66,8 @@ public class MorphologyFragment extends Fragment {
 			}
 		});
 		
-		mSpace = (Space)getActivity().getIntent().getExtras().get(Space.class.getName());
-		Log.i("Disciplina","id: "+mSpace.id);
-		
+		mSpace = (Space) getArguments().get(EXTRAS_SPACE);
+				
 		mExpListView = (ExpandableListView) v.findViewById(R.id.elvSubject);
 		
 		new LoadUserTask().execute();
@@ -79,13 +79,12 @@ public class MorphologyFragment extends Fragment {
 		@Override
 		protected User doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
-			Log.i("Redu", redu.getAuthorizeUrl());
 			return redu.getMe();
 		}
 	
 		protected void onPostExecute(User user) {
 //			((TextView) v.findViewById(R.id.details)).setText(user.first_name + " " + user.last_name + ", ");
-			mUser = user;
+//			mUser = user;
 
 			new LoadSubjectsTask().execute();
 		};
@@ -107,8 +106,6 @@ public class MorphologyFragment extends Fragment {
 	}*/
 	
 	class LoadSubjectsTask extends AsyncTask<Void, Void, Void> {
-		
-	
 
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());

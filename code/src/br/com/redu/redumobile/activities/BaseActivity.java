@@ -34,13 +34,16 @@ public abstract class BaseActivity extends FragmentActivity {
 	public void setActionBar(ActionBar ab) {
 		mActionBar = ab;
 		mActionBar.setActivity(this);
-		// mActionBar.setUpClass(HomeActivity.class);
 	}
 
 	protected void setUpClass(Class<? extends Activity> upClass) {
 		mActionBar.setUpClass(upClass);
 	}
 
+	protected void setUpClass(Class<? extends Activity> upClass, Bundle extras) {
+		mActionBar.setUpClass(upClass, extras);
+	}
+	
 	protected View addActionToActionBar(int drawableResId,
 			OnClickListener clickAction) {
 		return mActionBar.addAction(drawableResId, clickAction);

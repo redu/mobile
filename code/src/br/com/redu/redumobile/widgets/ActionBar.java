@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public class ActionBar extends FrameLayout {
 	private Activity mActivity;
 	private final LinearLayout mContent;
 	private Class<? extends Activity> mClassRef;
+	private Bundle mExtras;
 
 	public ActionBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -48,7 +50,6 @@ public class ActionBar extends FrameLayout {
 		if (!isInEditMode()) {
 			if (context instanceof BaseActivity) {
 				((BaseActivity) context).setActionBar(this);
-
 			}
 		}
 
@@ -63,6 +64,9 @@ public class ActionBar extends FrameLayout {
 							} else {
 								Intent intent = new Intent(mActivity, mClassRef);
 								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								if(mExtras != null) {
+									intent.putExtras(mExtras);
+								}
 								mActivity.startActivity(intent);
 							}
 						}
@@ -81,7 +85,12 @@ public class ActionBar extends FrameLayout {
 	}
 
 	public void setUpClass(Class<? extends Activity> classRef) {
+		setUpClass(classRef, null);
+	}
+	
+	public void setUpClass(Class<? extends Activity> classRef, Bundle extras) {
 		mClassRef = classRef;
+		mExtras = extras;
 	}
 
 	public View addAction(int drawableResId, OnClickListener clickAction) {

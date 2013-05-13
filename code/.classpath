@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="br/com/redu/redumobile/activities/MainActivity.java|br/com/redu/redumobile/widgets/LazyLoadingImageView.java|br/com/redu/redumobile/util/cache/|br/com/redu/redumobile/util/ImageLoader.java|br/com/redu/redumobile/activities/RespondStatusActivity.java|br/com/redu/redumobile/activities/SpaceActivity.java" kind="src" path="src"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>

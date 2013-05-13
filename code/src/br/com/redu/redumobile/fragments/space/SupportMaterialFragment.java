@@ -38,8 +38,8 @@ import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.activities.HomeSpaceActivity;
-import br.com.redu.redumobile.activities.HomeSpaceActivity.SupportMaterialFragmentListener;
+import br.com.redu.redumobile.activities.SpaceActivity;
+import br.com.redu.redumobile.activities.SpaceActivity.SupportMaterialFragmentListener;
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadFileFolderActivity;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
@@ -47,6 +47,9 @@ import br.com.redu.redumobile.util.DownloadHelper;
 
 @SuppressLint("ValidFragment")
 public class SupportMaterialFragment extends Fragment {
+	public static final String EXTRAS_FOLDER = "EXTRAS_FOLDER";
+	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
+
 	private Space mSpace;
 
 	private List<Folder> folders;
@@ -74,10 +77,7 @@ public class SupportMaterialFragment extends Fragment {
 		super();
 	}
 
-	public SupportMaterialFragment(Folder folder) {
-		mFolder = folder;
-	}
-	
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -85,11 +85,17 @@ public class SupportMaterialFragment extends Fragment {
 				container, false);
 		TextView indice;
 		ImageButton ibBack;
+		
+		Bundle args = getArguments();
+		if (args != null) {
+			mFolder = (Folder) args.get(EXTRAS_FOLDER);
+			mSpace = (Space) args.get(EXTRAS_SPACE);
+		}
 
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		mTvEmpytMsg = (TextView)v.findViewById(R.id.elv_subject_empyt);
 		mProgressDialog = new ProgressDialog(getActivity());
-		mProgressDialog.setMessage("Aguarde...");
+		mProgressDialog.setMessage("Aguarde…");
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -134,9 +140,6 @@ public class SupportMaterialFragment extends Fragment {
 				startActivity(it);
 			}
 		});
-
-		mSpace = (Space) getActivity().getIntent().getExtras()
-				.get(Space.class.getName());
 
 		lvFiles = (ListView) v.findViewById(R.id.lvFiles);
 		registerForContextMenu(lvFiles);
@@ -246,6 +249,7 @@ public class SupportMaterialFragment extends Fragment {
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication
 					.getReduClient(getActivity());
+			String folderRaizID;
 			if (mFolder == null) {
 				folderRaizID = redu.getFolderID(mSpace.id);
 			} else {
@@ -255,6 +259,7 @@ public class SupportMaterialFragment extends Fragment {
 			folders.removeAll(Collections.singleton(null));
 			files = redu.getFilesByFolder(folderRaizID);
 			files.removeAll(Collections.singleton(null));
+
 			return null;
 		}
 
@@ -305,7 +310,6 @@ public class SupportMaterialFragment extends Fragment {
 
 				// download the file
 				InputStream input = new BufferedInputStream(url.openStream());
-
 				java.io.File filling = new java.io.File(newFolder, fileName);
 				OutputStream output = new FileOutputStream(filling);
 
@@ -397,7 +401,7 @@ public class SupportMaterialFragment extends Fragment {
 			mProgressdialogRemove.dismiss();
 			//TODO CHAMAR O NOTIFYDATASETCHANGED DA ACTIVITY
 			mAdapter.notifyDataSetChanged();
-			HomeSpaceActivity activity = (HomeSpaceActivity) getActivity();
+			SpaceActivity activity = (SpaceActivity) getActivity();
 			activity.onRestart();
 		};
 	}
