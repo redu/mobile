@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.activities.lecture;
 
 import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.adapters.PopupAdapter;
 import android.app.Activity;
@@ -11,6 +12,7 @@ public class UploadStep1Activity extends Activity{
 	
 	String superId;
 	Space space;
+	private Subject subject;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +20,11 @@ public class UploadStep1Activity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insert_file_or_lecture);
 		superId = getIntent().getExtras().getString("id");
+		subject = (Subject) getIntent().getExtras().get(Subject.class.getName());
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
 		String[] str = {"Foto","Vídeo","Áudio"};
-		lv.setAdapter(new PopupAdapter(this, str,superId, space));
+		lv.setAdapter(new PopupAdapter(this, str, space, subject));
 	}
 	
 	@Override

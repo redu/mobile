@@ -124,7 +124,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			public void onClick(View v) {
 				Intent it = new Intent(mContext, UploadStep1Activity.class);
 				Subject subject = (Subject)v.getTag();
-				it.putExtra("id", subject.id);
+				it.putExtra(Subject.class.getName(), subject);
 				it.putExtra(Space.class.getName(), mSpace);
 				mContext.startActivity(it);
 			}

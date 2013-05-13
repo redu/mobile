@@ -62,7 +62,18 @@
             android:visibility="gone" >
         </ListView>
     </LinearLayout>
-
+    
+	<TextView
+            android:id="@+id/elv_subject_empyt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="15dp"
+            android:text="Esta pasta está vazia, comece adicionando algo nela através do '+' ao lado do seu nome." 
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/gray_light"
+            android:visibility="gone" />
+	
     <ProgressBar
         android:id="@+id/pb"
         android:layout_width="wrap_content"

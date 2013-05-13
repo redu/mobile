@@ -68,6 +68,8 @@ public class SupportMaterialFragment extends Fragment {
 
 	private SupportMaterialsAdapter mAdapter;
 
+	public TextView mTvEmpytMsg;
+
 	public SupportMaterialFragment() {
 		super();
 	}
@@ -85,7 +87,7 @@ public class SupportMaterialFragment extends Fragment {
 		ImageButton ibBack;
 
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
-
+		mTvEmpytMsg = (TextView)v.findViewById(R.id.elv_subject_empyt);
 		mProgressDialog = new ProgressDialog(getActivity());
 		mProgressDialog.setMessage("Aguarde...");
 		mProgressDialog.setIndeterminate(false);
@@ -262,9 +264,14 @@ public class SupportMaterialFragment extends Fragment {
 			if (getActivity() != null) {
 				mAdapter = new SupportMaterialsAdapter(getActivity(), folders,
 						files);
-				lvFiles.setAdapter(mAdapter);
-				lvFiles.setVisibility(View.VISIBLE);
-				mProgressBar.setVisibility(View.GONE);
+				if (mAdapter.getCount() != 0){
+					lvFiles.setAdapter(mAdapter);
+					lvFiles.setVisibility(View.VISIBLE);
+					mProgressBar.setVisibility(View.GONE);
+				}else{
+					mTvEmpytMsg.setVisibility(View.VISIBLE);
+					mProgressBar.setVisibility(View.GONE);
+				}
 			}
 		};
 	}

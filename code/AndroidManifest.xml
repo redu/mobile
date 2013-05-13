@@ -35,38 +35,64 @@
         </activity>
         <activity
             android:name=".activities.HomeActivity"
-            android:configChanges="orientation" >
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
             
         </activity>
         
         <activity android:name=".activities.HomeSpaceActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.MainActivity" >
+        <activity android:name=".activities.MainActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.EnvironmentActivity" >
+        <activity android:name=".activities.EnvironmentActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.CoursesActivity" >
+        <activity android:name=".activities.CoursesActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.SpaceActivity" >
+        <activity android:name=".activities.SpaceActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.SubjectActivity" >
+        <activity android:name=".activities.SubjectActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.StatusDetailActivity" >
+        <activity android:name=".activities.StatusDetailActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.RespondStatusActivity" >
+        <activity android:name=".activities.RespondStatusActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.LectureWallActivity" >
+        <activity android:name=".activities.LectureWallActivity" 
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.PostStatusOnSpaceWallActivity" >
+        <activity android:name=".activities.PostStatusOnSpaceWallActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.PostStatusOnLectureWallActivity" >
+        <activity android:name=".activities.PostStatusOnLectureWallActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.LectureActivity" >
+        <activity android:name=".activities.LectureActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" 
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.lecture.UploadFileFolderActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
