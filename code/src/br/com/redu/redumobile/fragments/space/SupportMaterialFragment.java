@@ -380,7 +380,7 @@ public class SupportMaterialFragment extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			mProgressdialogRemove = ProgressDialog.show(getActivity(), "Redu",
-					"Removendo material...", false, true);
+					"Removendo diretório...", false, true);
 			mProgressdialogRemove.setIcon(R.drawable.ic_launcher);
 			mProgressdialogRemove.setCancelable(false);
 			super.onPreExecute();

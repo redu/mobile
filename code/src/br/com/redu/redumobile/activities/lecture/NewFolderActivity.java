@@ -52,7 +52,6 @@ public class NewFolderActivity extends BaseActivity{
 				}
 			}
 		});
-		
 	}
 	
 	class SaveFolder extends AsyncTask<String, Void, Void> {
