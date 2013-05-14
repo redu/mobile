@@ -35,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="32dp"
-                android:background="@null"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/bg_action_button"
                 android:src="@drawable/ic_seta_back" />
 
             <ImageButton
@@ -44,7 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="end"
-                android:background="@null"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/bg_action_button"
                 android:src="@drawable/ic_add2" />
         </RelativeLayout>
 

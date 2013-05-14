@@ -249,7 +249,7 @@ public class SupportMaterialFragment extends Fragment {
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication
 					.getReduClient(getActivity());
-			String folderRaizID;
+			
 			if (mFolder == null) {
 				folderRaizID = redu.getFolderID(mSpace.id);
 			} else {
@@ -399,7 +399,6 @@ public class SupportMaterialFragment extends Fragment {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			mProgressdialogRemove.dismiss();
-			//TODO CHAMAR O NOTIFYDATASETCHANGED DA ACTIVITY
 			mAdapter.notifyDataSetChanged();
 			SpaceActivity activity = (SpaceActivity) getActivity();
 			activity.onRestart();
