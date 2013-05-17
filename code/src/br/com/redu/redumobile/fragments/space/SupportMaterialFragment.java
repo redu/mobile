@@ -75,7 +75,6 @@ public class SupportMaterialFragment extends Fragment {
 		super();
 	}
 
-
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -83,7 +82,7 @@ public class SupportMaterialFragment extends Fragment {
 				container, false);
 		TextView indice;
 		ImageButton ibBack;
-		
+
 		Bundle args = getArguments();
 		if (args != null) {
 			mFolder = (Folder) args.get(EXTRAS_FOLDER);
@@ -245,19 +244,21 @@ public class SupportMaterialFragment extends Fragment {
 	class LoadFoldersAndFilesTask extends AsyncTask<Void, Void, Void> {
 
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication
-					.getReduClient(getActivity());
-			String folderRaizID;
-			if (mFolder == null) {
-				folderRaizID = redu.getFolderID(mSpace.id);
-			} else {
-				folderRaizID = mFolder.id;
+			try {
+				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+				String folderRaizID;
+				if (mFolder == null) {
+					folderRaizID = redu.getFolderID(mSpace.id);
+				} else {
+					folderRaizID = mFolder.id;
+				}
+				folders = redu.getFolders(folderRaizID);
+				folders.removeAll(Collections.singleton(null));
+				files = redu.getFilesByFolder(folderRaizID);
+				files.removeAll(Collections.singleton(null));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			folders = redu.getFolders(folderRaizID);
-			folders.removeAll(Collections.singleton(null));
-			files = redu.getFilesByFolder(folderRaizID);
-			files.removeAll(Collections.singleton(null));
-
 			return null;
 		}
 
@@ -392,7 +393,7 @@ public class SupportMaterialFragment extends Fragment {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			mProgressdialogRemove.dismiss();
-			//TODO CHAMAR O NOTIFYDATASETCHANGED DA ACTIVITY
+			// TODO CHAMAR O NOTIFYDATASETCHANGED DA ACTIVITY
 			mAdapter.notifyDataSetChanged();
 			SpaceActivity activity = (SpaceActivity) getActivity();
 			activity.onRestart();

@@ -39,6 +39,14 @@
             android:configChanges="orientation" >
         </activity>
         <activity
+            android:name=".activities.TermsOfUseActivity"
+            android:configChanges="orientation" >
+        </activity>
+        <activity
+            android:name=".activities.PrivacyActivity"
+            android:configChanges="orientation" >
+        </activity>
+        <activity
             android:name=".activities.SpaceActivity"
             android:configChanges="orientation" >
         </activity>
@@ -109,13 +117,11 @@
         </activity>
         <activity
             android:name=".activities.lecture.NewFolderActivity"
-            android:configChanges="orientation"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            android:configChanges="orientation" >
         </activity>
         <activity
             android:name=".activities.NewModuleActivity"
-            android:configChanges="orientation"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            android:configChanges="orientation" >
         </activity>
 
         <!-- BuzzBox -->

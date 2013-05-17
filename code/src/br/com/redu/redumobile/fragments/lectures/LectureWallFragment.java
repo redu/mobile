@@ -121,4 +121,9 @@ public class LectureWallFragment extends StatusListFragment {
 		
 		return ((Status) mAdapter.getItem(0)).createdAtInMillis;
 	}
+
+	@Override
+	protected boolean isEnableGoToWallAction() {
+		return false;
+	}
 }

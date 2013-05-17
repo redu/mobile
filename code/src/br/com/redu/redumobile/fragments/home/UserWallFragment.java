@@ -7,8 +7,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
-import br.com.redu.redumobile.data.LoadingStatusesManager;
-import br.com.redu.redumobile.data.OnLoadStatusesListener;
+import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.fragments.StatusListFragment;
 
@@ -21,7 +20,7 @@ public class UserWallFragment extends StatusListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		LoadingStatusesManager.add(new OnLoadStatusesListener() {
+		LoadStatusesFromWebTask.addOnLoadStatusesFromWebListener(new OnLoadStatusesFromWebListener() {
 			@Override
 			public void onStart() {
 			
@@ -37,6 +36,7 @@ public class UserWallFragment extends StatusListFragment {
 						public void run() {
 							if(mRefreshView != null) {
 								mRefreshView.onRefreshComplete();
+								showNoConnectionAlert();
 							}
 						}
 					});
@@ -114,5 +114,10 @@ public class UserWallFragment extends StatusListFragment {
 		}
 		
 		return ((Status) mAdapter.getItem(0)).createdAtInMillis;
+	}
+
+	@Override
+	protected boolean isEnableGoToWallAction() {
+		return true;
 	}
 }

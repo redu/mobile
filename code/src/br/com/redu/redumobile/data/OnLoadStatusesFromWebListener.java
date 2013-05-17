@@ -1,6 +1,6 @@
 package br.com.redu.redumobile.data;
 
-public interface OnLoadStatusesListener {
+public interface OnLoadStatusesFromWebListener {
 	
 	public void onStart();
 	public void onComplete();

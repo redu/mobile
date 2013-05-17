@@ -36,8 +36,6 @@ public class PostStatusOnLectureWallActivity extends BaseActivity {
 
 		User user = ReduApplication.getUser(this);
 
-		findViewById(R.id.ll_publishing_local).setVisibility(View.VISIBLE);
-		
 		((WebCachedImageView) findViewById(R.id.iv_photo)).setImageUrl(user.getThumbnailUrl());
 
 		StringBuffer userActionBuffer = new StringBuffer().append("<b>").append(user.getCompleteName()).append("</b>");
@@ -104,6 +102,6 @@ public class PostStatusOnLectureWallActivity extends BaseActivity {
 	}
 	
 	private String getStatusType() {
-		return (mStatusIsHelpType) ? Status.TYPE_ACTIVITY : Status.TYPE_HELP;
+		return (mStatusIsHelpType) ? Status.TYPE_HELP : Status.TYPE_ACTIVITY;
 	}
 }

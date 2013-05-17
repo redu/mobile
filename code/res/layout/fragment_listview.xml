@@ -15,6 +15,7 @@
             android:id="@+id/ll_new_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/cream"
             android:orientation="vertical"
             android:visibility="gone" >
 

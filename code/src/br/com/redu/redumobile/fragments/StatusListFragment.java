@@ -22,7 +22,7 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.DbHelperHolderActivity;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
-import br.com.redu.redumobile.data.LoadingStatusesManager;
+import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperListener;
 
@@ -45,6 +45,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	protected boolean isWaitingNotification;
 	protected PullToRefreshBase<ListView> mRefreshView;
 
+	protected abstract boolean isEnableGoToWallAction();
 	protected abstract String getEmptyListMessage();
 	protected abstract long getOldestStatusTimestamp();
 	protected abstract long getEarliestStatusTimestamp();
@@ -106,6 +107,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 					Intent i = new Intent(getActivity(),
 							StatusDetailActivity.class);
 					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
+					i.putExtra(StatusDetailActivity.EXTRAS_ENABLE_GO_TO_WALL_ACTION, isEnableGoToWallAction());
 					startActivity(i);
 
 					DbHelper dbHelper = ((DbHelperHolderActivity) getActivity()).getDbHelper();
@@ -190,24 +192,22 @@ public abstract class StatusListFragment extends TitlableFragment implements
 				List<br.com.developer.redu.models.Status> statuses) {
 			if (getActivity() != null) {
 				if (statuses != null && statuses.size() > 0) {
-					if (mAdapter.isEmpty() || mOlderThan) {
-						mAdapter.addAll(statuses, mOlderThan);
-						mAdapter.notifyDataSetChanged();
-						hideEmptyListMessage();
-					}
-					// } else if (!mOlderThan) {
-					// showNewStatusMessage();
-					// }
-
-				} else if (mAdapter.isEmpty()) {
-					showEmptyListMessage();
+					mAdapter.addAll(statuses, mOlderThan);
+					mAdapter.notifyDataSetChanged();
 				}
-				LoadingStatusesManager.notifyOnComplete();
-			} else {
-				LoadingStatusesManager.notifyOnError(null);
+				
+				if (mAdapter.isEmpty()) {
+					if(LoadStatusesFromWebTask.isWorking()) {
+						mProgressBar.setVisibility(View.VISIBLE);
+					} else {
+						mProgressBar.setVisibility(View.GONE);
+						showEmptyListMessage();
+					}
+				} else {
+					mProgressBar.setVisibility(View.GONE);
+					hideEmptyListMessage();
+				}
 			}
-			
-			mProgressBar.setVisibility(View.GONE);
 		};
 	}
 }

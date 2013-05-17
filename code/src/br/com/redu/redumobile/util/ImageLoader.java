@@ -12,15 +12,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
-import br.com.redu.redumobile.util.cache.CacheController;
-import br.com.redu.redumobile.util.cache.HttpManager;
-import br.com.redu.redumobile.util.cache.IOUtilities;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import br.com.redu.redumobile.util.cache.CacheController;
+import br.com.redu.redumobile.util.cache.HttpManager;
+import br.com.redu.redumobile.util.cache.IOUtilities;
 
 
 public class ImageLoader {

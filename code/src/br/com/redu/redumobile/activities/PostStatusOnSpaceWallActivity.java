@@ -32,8 +32,6 @@ public class PostStatusOnSpaceWallActivity extends BaseActivity {
 
 		User user = ReduApplication.getUser(this);
 		
-		findViewById(R.id.ll_publishing_local).setVisibility(View.GONE);
-		
 		((WebCachedImageView) findViewById(R.id.iv_photo)).setImageUrl(user.getThumbnailUrl());
 
 		StringBuffer userActionBuffer = new StringBuffer().append("<b>").append(user.getCompleteName()).append("</b>").append(" comentou");

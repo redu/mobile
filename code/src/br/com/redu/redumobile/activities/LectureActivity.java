@@ -22,12 +22,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
-import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
@@ -53,7 +53,6 @@ public class LectureActivity extends BaseActivity {
 
 	private Lecture mLecture;
 	private Subject mSubject;
-	private Space mSpace;
 
 	private ProgressDialog mProgressDialog;
 
@@ -96,7 +95,6 @@ public class LectureActivity extends BaseActivity {
 								.getReduClient(LectureActivity.this);
 						mSubject = redu.getSubject(subjectId);
 						mLecture = redu.getLecture(lectureId);
-						mSpace = redu.getSpace(spaceId);
 						return null;
 					} catch (OAuthConnectionException e) {
 						e.printStackTrace();
@@ -105,17 +103,17 @@ public class LectureActivity extends BaseActivity {
 				}
 
 				protected void onPostExecute(Void param) {
-					if (mSubject != null && mLecture != null) {
+//					if (mSubject != null && mLecture != null) {
 						Bundle extrasToUp = new Bundle();
-						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE,
-								mSpace);
+						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE_ID,
+								spaceId);
 						extrasToUp.putSerializable(
 								SpaceActivity.EXTRAS_ENVIRONMENT_PATH,
 								environmentPath);
 						setUpClass(SpaceActivity.class, extrasToUp);
 
 						init();
-					}
+//					}
 				};
 			}.execute();
 		}
@@ -235,7 +233,7 @@ public class LectureActivity extends BaseActivity {
 			TextView tvMedia = (TextView) layoutLecture
 					.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
-			Button ibMedia = (Button) layoutLecture
+			ImageButton ibMedia = (ImageButton) layoutLecture
 					.findViewById(R.id.ibAcessarMedia);
 			ibMedia.setOnClickListener(new OnClickListener() {
 

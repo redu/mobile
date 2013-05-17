@@ -1,5 +1,7 @@
 package br.com.redu.redumobile;
 
+import org.scribe.exceptions.OAuthConnectionException;
+
 import android.app.Application;
 import android.content.Context;
 import br.com.developer.redu.DefaultReduClient;
@@ -16,7 +18,7 @@ public class ReduApplication extends Application {
 	static private DefaultReduClient reduClientInitialized;
 	static private User user;
 
-	static public DefaultReduClient getReduClient(Context context) {
+	static public DefaultReduClient getReduClient(Context context) throws OAuthConnectionException {
 		if(reduClientInitialized != null) {
 			return reduClientInitialized;
 		}
@@ -32,7 +34,7 @@ public class ReduApplication extends Application {
 		return reduClient;
 	}
 
-	static public User getUser(Context context) {
+	static public User getUser(Context context) throws OAuthConnectionException {
 		if(user == null) {
 			user = getReduClient(context).getMe();
 		}
