@@ -38,17 +38,6 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#36ACD5" />
 
-                <TextView
-                    android:id="@+id/tvLecture"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:text="Professor Fulano de Tal"
-                    android:textColor="#6D6E6F"
-                    android:textSize="12dp" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,7 +140,7 @@
                     android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/ibAcessarMedia"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
@@ -213,7 +202,7 @@
                     android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/ibCanvas"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"

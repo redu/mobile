@@ -34,7 +34,7 @@ public class NewModuleActivity extends BaseActivity {
 
 		TextView title = (TextView) findViewById(R.id.tv_title_action_bar);
 		title.setText(space.name);
-		addActionToActionBar(R.drawable.ic_add, new OnClickListener() {
+		addActionToActionBar(R.drawable.bt_send_actionbar, new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String name = mEtName.getText().toString();

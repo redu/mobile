@@ -35,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="32dp"
-                android:background="@null"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/bg_action_button"
                 android:src="@drawable/ic_seta_back" />
 
             <ImageButton
@@ -44,7 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="end"
-                android:background="@null"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/bg_action_button"
                 android:src="@drawable/ic_add2" />
         </RelativeLayout>
 
@@ -62,7 +66,18 @@
             android:visibility="gone" >
         </ListView>
     </LinearLayout>
-
+    
+	<TextView
+            android:id="@+id/elv_subject_empyt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="15dp"
+            android:text="Esta pasta está vazia, comece adicionando algo nela através do '+' ao lado do seu nome." 
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/gray_light"
+            android:visibility="gone" />
+	
     <ProgressBar
         android:id="@+id/pb"
         android:layout_width="wrap_content"

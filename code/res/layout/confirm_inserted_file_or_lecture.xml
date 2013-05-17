@@ -27,7 +27,8 @@
 	    	    android:textColor="@color/blue"
 	    	    android:background="@drawable/bg_gray"
 	    	    android:layout_margin="7dp" />
-		    <android.widget.Button 
+		    <android.widget.Button
+		        android:id="@+id/btAdicionarPreview" 
 		   		android:layout_width="wrap_content"
 		   		android:layout_gravity="right"
 		   	    android:layout_height="wrap_content"
@@ -50,9 +51,8 @@
 		    	
 		    	<ImageView
 		    	    android:id="@+id/camera_preview"
-		    	    android:layout_width="wrap_content"
-		    	    android:layout_height="wrap_content"
-		    	    android:background="@drawable/ic_audio_big"
+		    	    android:layout_width="128dp"
+		    	    android:layout_height="128dp"
 		    	    android:layout_margin="7dp"
 		    	    android:layout_gravity="center" />
 		    	

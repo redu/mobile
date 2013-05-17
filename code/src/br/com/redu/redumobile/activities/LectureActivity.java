@@ -8,10 +8,10 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.scribe.exceptions.OAuthConnectionException;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,7 +28,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Progress;
+import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
+import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.util.DownloadHelper;
@@ -47,6 +50,8 @@ public class LectureActivity extends BaseActivity {
 	private TextView mTvLecture;
 	private Button mBtEdit;
 	private Button mBtRemove;
+	
+	private Context mContext = this;
 
 	private Button mBtIsDone;
 	private Button mBtWall;
@@ -270,9 +275,6 @@ public class LectureActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 			}
 		});
-		// String extension = mLecture.mimetype;
-
-		// mTvFileName.setText(mLecture.name+" Tipo:"+mLecture.type);
 
 		mBtIsDone.setOnClickListener(new OnClickListener() {
 			@Override
@@ -392,23 +394,30 @@ public class LectureActivity extends BaseActivity {
 		}
 
 	}
-
-	class LoadProgress extends AsyncTask<String, Void, Void> {
-
+	
+class LoadProgress extends AsyncTask<String, Void, Progress> {
+		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 		}
-
-		protected Void doInBackground(String... text) {
-			DefaultReduClient redu = ReduApplication.getReduClient(LectureActivity.this);
-			// redu.getProgress(mLecture.id);
-			return null;
+		
+		protected Progress doInBackground(String... text) {
+			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+			User user = ReduApplication.getUser(mContext);
+			Progress progress = redu.getProgress(Integer.toString(mLecture.id), Integer.toString(user.id));
+			return progress;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
+		protected void onPostExecute(Progress progress) {
+			super.onPostExecute(progress);
+			if (progress.finalized.equals("true"))
+				mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_blue);
+			else{
+				
+			}
+				
 		};
 	}
 

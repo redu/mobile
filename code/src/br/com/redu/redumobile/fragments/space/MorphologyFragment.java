@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
@@ -40,7 +41,8 @@ public class MorphologyFragment extends Fragment {
 	private SubjectExpandableListAdapter mAdapter;
 
 	private ProgressBar mProgressBar;
-
+	private TextView mTvEmpytMsg;
+	
 	public MorphologyFragment() {
 
 	}
@@ -53,6 +55,7 @@ public class MorphologyFragment extends Fragment {
 				false);
 		Button ibModulo = (Button) v.findViewById(R.id.btNovoModulo);
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
+		mTvEmpytMsg = (TextView)v.findViewById(R.id.elv_subject_empyt);
 		ibModulo.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -150,6 +153,15 @@ public class MorphologyFragment extends Fragment {
 				mExpListView.setAdapter(mAdapter);
 				mExpListView.setVisibility(View.VISIBLE);
 				mProgressBar.setVisibility(View.GONE);
+				mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
+				if (mAdapter.getGroupCount() != 0){
+					mExpListView.setAdapter(mAdapter);
+					mExpListView.setVisibility(View.VISIBLE);
+					mProgressBar.setVisibility(View.GONE);
+				}else{
+					mTvEmpytMsg.setVisibility(View.VISIBLE);
+					mProgressBar.setVisibility(View.GONE);
+				}
 			}
 		};
 	}

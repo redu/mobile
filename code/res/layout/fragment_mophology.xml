@@ -49,10 +49,11 @@
             android:id="@+id/elv_subject_empyt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="15dp"
-            android:text="Esta Disciplina está vazia, comece adicionando um novo Módulo através do botão acima"
+            android:text="Esta Disciplina está vazia, será necessário adicionar o um Novo Módulo antes."
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#CCCCCC"
+            android:textColor="@color/gray_light"
             android:visibility="gone" />
         
         <ProgressBar
