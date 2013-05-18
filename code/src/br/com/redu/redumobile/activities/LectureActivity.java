@@ -108,7 +108,7 @@ public class LectureActivity extends BaseActivity {
 				}
 
 				protected void onPostExecute(Void param) {
-//					if (mSubject != null && mLecture != null) {
+					if (mSubject != null && mLecture != null) {
 						Bundle extrasToUp = new Bundle();
 						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE_ID,
 								spaceId);
@@ -118,7 +118,7 @@ public class LectureActivity extends BaseActivity {
 						setUpClass(SpaceActivity.class, extrasToUp);
 
 						init();
-//					}
+					}
 				};
 			}.execute();
 		}
@@ -405,7 +405,8 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 		protected Progress doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
 			User user = ReduApplication.getUser(mContext);
-			Progress progress = redu.getProgress(Integer.toString(mLecture.id), Integer.toString(user.id));
+			//TODO fix this code above
+			Progress progress = redu.getProgress(Integer.toString(mLecture.id)/*, Integer.toString(user.id)*/);
 			return progress;
 		}
 

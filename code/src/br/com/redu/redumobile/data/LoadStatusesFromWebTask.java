@@ -108,12 +108,12 @@ public class LoadStatusesFromWebTask implements Task {
 					statuses.addAll(temp);
 				}
 				
-				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr);
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr);
 				if(temp != null) {
 					statuses.addAll(temp);
 				}
 				
-				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr);
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr);
 				if(temp != null) {
 					statuses.addAll(temp);
 				}

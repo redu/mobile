@@ -16,9 +16,12 @@ import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.DbHelperHolderActivity;
 import br.com.redu.redumobile.activities.PostStatusOnLectureWallActivity;
+import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
+import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.fragments.StatusListFragment;
 
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 public class LectureWallFragment extends StatusListFragment {
@@ -73,17 +76,6 @@ public class LectureWallFragment extends StatusListFragment {
 	@Override
 	public void onStatusUpdated() {
 		// ignoring...
-	}
-
-	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		Activity activity = getActivity();
-		if(activity != null) {
-			isWaitingNotification = true;
-			mAdapter.clear();
-			updateStatusesFromDb(false);
-			mRefreshView = refreshView;
-		}
 	}
 
 	@Override

@@ -20,12 +20,16 @@ import android.widget.TextView;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.DbHelperHolderActivity;
+import br.com.redu.redumobile.activities.LectureActivity;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
+import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperListener;
 
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -55,6 +59,61 @@ public abstract class StatusListFragment extends TitlableFragment implements
 
 	}
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		LoadStatusesFromWebTask.addOnLoadStatusesFromWebListener(new OnLoadStatusesFromWebListener() {
+			@Override
+			public void onStart() {
+			
+			}
+			
+			@Override
+			public void onError(Exception e) {
+				if(isWaitingNotification) {
+					isWaitingNotification = false;
+					// TODO show a error message
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if(mRefreshView != null) {
+								mRefreshView.onRefreshComplete();
+								showNoConnectionAlert();
+							}
+						}
+					});
+				}
+			}
+			
+			@Override
+			public void onComplete() {
+				if(isWaitingNotification) {
+					isWaitingNotification = false;
+					updateStatusesFromDb(false);
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if(mRefreshView != null) {
+								mRefreshView.onRefreshComplete();
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+	
+	@Override
+	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		Activity activity = getActivity();
+		if(activity != null) {
+			isWaitingNotification = true;
+			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
+			mRefreshView = refreshView;
+		}
+	}
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -103,19 +162,37 @@ public abstract class StatusListFragment extends TitlableFragment implements
 					int position, long id) {
 				Status status = (Status) mAdapter.getItem(position - 1);
 
+				Intent i = null;
 				if (!status.isLogType()) {
-					Intent i = new Intent(getActivity(),
-							StatusDetailActivity.class);
+					i = new Intent(getActivity(), StatusDetailActivity.class);
 					i.putExtra(StatusDetailActivity.EXTRAS_STATUS, status);
 					i.putExtra(StatusDetailActivity.EXTRAS_ENABLE_GO_TO_WALL_ACTION, isEnableGoToWallAction());
-					startActivity(i);
-
-					DbHelper dbHelper = ((DbHelperHolderActivity) getActivity()).getDbHelper();
-					dbHelper.setStatusAsLastSeen(status);
-
-					status.lastSeen = true;
-					mAdapter.notifyDataSetChanged();
+				} else {
+					if(status.isCourseLogeableType() || status.isSubjectLogeableType()) {
+						i = new Intent(getActivity(), SpaceActivity.class);
+						i.putExtra(SpaceActivity.EXTRAS_ENVIRONMENT_PATH, status.getEnvironmentPath());
+						i.putExtra(SpaceActivity.EXTRAS_SPACE_ID, status.getSpaceId());
+						
+						if(status.isSubjectLogeableType()) {
+							i.putExtra(SpaceActivity.EXTRAS_ITEM_CHECKED, SpaceActivity.ITEM_MORPHOLOGY);
+						}
+						
+					} else if(status.isLectureLogeableType()) {
+						i = new Intent(getActivity(), LectureActivity.class);
+						i.putExtra(LectureActivity.EXTRAS_ENVIRONMENT_PATH, status.getEnvironmentPath());
+						i.putExtra(LectureActivity.EXTRAS_SPACE_ID, status.getSpaceId());
+						i.putExtra(LectureActivity.EXTRAS_LECTURE_ID, status.getLectureId());
+						i.putExtra(LectureActivity.EXTRAS_SUBJECT_ID, status.getSubjectId());
+					}
 				}
+				
+				startActivity(i);
+				
+				DbHelper dbHelper = ((DbHelperHolderActivity) getActivity()).getDbHelper();
+				dbHelper.setStatusAsLastSeen(status);
+
+				status.lastSeen = true;
+				mAdapter.notifyDataSetChanged();
 			}
 		});
 
@@ -163,7 +240,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	protected void updateStatusesFromDb(boolean olderThan) {
 		new LoadStatusesFromDbTask(olderThan).execute();
 	}
-
+	
 	class LoadStatusesFromDbTask extends
 			AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
 

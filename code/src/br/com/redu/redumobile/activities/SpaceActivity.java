@@ -41,9 +41,9 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	
 	static final int NUM_ITEMS = 3;
 
-	static final int ITEM_MORPHOLOGY = 0;
-	static final int ITEM_WALL = 1;
-	static final int ITEM_SUPPORT_MATERIAL = 2;
+	public static final int ITEM_MORPHOLOGY = 0;
+	public static final int ITEM_WALL = 1;
+	public static final int ITEM_SUPPORT_MATERIAL = 2;
 	
     private PageIndicator mIndicator;
     private MainAdapter mAdapter;
