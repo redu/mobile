@@ -30,6 +30,9 @@ public abstract class DbHelperHolderActivity extends BaseActivity {
 	}
 
 	public DbHelper getDbHelper() {
+		if(mDbHelper == null) {
+			init();
+		}
 		return mDbHelper;
 	}
 }

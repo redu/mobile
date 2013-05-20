@@ -107,6 +107,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	public void dismissProgressDialog() {
 		if (mDialog != null && mDialog.isShowing()) {
 			mDialog.dismiss();
+			mDialog = null;
 		}
 	}
 	

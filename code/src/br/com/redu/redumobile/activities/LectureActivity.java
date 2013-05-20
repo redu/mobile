@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,7 +59,6 @@ public class LectureActivity extends BaseActivity {
 
 	private Lecture mLecture;
 	private Subject mSubject;
-	private Space mSpace;
 
 	private ProgressDialog mProgressDialog;
 
@@ -103,7 +103,6 @@ public class LectureActivity extends BaseActivity {
 								.getReduClient(LectureActivity.this);
 						mSubject = redu.getSubject(subjectId);
 						mLecture = redu.getLecture(lectureId);
-						mSpace = redu.getSpace(spaceId);
 						return null;
 					} catch (OAuthConnectionException e) {
 						e.printStackTrace();
@@ -114,8 +113,8 @@ public class LectureActivity extends BaseActivity {
 				protected void onPostExecute(Void param) {
 					if (mSubject != null && mLecture != null) {
 						Bundle extrasToUp = new Bundle();
-						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE,
-								mSpace);
+						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE_ID,
+								spaceId);
 						extrasToUp.putSerializable(
 								SpaceActivity.EXTRAS_ENVIRONMENT_PATH,
 								environmentPath);
@@ -242,7 +241,7 @@ public class LectureActivity extends BaseActivity {
 			TextView tvMedia = (TextView) layoutLecture
 					.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
-			Button ibMedia = (Button) layoutLecture
+			ImageButton ibMedia = (ImageButton) layoutLecture
 					.findViewById(R.id.ibAcessarMedia);
 			ibMedia.setOnClickListener(new OnClickListener() {
 
@@ -413,6 +412,7 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 			User user = ReduApplication.getUser(mContext);
 			List<Progress> progress = redu.getProgressByLecture(Integer.toString(mLecture.id), Integer.toString(user.id));
 			return progress.get(0);
+			//TODO fix this code above
 		}
 
 		@Override

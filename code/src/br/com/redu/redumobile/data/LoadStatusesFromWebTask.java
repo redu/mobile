@@ -51,6 +51,8 @@ public class LoadStatusesFromWebTask implements Task {
 			if(status.isActivityType() || status.isHelpType()) {
 				notification.setNotificationClickIntentClass(StatusDetailActivity.class);
 				extras.putSerializable(StatusDetailActivity.EXTRAS_STATUS, status);
+				extras.putSerializable(StatusDetailActivity.EXTRAS_ENABLE_GO_TO_WALL_ACTION, false);
+				extras.putSerializable(StatusDetailActivity.EXTRAS_IS_FROM_NOTIFICATION, true);
 				notification.setNotificationClickIntentBundle(extras);
 				
 			} else if(status.isLogType()) {
@@ -66,7 +68,7 @@ public class LoadStatusesFromWebTask implements Task {
 	private List<Status> loadStatuses(Context context) {
 		boolean firstRunning = false;
 		
-		LoadingStatusesManager.notifyOnStart();
+		LoadStatusesFromWebManager.notifyOnStart();
 
 		List<Status> notifiableStatuses = new ArrayList<Status>();
 
@@ -106,12 +108,12 @@ public class LoadStatusesFromWebTask implements Task {
 					statuses.addAll(temp);
 				}
 				
-				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr);
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr);
 				if(temp != null) {
 					statuses.addAll(temp);
 				}
 				
-				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_SUBJECT, pageStr);
+				temp = redu.getStatusesTimelineLogByUser(userId, Status.LOGEABLE_TYPE_LECTURE, pageStr);
 				if(temp != null) {
 					statuses.addAll(temp);
 				}
@@ -131,20 +133,21 @@ public class LoadStatusesFromWebTask implements Task {
 						if (status.createdAtInMillis <= dbTimestamp) {
 							loadNextPage = false;
 						} else {
-							long id = dbHelper.putStatus(status, userId);
-							if(checkNotifiable(context, status) && firstRunning == false && id != -1) {
+							if(checkNotifiable(context, status) && firstRunning == false) {
 								notifiableStatuses.add(status);
 							}
 						}
 					}
+					
+					dbHelper.putAllStatuses(statuses, userId);
 				}
 			}
 
-			LoadingStatusesManager.notifyOnComplete();
+			LoadStatusesFromWebManager.notifyOnComplete();
 
 		} catch(OAuthConnectionException e) {
 			e.printStackTrace();
-			LoadingStatusesManager.notifyOnError(e);
+			LoadStatusesFromWebManager.notifyOnError(e);
 		}
 
 		return notifiableStatuses;
@@ -173,5 +176,52 @@ public class LoadStatusesFromWebTask implements Task {
 		}
 		
 		return false;
+	}
+	
+	public static void addOnLoadStatusesFromWebListener(OnLoadStatusesFromWebListener listener) {
+		LoadStatusesFromWebManager.add(listener);
+	}
+	
+	public static boolean isWorking() {
+		return LoadStatusesFromWebManager.isWorking();
+	}
+	
+	private static class LoadStatusesFromWebManager {
+
+		private static boolean mIsWorking;
+		private static final List<OnLoadStatusesFromWebListener> mListeners = new ArrayList<OnLoadStatusesFromWebListener>();
+
+		public static void add(OnLoadStatusesFromWebListener listener) {
+			mListeners.add(listener);
+		}
+		
+		public static void clear() {
+			mListeners.clear();
+		}
+
+		public static void notifyOnStart() {
+			mIsWorking = true;
+			for (OnLoadStatusesFromWebListener listener : mListeners) {
+				listener.onStart();
+			}
+		}
+
+		public static void notifyOnComplete() {
+			mIsWorking = false;
+			for (OnLoadStatusesFromWebListener listener : mListeners) {
+				listener.onComplete();
+			}
+		}
+
+		public static void notifyOnError(Exception e) {
+			mIsWorking = false;
+			for (OnLoadStatusesFromWebListener listener : mListeners) {
+				listener.onError(e);
+			}
+		}
+		
+		public static boolean isWorking() {
+			return mIsWorking;
+		}
 	}
 }

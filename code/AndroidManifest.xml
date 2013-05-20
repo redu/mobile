@@ -108,25 +108,21 @@
         <activity
             android:name=".activities.lecture.UploadFileFolderActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".activities.lecture.UploadStep1Activity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".activities.lecture.UploadStep2Activity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name=".activities.lecture.UploadStep3Activity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
@@ -138,6 +134,7 @@
             android:name=".activities.NewModuleActivity"
             android:configChanges="orientation" 
             android:screenOrientation="portrait">
+
         </activity>
 
         <!-- BuzzBox -->

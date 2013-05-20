@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -53,8 +55,6 @@ public class HomeActivity extends DbHelperHolderActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_home);
-
-		setActionBarTitle("Redu");
 
 		popupMenuButton = addActionToActionBar(R.drawable.ic_menu, new OnClickListener() {
 			@Override
@@ -130,10 +130,17 @@ public class HomeActivity extends DbHelperHolderActivity {
 					i = new Intent(getApplicationContext(), LoginWebViewActivity.class);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					PinCodeHelper.clearPinCode(getApplicationContext());
+					CookieSyncManager.createInstance(HomeActivity.this);
+//					CookieManager.getInstance().setCookie("redu.com.br", "");
+//					CookieSyncManager.getInstance().sync();
+					CookieManager.getInstance().removeAllCookie();
+					CookieSyncManager.getInstance().sync();
 					break;
 				}
-				
+
 				startActivity(i);
+
+				popupWindow.dismiss();
 			}
 		});
 

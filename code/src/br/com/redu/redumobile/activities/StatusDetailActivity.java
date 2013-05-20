@@ -27,6 +27,8 @@ import br.com.redu.redumobile.widgets.StatusComposer.OnStatusComposerListener;
 public class StatusDetailActivity extends BaseActivity {
 
 	public static final String EXTRAS_STATUS = "EXTRAS_STATUS";
+	public static final String EXTRAS_ENABLE_GO_TO_WALL_ACTION = "EXTRAS_ENABLE_GO_TO_WALL_ACTION";
+	public static final String EXTRAS_IS_FROM_NOTIFICATION = "EXTRAS_IS_FROM_NOTIFICATION";
 
 	private LayoutInflater mInflater;
 
@@ -40,42 +42,36 @@ public class StatusDetailActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_status_detail);
-
+	
 		Bundle extras = getIntent().getExtras();
 		mStatus = (Status) extras.get(EXTRAS_STATUS);
+		boolean showGoToWallAction = extras.getBoolean(EXTRAS_ENABLE_GO_TO_WALL_ACTION, false);
+		boolean isFromNotification = extras.getBoolean(EXTRAS_IS_FROM_NOTIFICATION, false);
 
 		setActionBarTitle(mStatus.getLastBreadcrumb());
 
-		if (!mStatus.isPostedOnUserWall()) {
+		if (showGoToWallAction && !mStatus.isPostedOnUserWall()) {
 			addActionToActionBar(R.drawable.bt_go_to_wall,
 					new OnClickListener() {
 						@Override
 						public void onClick(View v) {
 							Intent i = null;
 							if (mStatus.isPostedOnLectureWall()) {
-								i = new Intent(StatusDetailActivity.this,
-										LectureActivity.class);
-								i.putExtra(LectureActivity.EXTRAS_SUBJECT_ID,
-										mStatus.getSubjectId());
-								i.putExtra(LectureActivity.EXTRAS_LECTURE_ID,
-										mStatus.getLectureId());
+								i = new Intent(StatusDetailActivity.this, LectureActivity.class);
+								i.putExtra(LectureActivity.EXTRAS_ENVIRONMENT_PATH, mStatus.getEnvironmentPath());
+								i.putExtra(LectureActivity.EXTRAS_SPACE_ID, mStatus.getSpaceId());
+								i.putExtra(LectureActivity.EXTRAS_SUBJECT_ID, mStatus.getSubjectId());
+								i.putExtra(LectureActivity.EXTRAS_LECTURE_ID, mStatus.getLectureId());
 
 							} else if (mStatus.isPostedOnSpaceWall()) {
-								i = new Intent(StatusDetailActivity.this,
-										SpaceActivity.class);
-								i.putExtra(SpaceActivity.EXTRAS_SPACE_ID,
-										mStatus.getSpaceId());
+								i = new Intent(StatusDetailActivity.this, SpaceActivity.class);
+								i.putExtra(SpaceActivity.EXTRAS_SPACE_ID, mStatus.getSpaceId());
 
 								Bundle extras = new Bundle();
-								extras.putString(
-										SpaceActivity.EXTRAS_ENVIRONMENT_PATH,
-										mStatus.getEnvironmentPath());
-								extras.putString(SpaceActivity.EXTRAS_SPACE_ID,
-										mStatus.getSpaceId());
+								extras.putString(SpaceActivity.EXTRAS_ENVIRONMENT_PATH, mStatus.getEnvironmentPath());
+								extras.putString(SpaceActivity.EXTRAS_SPACE_ID, mStatus.getSpaceId());
 								setUpClass(SpaceActivity.class, extras);
 
-							} else if (mStatus.isPostedOnUserWall()) {
-								setUpClass(HomeActivity.class);
 							}
 
 							startActivity(i);
@@ -83,6 +79,10 @@ public class StatusDetailActivity extends BaseActivity {
 					});
 		}
 
+		if(isFromNotification) {
+			setUpClasses();
+		}
+		
 		mInflater = LayoutInflater.from(this);
 
 		mFooterLoadingAnswers = mInflater.inflate(
@@ -101,8 +101,30 @@ public class StatusDetailActivity extends BaseActivity {
 
 		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
 		mListView.setAdapter(mAdapter);
-
+	}
+	
+	protected void onStart() {
+		super.onStart();
+		
 		new LoadAnswersStatus(mStatus.id).execute();
+	};
+	
+	private void setUpClasses() {
+		if (mStatus.isPostedOnLectureWall()) {
+			Bundle extrasToUp = new Bundle();
+			extrasToUp.putString(LectureWallActivity.EXTRAS_SUBJECT_ID, mStatus.getSubjectId());
+			extrasToUp.putString(LectureWallActivity.EXTRAS_LECTURE_ID, mStatus.getLectureId());
+			setUpClass(LectureWallActivity.class, extrasToUp);
+
+		} else if (mStatus.isPostedOnSpaceWall()) {
+			Bundle extrasToUp = new Bundle();
+			extrasToUp.putString(SpaceActivity.EXTRAS_ENVIRONMENT_PATH, mStatus.getEnvironmentPath());
+			extrasToUp.putString(SpaceActivity.EXTRAS_SPACE_ID, mStatus.getSpaceId());
+			setUpClass(SpaceActivity.class, extrasToUp);
+
+		} else if (mStatus.isPostedOnUserWall()) {
+			setUpClass(HomeActivity.class);
+		}
 	}
 
 	private View createStatusHeaderView(Status status) {
@@ -211,10 +233,12 @@ public class StatusDetailActivity extends BaseActivity {
 
 					mListView.removeFooterView(mFooterLoadingAnswers);
 				} else {
-					mFooterLoadingAnswers.findViewById(R.id.pb).setVisibility(View.GONE);
-					((TextView) mFooterLoadingAnswers
-							.findViewById(R.id.tv_text))
-							.setText("Não há respostas, seja o primeiro a responder");
+					mFooterLoadingAnswers.findViewById(R.id.pb).setVisibility(
+							View.GONE);
+					mFooterLoadingAnswers.findViewById(R.id.tv_loading)
+							.setVisibility(View.GONE);
+					mFooterLoadingAnswers.findViewById(R.id.tv_empty_list)
+							.setVisibility(View.VISIBLE);
 				}
 			} else {
 				// TODO handler no internet problem connection
