@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
 import android.app.AlertDialog;
@@ -64,6 +65,8 @@ public class LectureActivity extends BaseActivity {
 	private AlertDialog alertDialog;
 
 	DownloadFile df;
+	
+	private Progress mProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +283,7 @@ public class LectureActivity extends BaseActivity {
 		mBtIsDone.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				new PutProgress().execute();
 			}
 		});
 
@@ -293,6 +296,8 @@ public class LectureActivity extends BaseActivity {
 				startActivity(i);
 			}
 		});
+		
+		new LoadProgress().execute();
 
 	}
 
@@ -406,20 +411,39 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 		protected Progress doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
 			User user = ReduApplication.getUser(mContext);
-			Progress progress = redu.getProgress(Integer.toString(mLecture.id), Integer.toString(user.id));
-			return progress;
+			List<Progress> progress = redu.getProgressByLecture(Integer.toString(mLecture.id), Integer.toString(user.id));
+			return progress.get(0);
 		}
 
 		@Override
 		protected void onPostExecute(Progress progress) {
 			super.onPostExecute(progress);
-			if (progress.finalized.equals("true"))
-				mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_blue);
+			mProgress = progress;
+			if (progress.finalized == null)
+				mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_green);
 			else{
-				
+				mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_gray);
 			}
-				
 		};
 	}
+
+class PutProgress extends AsyncTask<String, Void, Void> {
+	
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+	}
+	
+	protected Void doInBackground(String... text) {
+		DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+		redu.putProgress(mProgress);
+		return null;
+	}
+
+	@Override
+	protected void onPostExecute(Void result) {
+		super.onPostExecute(result);
+	};
+}
 
 }

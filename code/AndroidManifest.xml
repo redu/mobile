@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -26,7 +27,7 @@
         <activity
             android:name=".activities.LoginWebViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,76 +36,73 @@
         </activity>
         <activity
             android:name=".activities.HomeActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-            
+            android:screenOrientation="portrait"
+             >
         </activity>
-        
-        <activity android:name=".activities.HomeSpaceActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
+        <activity
+            android:name=".activities.HomeSpaceActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.MainActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.EnvironmentActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.CoursesActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" 
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".activities.SpaceActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.SubjectActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.StatusDetailActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".activities.RespondStatusActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.LectureWallActivity" 
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".activities.PostStatusOnSpaceWallActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activities.PostStatusOnLectureWallActivity"
-            android:configChanges="orientation"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.LectureActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" 
+        <activity
+            android:name=".activities.EnvironmentActivity"
             android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.CoursesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.SpaceActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.SubjectActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.StatusDetailActivity"
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.RespondStatusActivity"
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.LectureWallActivity"
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.PostStatusOnSpaceWallActivity"
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.PostStatusOnLectureWallActivity"
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activities.LectureActivity"
+            android:configChanges="orientation" 
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -134,14 +132,12 @@
         <activity
             android:name=".activities.lecture.NewFolderActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.NewModuleActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            android:configChanges="orientation" 
+            android:screenOrientation="portrait">
         </activity>
 
         <!-- BuzzBox -->
