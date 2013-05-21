@@ -26,7 +26,9 @@ import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.NewModuleActivity;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
+import br.com.redu.redumobile.util.UserHelper;
 
 public class MorphologyFragment extends Fragment {
 
@@ -53,19 +55,23 @@ public class MorphologyFragment extends Fragment {
 
 		final View v = inflater.inflate(R.layout.fragment_mophology, container,
 				false);
-		Button ibModulo = (Button) v.findViewById(R.id.btNovoModulo);
+		String role = UserHelper.getUserRoleInCourse(getActivity());
+		if (role.equals("teacher") || role.equals("environment_admin")) {
+			Button ibModulo = (Button) v.findViewById(R.id.btNovoModulo);
+			ibModulo.setVisibility(View.VISIBLE);
+			ibModulo.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(getActivity(), NewModuleActivity.class);
+					it.putExtra(Space.class.getName(), mSpace);
+					startActivity(it);
+				}
+			});
+		} 
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		mTvEmpytMsg = (TextView)v.findViewById(R.id.elv_subject_empyt);
-		ibModulo.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent it = new Intent(getActivity(), NewModuleActivity.class);
-				it.putExtra(Space.class.getName(), mSpace);
-				startActivity(it);
-			}
-		});
-
+		
 		mSpace = (Space) getArguments().get(EXTRAS_SPACE);
 
 		mExpListView = (ExpandableListView) v.findViewById(R.id.elvSubject);

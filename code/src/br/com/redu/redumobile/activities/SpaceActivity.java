@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +12,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Course;
+import br.com.developer.redu.models.Enrollment;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
@@ -52,6 +56,10 @@ public class SpaceActivity extends DbHelperHolderActivity {
     
     private Environment mEnvironment;
     private Space mSpace;
+    private Enrollment mEnrollment;
+
+	private Course mCourse;
+	private Context mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,12 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		
 		final Bundle extras = getIntent().getExtras();
 		mSpace = (Space) extras.get(EXTRAS_SPACE);
+		mCourse = (Course) extras.get(Course.class.getName());
+		mEnrollment = (Enrollment) extras.get(Enrollment.class.getName());
+		Log.i("SPACE", mSpace.name);
+		Log.i("COURSE", mCourse.name);
+		Log.i("ENROLLMENT", mEnrollment.role);
+		
 		
 		// Se foi passado um objeto, é pq está na navegação normal, caso contrário, está no up
 		if (mSpace != null) {

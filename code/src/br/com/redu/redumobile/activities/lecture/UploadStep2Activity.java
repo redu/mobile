@@ -1,39 +1,27 @@
 package br.com.redu.redumobile.activities.lecture;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-
-import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.Subject;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.adapters.PopupAdapter;
-import br.com.redu.redumobile.util.DownloadHelper;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.Subject;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.adapters.PopupAdapter;
 
 public class UploadStep2Activity extends Activity {
 
 	String superId;
 	Space space;
 	String type;
-	private Bitmap bitmap;
 	private String filemanagerstring;
 	private String selectedImagePath;
 	private Subject mSubject;
@@ -42,12 +30,14 @@ public class UploadStep2Activity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insert_file_or_lecture);
+		TextView tvTitle = (TextView)findViewById(R.id.tvTitleUpload2);
+		tvTitle.setText("Escolha a forma de adição?");
 		superId = getIntent().getExtras().getString("id");
 		type = getIntent().getExtras().getString("type");
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
-		String[] str = {"Gravar","Escolher da Galeria"};
+		String[] str = {"Camera","Escolher da Galeria"};
 		lv.setAdapter(new PopupAdapter(this, str,superId, space));
 		lv.setOnItemClickListener(new OnItemClickListener() {
 

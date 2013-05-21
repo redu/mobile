@@ -143,7 +143,7 @@ public class PopupAdapter extends BaseAdapter {
 				}
 			}); 
 		}
-		if (values[position].equals("Gravar")){
+		if (values[position].equals("Camera")){
 			iv.setImageResource(R.drawable.ic_midia);
 		}
 		if (values[position].equals("Escolher da Galeria")){
