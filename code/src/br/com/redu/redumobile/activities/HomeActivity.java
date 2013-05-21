@@ -40,7 +40,7 @@ public class HomeActivity extends DbHelperHolderActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
-	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 30;
+	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 2;
 	
 	static final int NUM_ITEMS = 4;
 	
@@ -64,14 +64,16 @@ public class HomeActivity extends DbHelperHolderActivity {
 		});
 		
 		// START BuzzNotify
-		int openAppStatus = AnalyticsManager.onOpenApp(this);
-		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
-			SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
-			SchedulerManager.getInstance().restart(this, LoadStatusesFromWebTask.class);
-		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
-			SchedulerManager.getInstance().restartAll(getApplicationContext());
-		}
+//		int openAppStatus = AnalyticsManager.onOpenApp(this);
+//		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
+//			SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
+//			SchedulerManager.getInstance().restart(this, LoadStatusesFromWebTask.class);
+//		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
+//			SchedulerManager.getInstance().restartAll(getApplicationContext());
+//		}
 		SchedulerManager.getInstance().runNow(this, LoadStatusesFromWebTask.class, 0);
+		SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
+		SchedulerManager.getInstance().restart(this, LoadStatusesFromWebTask.class);
 		// END BuzzNotify
 
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);

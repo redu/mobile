@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -54,7 +55,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.activity_home_space);
+		super.onCreate(savedInstanceState, R.layout.activity_space);
 		
 		final Bundle extras = getIntent().getExtras();
 		mSpace = (Space) extras.get(EXTRAS_SPACE);
@@ -63,9 +64,13 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		if (mSpace != null) {
 			init();
 		} else {
-			new AsyncTask<Void, Void, Void>() {
+			new AsyncTask<Void, Void, Boolean>() {
+				protected void onPreExecute() {
+					showProgressDialog("Carregando Disciplina…");
+				};
+				
 				@Override
-				protected Void doInBackground(Void... params) {
+				protected Boolean doInBackground(Void... params) {
 					try {
 						DefaultReduClient redu = ReduApplication.getReduClient(SpaceActivity.this);
 						
@@ -76,18 +81,26 @@ public class SpaceActivity extends DbHelperHolderActivity {
 						mEnvironment = redu.getEnvironment(environmentId);
 					} catch (OAuthConnectionException e) {
 						e.printStackTrace();
+						return true;
 					}
-					return null;
+					return false;
 				}
 	
-				protected void onPostExecute(Void param) {
-					if(mSpace != null && mEnvironment != null) {
+				protected void onPostExecute(Boolean hasError) {
+					dismissProgressDialog();
+					if(hasError || mSpace == null || mEnvironment == null) {
+						showAlertDialog(SpaceActivity.this, "Não foi possível carregar essa Disciplina.", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+					} else {
 						Bundle extras = new Bundle();
 						extras.putSerializable(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironment);
 						setUpClass(EnvironmentActivity.class, extras);
 						init();
 					}
-
 				};
 			}.execute();
 		}

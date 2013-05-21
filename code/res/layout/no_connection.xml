@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="7dip"
-        android:text="Problemas na conexão"
+        android:padding="10dip"
+        android:text="Problemas na conexão!"
         android:textColor="#F00" />
 
     <View

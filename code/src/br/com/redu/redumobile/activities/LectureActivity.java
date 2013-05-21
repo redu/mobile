@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.scribe.exceptions.OAuthConnectionException;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -29,9 +30,7 @@ import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Progress;
-import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
-import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.util.DownloadHelper;
@@ -92,23 +91,35 @@ public class LectureActivity extends BaseActivity {
 		if (mLecture != null && mSubject != null) {
 			init();
 		} else {
-			new AsyncTask<Void, Void, Void>() {
+			new AsyncTask<Void, Void, Boolean>() {
+				protected void onPreExecute() {
+					showProgressDialog("Carregando Aula…");
+				};
+				
 				@Override
-				protected Void doInBackground(Void... params) {
+				protected Boolean doInBackground(Void... params) {
 					try {
 						DefaultReduClient redu = ReduApplication
 								.getReduClient(LectureActivity.this);
 						mSubject = redu.getSubject(subjectId);
 						mLecture = redu.getLecture(lectureId);
-						return null;
 					} catch (OAuthConnectionException e) {
 						e.printStackTrace();
-						return null;
+						return true;
 					}
+					return false;
 				}
 
-				protected void onPostExecute(Void param) {
-					if (mSubject != null && mLecture != null) {
+				protected void onPostExecute(Boolean hasError) {
+					dismissProgressDialog();
+					if(hasError || mSubject == null || mLecture == null) {
+						showAlertDialog(LectureActivity.this, "Não foi possível carregar essa Aula.", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+					} else {
 						Bundle extrasToUp = new Bundle();
 						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE_ID,
 								spaceId);
@@ -238,7 +249,7 @@ public class LectureActivity extends BaseActivity {
 			TextView tvMedia = (TextView) layoutLecture
 					.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
-			ImageButton ibMedia = (ImageButton) layoutLecture
+			Button ibMedia = (Button) layoutLecture
 					.findViewById(R.id.ibAcessarMedia);
 			ibMedia.setOnClickListener(new OnClickListener() {
 
@@ -404,7 +415,7 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 		
 		protected Progress doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			User user = ReduApplication.getUser(mContext);
+//			User user = ReduApplication.getUser(mContext);
 			//TODO fix this code above
 			Progress progress = redu.getProgress(Integer.toString(mLecture.id)/*, Integer.toString(user.id)*/);
 			return progress;
