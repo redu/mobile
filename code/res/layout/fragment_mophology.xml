@@ -13,7 +13,8 @@
         android:text="Novo Módulo"
         android:textColor="@color/blue"
         android:background="@drawable/bg_gray"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:visibility="gone" />
 	<View
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"

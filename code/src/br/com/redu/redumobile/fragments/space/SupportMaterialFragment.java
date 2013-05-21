@@ -36,6 +36,7 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.File;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.SpaceActivity;
@@ -44,6 +45,7 @@ import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadFileFolderActivity;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
 import br.com.redu.redumobile.util.DownloadHelper;
+import br.com.redu.redumobile.util.UserHelper;
 
 @SuppressLint("ValidFragment")
 public class SupportMaterialFragment extends Fragment {
@@ -123,23 +125,27 @@ public class SupportMaterialFragment extends Fragment {
 			ibBack = (ImageButton) v.findViewById(R.id.ibBack);
 			ibBack.setVisibility(View.GONE);
 		}
+		
+		String role = UserHelper.getUserRoleInCourse(getActivity());
+		if (role.equals("teacher") || role.equals("environment_admin") || role.equals("tutor")) {
+			ImageButton ibMore = (ImageButton) v.findViewById(R.id.ibMore);
+			ibMore.setVisibility(View.VISIBLE);
+			ibMore.setOnClickListener(new OnClickListener() {
 
-		ImageButton ibMore = (ImageButton) v.findViewById(R.id.ibMore);
-		ibMore.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent it = new Intent(getActivity(),
-						UploadFileFolderActivity.class);
-				it.putExtra(Space.class.getName(), mSpace);
-				if (mFolder != null)
-					it.putExtra("id", mFolder.id);
-				else
-					it.putExtra("id", folderRaizID);
-				startActivity(it);
-			}
-		});
-
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(getActivity(),
+							UploadFileFolderActivity.class);
+					it.putExtra(Space.class.getName(), mSpace);
+					if (mFolder != null)
+						it.putExtra("id", mFolder.id);
+					else
+						it.putExtra("id", folderRaizID);
+					startActivity(it);
+				}
+			});
+		} 
+		
 		lvFiles = (ListView) v.findViewById(R.id.lvFiles);
 		registerForContextMenu(lvFiles);
 

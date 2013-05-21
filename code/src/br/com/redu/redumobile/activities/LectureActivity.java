@@ -36,6 +36,7 @@ import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.util.DownloadHelper;
+import br.com.redu.redumobile.util.UserHelper;
 
 public class LectureActivity extends BaseActivity {
 
@@ -74,8 +75,27 @@ public class LectureActivity extends BaseActivity {
 
 		mTvSubject = (TextView) findViewById(R.id.tv_title_action_bar);
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
-		mBtEdit = (Button) findViewById(R.id.btEdit);
-		mBtRemove = (Button) findViewById(R.id.btRemove);
+		String role = UserHelper.getUserRoleInCourse(this);
+		if (role.equals("teacher") || role.equals("environment_admin")) {
+			mBtEdit = (Button) findViewById(R.id.btEdit);
+			mBtRemove = (Button) findViewById(R.id.btRemove);
+			mBtEdit.setVisibility(View.VISIBLE);
+			mBtRemove.setVisibility(View.VISIBLE);
+			mBtEdit.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+				}
+			});
+
+			mBtRemove.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+				}
+			});
+		}
+		
 		// mIvImage = (ImageView) findViewById(R.id.ivImage);
 		// mTvFileName = (TextView) findViewById(R.id.tvFileName);
 
@@ -172,6 +192,9 @@ public class LectureActivity extends BaseActivity {
 
 	private void init() {
 		initDialogs();
+		
+		//findViewById(R.id.llLecture).setVisibility(View.VISIBLE);
+		//findViewById(R.id.pbLecture).setVisibility(View.GONE);
 
 		LinearLayout layoutLecture;
 		if (mLecture.type.equals(Lecture.TYPE_CANVAS)) {
@@ -241,7 +264,7 @@ public class LectureActivity extends BaseActivity {
 			TextView tvMedia = (TextView) layoutLecture
 					.findViewById(R.id.tvMedia);
 			tvMedia.setText(mLecture.name);
-			ImageButton ibMedia = (ImageButton) layoutLecture
+			Button ibMedia = (Button) layoutLecture
 					.findViewById(R.id.ibAcessarMedia);
 			ibMedia.setOnClickListener(new OnClickListener() {
 
@@ -264,20 +287,6 @@ public class LectureActivity extends BaseActivity {
 		mTvSubject.setText(mSubject.name);
 
 		Log.i("Aula", Integer.toString(mLecture.id));
-
-		mBtEdit.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			}
-		});
-
-		mBtRemove.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			}
-		});
 
 		mBtIsDone.setOnClickListener(new OnClickListener() {
 			@Override
@@ -411,18 +420,20 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
 			User user = ReduApplication.getUser(mContext);
 			List<Progress> progress = redu.getProgressByLecture(Integer.toString(mLecture.id), Integer.toString(user.id));
-			return progress.get(0);
-			//TODO fix this code above
+			if (progress.size() > 0)
+				mProgress = progress.get(0);
+			return mProgress;
 		}
 
 		@Override
 		protected void onPostExecute(Progress progress) {
 			super.onPostExecute(progress);
-			mProgress = progress;
-			if (progress.finalized == null)
-				mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_green);
-			else{
-				mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_gray);
+			if (mProgress != null){
+				if (mProgress.finalized == null)
+					mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_green);
+				else{
+					mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_gray);
+				}
 			}
 		};
 	}

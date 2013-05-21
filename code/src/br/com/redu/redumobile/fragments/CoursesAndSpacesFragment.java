@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,10 @@ public class CoursesAndSpacesFragment extends Fragment {
 	
 	private OnSpaceSelectedListener mListener;
 
+	private Course mCourse;
+
 	public interface OnSpaceSelectedListener {
-        public void onSpaceSelected(Space space);
+        public void onSpaceSelected(Space space, Course course);
     }
 	
 	public CoursesAndSpacesFragment() {
@@ -81,7 +84,10 @@ public class CoursesAndSpacesFragment extends Fragment {
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 					mSpace = (Space) mAdapter.getChild(groupPosition, childPosition);
-					mListener.onSpaceSelected(mSpace);
+					mCourse = (Course) mAdapter.getGroup(groupPosition);
+					Log.i("SPACE2", mSpace.name);
+					Log.i("COURSE2", mCourse.name);
+					mListener.onSpaceSelected(mSpace, mCourse);
 				return false;
 			}
 		});		

@@ -49,14 +49,14 @@ public class CoursesExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView tv = (TextView) convertView.findViewById(R.id.tvSpaceName);
 		tv.setText(space.name);
 		
-		convertView.setOnClickListener(new OnClickListener() {
+		/*convertView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(mContext, SpaceActivity.class);
 				i.putExtra(SpaceActivity.EXTRAS_SPACE, space);
 				mContext.startActivity(i);	
 			}
-		});
+		});*/
 		
 		return convertView;
 	}

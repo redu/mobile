@@ -4,21 +4,27 @@ import java.util.ArrayList;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Course;
+import br.com.developer.redu.models.Enrollment;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.fragments.space.MorphologyFragment;
 import br.com.redu.redumobile.fragments.space.SpaceWallFragment;
 import br.com.redu.redumobile.fragments.space.SupportMaterialFragment;
+import br.com.redu.redumobile.util.UserHelper;
 
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -51,6 +57,10 @@ public class SpaceActivity extends DbHelperHolderActivity {
     
     private Environment mEnvironment;
     private Space mSpace;
+    private Enrollment mEnrollment;
+
+	private Course mCourse;
+	private Context mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +68,12 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		
 		final Bundle extras = getIntent().getExtras();
 		mSpace = (Space) extras.get(EXTRAS_SPACE);
+		mCourse = (Course) extras.get(Course.class.getName());
+		mEnrollment = (Enrollment) extras.get(Enrollment.class.getName());
+		Log.i("SPACE", mSpace.name);
+		Log.i("COURSE", mCourse.name);
+		Log.i("ENROLLMENT", mEnrollment.role);
+		
 		
 		// Se foi passado um objeto, é pq está na navegação normal, caso contrário, está no up
 		if (mSpace != null) {
@@ -81,13 +97,31 @@ public class SpaceActivity extends DbHelperHolderActivity {
 				}
 	
 				protected void onPostExecute(Void param) {
-					if(mSpace != null && mEnvironment != null) {
-						Bundle extras = new Bundle();
-						extras.putSerializable(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironment);
-						setUpClass(EnvironmentActivity.class, extras);
-						init();
-					}
+						new AsyncTask<Void, Void, Void>() {
 
+							@Override
+							protected Void doInBackground(Void... params) {
+								try {
+									DefaultReduClient redu = ReduApplication.getReduClient(SpaceActivity.this);
+									User u = ReduApplication.getUser(mContext);
+									mEnrollment = redu.getEnrollmentUserAtCourse(Integer.toString(u.id), mCourse.id);
+									UserHelper.setUserRoleInCourse(mContext, mEnrollment.role);
+								} catch (OAuthConnectionException e) {
+									e.printStackTrace();
+								}
+								return null;
+							}
+				
+							protected void onPostExecute(Void param) {
+								if(mSpace != null && mEnvironment != null) {
+									Bundle extras = new Bundle();
+									extras.putSerializable(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironment);
+									setUpClass(EnvironmentActivity.class, extras);
+									init();
+								}
+
+							};
+						}.execute();
 				};
 			}.execute();
 		}
