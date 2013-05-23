@@ -32,6 +32,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.File;
 import br.com.developer.redu.models.Folder;
@@ -170,6 +171,9 @@ public class SupportMaterialFragment extends Fragment {
 							it = DownloadHelper.loadDocInReader(f);
 							startActivity(it);
 						} catch (ActivityNotFoundException e) {
+	  		                Toast.makeText(getActivity(), 
+			                "Arquivo não suportado. Instale um aplicativo capaz de abrir o Arquivo: "+file.mimetype , 
+			                Toast.LENGTH_LONG).show();
 							e.printStackTrace();
 						} catch (Exception e) {
 							e.printStackTrace();

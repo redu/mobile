@@ -232,7 +232,11 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	@Override
 	public void onBackPressed() {
 		if (mVp.getCurrentItem() == ITEM_SUPPORT_MATERIAL){
-			//TODO Fazer back.
+			if (mAdapter.materialFragments.size() > 1 ) {
+				//NOTHING
+			}else{
+				super.onBackPressed();
+			}
 		} else {
 			super.onBackPressed();
 		}
