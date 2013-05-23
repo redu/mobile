@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -29,6 +30,13 @@ public class StatusDetailAdapter extends BaseAdapter {
 		} else {
 			mAnswers.addAll(answers);
 		}
+	}
+	
+	public void add(Status answer) {
+		if(mAnswers == null) {
+			mAnswers = new ArrayList<Status>();
+		} 
+		mAnswers.add(answer);
 	}
 	
 	@Override

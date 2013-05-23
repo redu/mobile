@@ -64,6 +64,7 @@ public class PostStatusOnSpaceWallActivity extends BaseActivity {
 				DefaultReduClient redu = ReduApplication.getReduClient(PostStatusOnSpaceWallActivity.this);
 				status = redu.postStatusSpace(spaceId, text);
 			} catch(Exception e) {
+				e.printStackTrace();
 				status = null;
 			}
 			

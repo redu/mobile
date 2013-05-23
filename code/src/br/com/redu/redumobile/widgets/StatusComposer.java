@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class StatusComposer extends FrameLayout {
 
 	public static final int NUM_MAX_CHARACTERS = 800;
 
+	private Context mContext;
 	private EditText mEditText;
 	private OnStatusComposerListener mListener;
 	
@@ -33,6 +35,8 @@ public class StatusComposer extends FrameLayout {
 	}
 	
 	private void init(Context context) {
+		mContext = context;
+		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View content = inflater.inflate(R.layout.status_compose, null);
 		
@@ -59,6 +63,7 @@ public class StatusComposer extends FrameLayout {
 					String text = mEditText.getText().toString().trim();
 					if(text.length() <= StatusComposer.NUM_MAX_CHARACTERS) {
 						mListener.onSendClicked(text);
+						hideSoftKeyboard();
 					}
 				}
 			}
@@ -71,4 +76,8 @@ public class StatusComposer extends FrameLayout {
 		mListener = listener;
 	}
 
+	private void hideSoftKeyboard() {
+		((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE))  
+        .hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+	}
 }

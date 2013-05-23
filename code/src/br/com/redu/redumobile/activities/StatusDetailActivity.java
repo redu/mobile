@@ -101,13 +101,9 @@ public class StatusDetailActivity extends BaseActivity {
 
 		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
 		mListView.setAdapter(mAdapter);
-	}
-	
-	protected void onStart() {
-		super.onStart();
 		
 		new LoadAnswersStatus(mStatus.id).execute();
-	};
+	}
 	
 	private void setUpClasses() {
 		if (mStatus.isPostedOnLectureWall()) {
@@ -285,7 +281,9 @@ public class StatusDetailActivity extends BaseActivity {
 				Toast.makeText(StatusDetailActivity.this,
 						"Resposta enviada com sucesso.", Toast.LENGTH_SHORT)
 						.show();
-				finish();
+				
+				mAdapter.add(result);
+				mAdapter.notifyDataSetChanged();
 			}
 		}
 	}

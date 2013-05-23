@@ -33,7 +33,7 @@ public class BaseFragment extends Fragment {
 	}
 	
 	private void animateNoConnectionAlert(boolean isToShow) {
-		if(getActivity() != null) {
+		if(getActivity() != null && mNoConnectionView != null) {
 			
 			int expandedHeightDip = 50;
 			int collapsedHeightDip = 0;
