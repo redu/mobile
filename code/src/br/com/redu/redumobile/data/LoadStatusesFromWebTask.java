@@ -8,6 +8,7 @@ import org.scribe.exceptions.OAuthConnectionException;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Bundle;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Status;
@@ -54,6 +55,7 @@ public class LoadStatusesFromWebTask implements Task {
 				extras.putSerializable(StatusDetailActivity.EXTRAS_ENABLE_GO_TO_WALL_ACTION, false);
 				extras.putSerializable(StatusDetailActivity.EXTRAS_IS_FROM_NOTIFICATION, true);
 				notification.setNotificationClickIntentBundle(extras);
+				notification.setFlagResource(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				
 			} else if(status.isLogType()) {
 				// TODO abrir notificacao de novas aulas 

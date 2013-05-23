@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -57,6 +58,16 @@ public abstract class BaseActivity extends FragmentActivity {
 	<T>T getViewById(int resId) {  
 		return (T) findViewById(resId);
 	} 
+	
+	public void showAlertDialog(final Activity source, String text,
+			DialogInterface.OnClickListener listener) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(source);
+		builder.setMessage(text)
+				.setCancelable(false)
+				.setNeutralButton("Ok", listener)
+				.create().show();
+	}
 	
 	public ReduProgressDialog showProgressDialog(String text) {
 		return showProgressDialog(text, true);

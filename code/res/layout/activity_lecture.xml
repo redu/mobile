@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/br.com.redu.redumobile"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
+    <br.com.redu.redumobile.widgets.ActionBar
         android:id="@+id/llLecture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="visible" >
+        android:layout_height="wrap_content"
+        layout="@layout/action_bar"
+        app:title="Redu" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
         <br.com.redu.redumobile.widgets.ActionBar
             android:id="@+id/actionBar"
@@ -285,13 +289,16 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/pbLecture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+        <LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLecture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </ScrollView>
 
 </FrameLayout>

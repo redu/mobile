@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.util.ImageUtils;
 import br.com.redu.redumobile.widgets.VerticalAnimation;
@@ -18,12 +19,17 @@ public class BaseFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mNoConnectionView = LayoutInflater.from(getActivity()).inflate(R.layout.no_connection, null);
-		mNoConnectionView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			}
-		});
+		ViewGroup vg = (ViewGroup) getActivity().findViewById(R.id.no_connection_container);
+		if(vg != null) {
+			mNoConnectionView = LayoutInflater.from(getActivity()).inflate(R.layout.no_connection, null);
+			mNoConnectionView.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					hideNoConnectionAlert();
+				}
+			});
+
+			//vg.addView(mNoConnectionView);
+		}
 	}
 	
 	private void animateNoConnectionAlert(boolean isToShow) {
@@ -49,9 +55,9 @@ public class BaseFragment extends Fragment {
 			int finishHeight;
 			
 			if (isToShow) {
-				finishHeight = collapsedHeight;
-			} else {
 				finishHeight = expandedHeight;
+			} else {
+				finishHeight = collapsedHeight;
 			}
 	
 			mNoConnectionView.startAnimation(new VerticalAnimation(mNoConnectionView, startHeight, finishHeight, duration));
@@ -60,5 +66,9 @@ public class BaseFragment extends Fragment {
 	
 	public void showNoConnectionAlert() {
 		animateNoConnectionAlert(true);
+	}
+	
+	public void hideNoConnectionAlert() {
+		animateNoConnectionAlert(false);
 	}
 }

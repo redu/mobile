@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -23,14 +24,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Progress;
-import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
@@ -115,23 +114,35 @@ public class LectureActivity extends BaseActivity {
 		if (mLecture != null && mSubject != null) {
 			init();
 		} else {
-			new AsyncTask<Void, Void, Void>() {
+			new AsyncTask<Void, Void, Boolean>() {
+				protected void onPreExecute() {
+					showProgressDialog("Carregando Aula…");
+				};
+				
 				@Override
-				protected Void doInBackground(Void... params) {
+				protected Boolean doInBackground(Void... params) {
 					try {
 						DefaultReduClient redu = ReduApplication
 								.getReduClient(LectureActivity.this);
 						mSubject = redu.getSubject(subjectId);
 						mLecture = redu.getLecture(lectureId);
-						return null;
 					} catch (OAuthConnectionException e) {
 						e.printStackTrace();
-						return null;
+						return true;
 					}
+					return false;
 				}
 
-				protected void onPostExecute(Void param) {
-					if (mSubject != null && mLecture != null) {
+				protected void onPostExecute(Boolean hasError) {
+					dismissProgressDialog();
+					if(hasError || mSubject == null || mLecture == null) {
+						showAlertDialog(LectureActivity.this, "Não foi possível carregar essa Aula.", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+					} else {
 						Bundle extrasToUp = new Bundle();
 						extrasToUp.putSerializable(SpaceActivity.EXTRAS_SPACE_ID,
 								spaceId);

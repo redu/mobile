@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.scribe.exceptions.OAuthConnectionException;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,13 +19,11 @@ import br.com.developer.redu.models.Enrollment;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.fragments.space.MorphologyFragment;
 import br.com.redu.redumobile.fragments.space.SpaceWallFragment;
 import br.com.redu.redumobile.fragments.space.SupportMaterialFragment;
-import br.com.redu.redumobile.util.UserHelper;
 
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -64,7 +63,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.activity_home_space);
+		super.onCreate(savedInstanceState, R.layout.activity_space);
 		
 		final Bundle extras = getIntent().getExtras();
 		mSpace = (Space) extras.get(EXTRAS_SPACE);
@@ -79,9 +78,13 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		if (mSpace != null) {
 			init();
 		} else {
-			new AsyncTask<Void, Void, Void>() {
+			new AsyncTask<Void, Void, Boolean>() {
+				protected void onPreExecute() {
+					showProgressDialog("Carregando Disciplina…");
+				};
+				
 				@Override
-				protected Void doInBackground(Void... params) {
+				protected Boolean doInBackground(Void... params) {
 					try {
 						DefaultReduClient redu = ReduApplication.getReduClient(SpaceActivity.this);
 						
@@ -92,36 +95,26 @@ public class SpaceActivity extends DbHelperHolderActivity {
 						mEnvironment = redu.getEnvironment(environmentId);
 					} catch (OAuthConnectionException e) {
 						e.printStackTrace();
+						return true;
 					}
-					return null;
+					return false;
 				}
 	
-				protected void onPostExecute(Void param) {
-						new AsyncTask<Void, Void, Void>() {
-
+				protected void onPostExecute(Boolean hasError) {
+					dismissProgressDialog();
+					if(hasError || mSpace == null || mEnvironment == null) {
+						showAlertDialog(SpaceActivity.this, "Não foi possível carregar essa Disciplina.", new DialogInterface.OnClickListener() {
 							@Override
-							protected Void doInBackground(Void... params) {
-								try {
-									DefaultReduClient redu = ReduApplication.getReduClient(SpaceActivity.this);
-									User u = ReduApplication.getUser(mContext);
-									mEnrollment = redu.getEnrollmentUserAtCourse(Integer.toString(u.id), mCourse.id);
-									UserHelper.setUserRoleInCourse(mContext, mEnrollment.role);
-								} catch (OAuthConnectionException e) {
-									e.printStackTrace();
-								}
-								return null;
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
 							}
-				
-							protected void onPostExecute(Void param) {
-								if(mSpace != null && mEnvironment != null) {
-									Bundle extras = new Bundle();
-									extras.putSerializable(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironment);
-									setUpClass(EnvironmentActivity.class, extras);
-									init();
-								}
-
-							};
-						}.execute();
+						});
+					} else {
+						Bundle extras = new Bundle();
+						extras.putSerializable(EnvironmentActivity.EXTRA_ENVIRONMENT, mEnvironment);
+						setUpClass(EnvironmentActivity.class, extras);
+						init();
+					}
 				};
 			}.execute();
 		}
