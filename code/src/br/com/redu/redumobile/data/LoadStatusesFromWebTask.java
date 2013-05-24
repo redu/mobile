@@ -197,9 +197,9 @@ public class LoadStatusesFromWebTask implements Task {
 			mListeners.add(listener);
 		}
 		
-		public static void clear() {
-			mListeners.clear();
-		}
+//		public static void clear() {
+//			mListeners.clear();
+//		}
 
 		public static void notifyOnStart() {
 			mIsWorking = true;

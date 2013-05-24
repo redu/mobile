@@ -48,8 +48,11 @@ public class StatusDetailActivity extends BaseActivity {
 		boolean showGoToWallAction = extras.getBoolean(EXTRAS_ENABLE_GO_TO_WALL_ACTION, false);
 		boolean isFromNotification = extras.getBoolean(EXTRAS_IS_FROM_NOTIFICATION, false);
 
-		setActionBarTitle(mStatus.getLastBreadcrumb());
-
+		String title = mStatus.getLastBreadcrumb();
+		if(title != null) {
+			setActionBarTitle(title);
+		}
+		
 		if (showGoToWallAction && !mStatus.isPostedOnUserWall()) {
 			addActionToActionBar(R.drawable.bt_go_to_wall,
 					new OnClickListener() {

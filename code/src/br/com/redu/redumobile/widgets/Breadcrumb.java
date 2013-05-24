@@ -35,7 +35,7 @@ public class Breadcrumb extends EllipsizingTextView {
 	public void setStatus(Status status) {
 		List<String> crumbs = status.getBreadcrumbs();
 		
-		if(crumbs == null) {
+		if(crumbs == null || crumbs.size() == 0) {
 			setVisibility(View.GONE);
 		} else {
 			String breadcrumbs = composeBreadcrumbs(crumbs);

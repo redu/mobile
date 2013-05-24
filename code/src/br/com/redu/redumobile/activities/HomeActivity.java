@@ -32,7 +32,6 @@ import br.com.redu.redumobile.fragments.home.UserWallFragment;
 import br.com.redu.redumobile.util.PinCodeHelper;
 
 import com.buzzbox.mob.android.scheduler.SchedulerManager;
-import com.buzzbox.mob.android.scheduler.analytics.AnalyticsManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
