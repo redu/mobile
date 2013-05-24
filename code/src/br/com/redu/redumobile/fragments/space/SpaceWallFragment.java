@@ -46,7 +46,7 @@ public class SpaceWallFragment extends StatusListFragment {
 			public void onClick(View v) {
 				Intent i = new Intent(getActivity(), PostStatusOnSpaceWallActivity.class);
 				i.putExtra(PostStatusOnSpaceWallActivity.EXTRAS_SPACE, mSpace);
-				startActivity(i);
+				startActivityForResult(i, 0);
 			}
 		});
 		

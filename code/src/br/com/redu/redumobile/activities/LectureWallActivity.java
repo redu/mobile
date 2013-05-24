@@ -2,17 +2,20 @@ package br.com.redu.redumobile.activities;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.fragments.lectures.LectureWallFragment;
 
 public class LectureWallActivity extends DbHelperHolderActivity {
+
+	public static final String EXTRA_STATUS_RESULT = "RESULT_STATUS";
 
 	public static final String EXTRAS_LECTURE = "EXTRAS_LECTURE";
 
@@ -22,6 +25,7 @@ public class LectureWallActivity extends DbHelperHolderActivity {
 	public static final String EXTRAS_ENVIRONMENT_PATH = "EXTRAS_ENVIRONMENT_PATH";
 
 	private Lecture mLecture;
+	private LectureWallFragment mFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +85,18 @@ public class LectureWallActivity extends DbHelperHolderActivity {
 		Bundle args = new Bundle();
 		args.putSerializable(LectureWallFragment.EXTRAS_LECTURE, mLecture);
 
-		Fragment fragment = new LectureWallFragment();
-		fragment.setArguments(args);
+		mFragment = new LectureWallFragment();
+		mFragment.setArguments(args);
 
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
-		transaction.add(R.id.fragment_container, fragment);
-		transaction.commit();
+		getSupportFragmentManager().beginTransaction()
+				.add(R.id.fragment_container, mFragment).commit();
+	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == Activity.RESULT_OK) {
+			Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
+			mFragment.addStatus(status);
+		}
 	}
 }

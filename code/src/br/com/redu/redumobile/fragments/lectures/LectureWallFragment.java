@@ -10,19 +10,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.DbHelperHolderActivity;
 import br.com.redu.redumobile.activities.PostStatusOnLectureWallActivity;
-import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
-import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.fragments.StatusListFragment;
-
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 public class LectureWallFragment extends StatusListFragment {
 
@@ -49,7 +43,7 @@ public class LectureWallFragment extends StatusListFragment {
 				Intent i = new Intent(getActivity(), PostStatusOnLectureWallActivity.class);
 				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_LECTURE, mLecture);
 				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_STATUS_IS_HELP_TYPE, false);
-				startActivity(i);
+				startActivityForResult(i, 0);
 			}
 		});
 		llFooter.findViewById(R.id.bt_ask_help).setOnClickListener(new OnClickListener() {
@@ -58,7 +52,7 @@ public class LectureWallFragment extends StatusListFragment {
 				Intent i = new Intent(getActivity(), PostStatusOnLectureWallActivity.class);
 				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_LECTURE, mLecture);
 				i.putExtra(PostStatusOnLectureWallActivity.EXTRAS_STATUS_IS_HELP_TYPE, true);
-				startActivity(i);
+				startActivityForResult(i, 0);
 			}
 		});
 		
@@ -66,6 +60,10 @@ public class LectureWallFragment extends StatusListFragment {
 		llContent.addView(llFooter);
 		
 		return v;
+	}
+	
+	public void addStatus(Status status) {
+		mAdapter.add(status, false);
 	}
 	
 	@Override
@@ -100,7 +98,6 @@ public class LectureWallFragment extends StatusListFragment {
 		if(count == 0) {
 			return System.currentTimeMillis();
 		}
-		
 		return ((Status) mAdapter.getItem(count-1)).createdAtInMillis;
 	}
 	
