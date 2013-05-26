@@ -32,7 +32,7 @@ public class CacheManager {
 	private static final String DISK_CACHE_SUBDIR = "images";
 	private static final int IO_BUFFER_SIZE = 8 * 1024;
 
-	private static final CompressFormat BITMAP_COMPRESS_FORMAT = CompressFormat.JPEG;
+	private static final CompressFormat BITMAP_COMPRESS_FORMAT = CompressFormat.PNG;
 	private static final int BITMAP_COMPRESS_QUALITY = 80;
 
 	private static CacheManager INSTANCE = null;
