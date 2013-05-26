@@ -122,10 +122,14 @@ public class HomeActivity extends DbHelperHolderActivity {
 					i = new Intent(getApplicationContext(), SettingsActivity.class);
 					break;
 				case 1:
-					i = new Intent(getApplicationContext(), TermsOfUseActivity.class);
+					i = new Intent(getApplicationContext(), WebViewActivity.class);
+					i.putExtra(WebViewActivity.EXTRAS_TITLE, "Termos de Uso");
+					i.putExtra(WebViewActivity.EXTRAS_URL, "http://www.redu.com.br/paginas/termos_uso");
 					break;
 				case 2:
-					i = new Intent(getApplicationContext(), PrivacyActivity.class);
+					i = new Intent(getApplicationContext(), WebViewActivity.class);
+					i.putExtra(WebViewActivity.EXTRAS_TITLE, "Política de Privacidade");
+					i.putExtra(WebViewActivity.EXTRAS_URL, "http://www.redu.com.br/paginas/politica_privacidade");
 					break;
 				case 3:
 					i = new Intent(getApplicationContext(), LoginWebViewActivity.class);

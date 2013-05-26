@@ -26,8 +26,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.LoginWebViewActivity"
-            android:screenOrientation="portrait"
-             >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,8 +36,7 @@
         <activity
             android:name=".activities.HomeActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-             >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.HomeSpaceActivity"
@@ -72,38 +70,38 @@
         </activity>
         <activity
             android:name=".activities.StatusDetailActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.RespondStatusActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.LectureWallActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.PostStatusOnSpaceWallActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.PostStatusOnLectureWallActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.LectureActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.lecture.UploadFileFolderActivity"
@@ -132,9 +130,13 @@
         </activity>
         <activity
             android:name=".activities.NewModuleActivity"
-            android:configChanges="orientation" 
-            android:screenOrientation="portrait">
-
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- BuzzBox -->
