@@ -2,13 +2,6 @@ package br.com.redu.redumobile.activities.lecture;
 
 import java.io.File;
 
-import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.Lecture;
-import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.Subject;
-import br.com.redu.redumobile.R;
-import br.com.redu.redumobile.ReduApplication;
-import br.com.redu.redumobile.adapters.PopupAdapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,8 +15,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.models.Lecture;
+import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.Subject;
+import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 
 public class UploadStep3Activity extends Activity {
 

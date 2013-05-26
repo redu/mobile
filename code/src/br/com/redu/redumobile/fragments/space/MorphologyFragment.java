@@ -26,7 +26,6 @@ import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.NewModuleActivity;
-import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 import br.com.redu.redumobile.util.UserHelper;
 

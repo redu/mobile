@@ -1,15 +1,7 @@
 package br.com.redu.redumobile.adapters;
 
-import java.util.List;
-
-import javax.crypto.spec.IvParameterSpec;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
-import android.sax.StartElementListener;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +16,6 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
 import br.com.redu.redumobile.activities.lecture.UploadStep2Activity;
-import br.com.redu.redumobile.activities.lecture.UploadStep3Activity;
 
 public class PopupAdapter extends BaseAdapter {
 

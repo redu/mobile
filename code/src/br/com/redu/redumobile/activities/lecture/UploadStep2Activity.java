@@ -151,7 +151,8 @@ public class UploadStep2Activity extends Activity {
 	}
 	
 	//UPDATED!
-    public String getPath(Uri uri) {
+    @SuppressWarnings("deprecation")
+	public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         if(cursor!=null)
