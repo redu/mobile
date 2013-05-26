@@ -31,7 +31,6 @@ import br.com.redu.redumobile.fragments.home.NewLecturesFragment;
 import br.com.redu.redumobile.fragments.home.UserWallFragment;
 import br.com.redu.redumobile.util.PinCodeHelper;
 
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
@@ -39,8 +38,6 @@ public class HomeActivity extends DbHelperHolderActivity {
 
 	public static final String ITEM_EXTRA_PARAM = "ITEM_CHECKED";
 
-	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 2;
-	
 	static final int NUM_ITEMS = 4;
 	
 	static final int ITEM_LAST_SEEN_STATUS = 0;
@@ -61,19 +58,8 @@ public class HomeActivity extends DbHelperHolderActivity {
 				onPopupMenuClicked();
 			}
 		});
-		
-		// START BuzzNotify
-//		int openAppStatus = AnalyticsManager.onOpenApp(this);
-//		if (openAppStatus == AnalyticsManager.OPEN_APP_FIRST_TIME) {
-//			SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
-//			SchedulerManager.getInstance().restart(this, LoadStatusesFromWebTask.class);
-//		} else if (openAppStatus == AnalyticsManager.OPEN_APP_UPGRADE) {
-//			SchedulerManager.getInstance().restartAll(getApplicationContext());
-//		}
-		SchedulerManager.getInstance().runNow(this, LoadStatusesFromWebTask.class, 0);
-		SchedulerManager.getInstance().saveTask(this, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
-		SchedulerManager.getInstance().restart(this, LoadStatusesFromWebTask.class);
-		// END BuzzNotify
+
+		LoadStatusesFromWebTask.run(this);
 
 		final ViewPager vp = (ViewPager) findViewById(R.id.vp);
 		vp.setAdapter(new MainAdapter(getSupportFragmentManager()));

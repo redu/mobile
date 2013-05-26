@@ -29,7 +29,6 @@ import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperListener;
 
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -246,7 +245,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		Activity activity = getActivity();
 		if(activity != null) {
 			isWaitingNotification = true;
-			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
+			LoadStatusesFromWebTask.run(activity);
 		}
 	}
 	

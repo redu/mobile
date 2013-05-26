@@ -1,10 +1,9 @@
 package br.com.redu.redumobile.data;
 
+import java.lang.ref.SoftReference;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.scribe.exceptions.OAuthConnectionException;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -20,10 +19,13 @@ import br.com.redu.redumobile.util.DateUtil;
 import br.com.redu.redumobile.util.SettingsHelper;
 
 import com.buzzbox.mob.android.scheduler.NotificationMessage;
+import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.buzzbox.mob.android.scheduler.Task;
 import com.buzzbox.mob.android.scheduler.TaskResult;
 
 public class LoadStatusesFromWebTask implements Task {
+
+	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 30;
 
 	@Override
 	public String getTitle() {
@@ -35,6 +37,10 @@ public class LoadStatusesFromWebTask implements Task {
 		return "redumobile"; // give it an ID
 	}
 
+	public static void run(Context context) {
+		LoadStatusesFromWebManager.run(context);
+	}
+	
 	@Override
 	public TaskResult doWork(ContextWrapper ctx) {
 
@@ -147,7 +153,7 @@ public class LoadStatusesFromWebTask implements Task {
 
 			LoadStatusesFromWebManager.notifyOnComplete();
 
-		} catch(OAuthConnectionException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 			LoadStatusesFromWebManager.notifyOnError(e);
 		}
@@ -191,34 +197,44 @@ public class LoadStatusesFromWebTask implements Task {
 	private static class LoadStatusesFromWebManager {
 
 		private static boolean mIsWorking;
-		private static final List<OnLoadStatusesFromWebListener> mListeners = new ArrayList<OnLoadStatusesFromWebListener>();
+		private static final List<SoftReference<OnLoadStatusesFromWebListener>> mListeners = new ArrayList<SoftReference<OnLoadStatusesFromWebListener>>();
 
-		public static void add(OnLoadStatusesFromWebListener listener) {
-			mListeners.add(listener);
+		public static void run(Context context) {
+			if(!mIsWorking) {		
+				SchedulerManager.getInstance().runNow(context, LoadStatusesFromWebTask.class, 0);
+				SchedulerManager.getInstance().saveTask(context, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
+//				SchedulerManager.getInstance().restart(context, LoadStatusesFromWebTask.class);
+			}
 		}
 		
-//		public static void clear() {
-//			mListeners.clear();
-//		}
+		public static void add(OnLoadStatusesFromWebListener listener) {
+			mListeners.add(new SoftReference<OnLoadStatusesFromWebListener>(listener));
+		}
 
 		public static void notifyOnStart() {
 			mIsWorking = true;
-			for (OnLoadStatusesFromWebListener listener : mListeners) {
-				listener.onStart();
+			for (SoftReference<OnLoadStatusesFromWebListener> reference : mListeners) {
+				if(!reference.isEnqueued() && reference.get() != null) {
+					reference.get().onStart();
+				}
 			}
 		}
 
 		public static void notifyOnComplete() {
 			mIsWorking = false;
-			for (OnLoadStatusesFromWebListener listener : mListeners) {
-				listener.onComplete();
+			for (SoftReference<OnLoadStatusesFromWebListener> reference : mListeners) {
+				if(!reference.isEnqueued() && reference.get() != null) {
+					reference.get().onComplete();
+				}
 			}
 		}
 
 		public static void notifyOnError(Exception e) {
 			mIsWorking = false;
-			for (OnLoadStatusesFromWebListener listener : mListeners) {
-				listener.onError(e);
+			for (SoftReference<OnLoadStatusesFromWebListener> reference : mListeners) {
+				if(!reference.isEnqueued() && reference.get() != null) {
+					reference.get().onError(e);
+				}
 			}
 		}
 		
