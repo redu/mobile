@@ -48,8 +48,11 @@ public class StatusDetailActivity extends BaseActivity {
 		boolean showGoToWallAction = extras.getBoolean(EXTRAS_ENABLE_GO_TO_WALL_ACTION, false);
 		boolean isFromNotification = extras.getBoolean(EXTRAS_IS_FROM_NOTIFICATION, false);
 
-		setActionBarTitle(mStatus.getLastBreadcrumb());
-
+		String title = mStatus.getLastBreadcrumb();
+		if(title != null) {
+			setActionBarTitle(title);
+		}
+		
 		if (showGoToWallAction && !mStatus.isPostedOnUserWall()) {
 			addActionToActionBar(R.drawable.bt_go_to_wall,
 					new OnClickListener() {
@@ -101,13 +104,9 @@ public class StatusDetailActivity extends BaseActivity {
 
 		mAdapter = new StatusDetailAdapter(getApplicationContext(), null);
 		mListView.setAdapter(mAdapter);
-	}
-	
-	protected void onStart() {
-		super.onStart();
 		
 		new LoadAnswersStatus(mStatus.id).execute();
-	};
+	}
 	
 	private void setUpClasses() {
 		if (mStatus.isPostedOnLectureWall()) {
@@ -285,7 +284,9 @@ public class StatusDetailActivity extends BaseActivity {
 				Toast.makeText(StatusDetailActivity.this,
 						"Resposta enviada com sucesso.", Toast.LENGTH_SHORT)
 						.show();
-				finish();
+				
+				mAdapter.add(result);
+				mAdapter.notifyDataSetChanged();
 			}
 		}
 	}

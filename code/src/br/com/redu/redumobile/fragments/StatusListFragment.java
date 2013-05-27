@@ -29,7 +29,6 @@ import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperListener;
 
-import com.buzzbox.mob.android.scheduler.SchedulerManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -58,7 +57,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	public StatusListFragment() {
 
 	}
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -106,12 +105,8 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		Activity activity = getActivity();
-		if(activity != null) {
-			isWaitingNotification = true;
-			SchedulerManager.getInstance().runNow(activity, LoadStatusesFromWebTask.class, 0);
-			mRefreshView = refreshView;
-		}
+		mRefreshView = refreshView;
+		updateStatusesFromWeb();
 	}
 	
 	@Override
@@ -237,8 +232,21 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		mLlNewStatus.setVisibility(View.VISIBLE);
 	}
 
+	@Override
+	public void onNoConnectionAlertClicked() {
+		updateStatusesFromWeb();
+	}
+
 	protected void updateStatusesFromDb(boolean olderThan) {
 		new LoadStatusesFromDbTask(olderThan).execute();
+	}
+	
+	protected void updateStatusesFromWeb() {
+		Activity activity = getActivity();
+		if(activity != null) {
+			isWaitingNotification = true;
+			LoadStatusesFromWebTask.run(activity);
+		}
 	}
 	
 	class LoadStatusesFromDbTask extends

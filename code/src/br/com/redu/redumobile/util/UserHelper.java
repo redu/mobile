@@ -1,6 +1,5 @@
 package br.com.redu.redumobile.util;
 
-import br.com.developer.redu.models.User;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

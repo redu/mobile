@@ -1,7 +1,6 @@
 package br.com.redu.redumobile.fragments;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.scribe.exceptions.OAuthConnectionException;
@@ -9,28 +8,24 @@ import org.scribe.exceptions.OAuthConnectionException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WebCachedImageView;
 import android.widget.ExpandableListView;
-import android.widget.ProgressBar;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Course;
 import br.com.developer.redu.models.Environment;
-import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.adapters.CoursesExpandableListAdapter;
-import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 
-public class CoursesAndSpacesFragment extends Fragment {
+public class CoursesAndSpacesFragment extends NoConnectNotifiableFragment {
 	
 	public static final String EXTRAS_ENVIRONMENT = "EXTRAS_ENVIRONMENT";
 	
@@ -92,54 +87,7 @@ public class CoursesAndSpacesFragment extends Fragment {
 			}
 		});		
 		
-		new AsyncTask<Void, Void, Void>() {
-			protected Void doInBackground(Void... params) {
-				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
-
-				mEnrollmentedCourses = new ArrayList<Course>();
-				mSpaces = new ArrayList<List<Space>>();
-				
-				List<Course> courses = redu.getCoursesByEnvironment(mEnvironment.path);
-				if(courses != null) {
-					for(Course course : courses) {
-						List<Space> spacesByCourse;
-						try {
-							spacesByCourse = redu.getSpacesByCourse(course.id);
-						} catch(OAuthConnectionException e) {
-							// usuario nao matriculado no curso
-							e.printStackTrace();
-							spacesByCourse = null;
-						}
-
-						if(spacesByCourse != null) {
-							mEnrollmentedCourses.add(course);
-							mSpaces.add(spacesByCourse);
-						}
-					}
-				}
-				return null;
-			}
-
-			protected void onPostExecute(Void result) {
-				if (getActivity() != null){
-					mTvEnvironment.setText(mEnvironment.name);
-					mTvEnvironment.setVisibility(View.VISIBLE);
-					
-					mIvThumbnail.setImageUrl(mEnvironment.getThumbnailUrl());
-					mIvThumbnail.setVisibility(View.VISIBLE);
-					
-					if(mEnrollmentedCourses.isEmpty()) {
-						mTvEmptyList.setVisibility(View.VISIBLE);
-					} else {
-						mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
-						mListView.setAdapter(mAdapter);
-					}
-				}
-				
-				mProgressBar.setVisibility(View.GONE);
-			};
-
-		}.execute();
+		new LoadSpacesTask().execute();
 		
 		return v;
 	}
@@ -153,46 +101,100 @@ public class CoursesAndSpacesFragment extends Fragment {
             throw new ClassCastException(activity.toString() + " must implement OnCourseSelectedListener");
         }
     }
+
+	@Override
+	public void onNoConnectionAlertClicked() {
+		new LoadSpacesTask().execute();
+	}
     
-    class EnrollmentTask extends AsyncTask<Void, Void, Void> {
-		
+	class LoadSpacesTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
 			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+
+			mEnrollmentedCourses = new ArrayList<Course>();
+			mSpaces = new ArrayList<List<Space>>();
 			
-			/*mEnrollment = new ArrayList<Subject>();
-			List<Subject> subjects = redu.getSubjectsBySpace(mSpace.id);
-			
-			mLecture = new ArrayList<List<Lecture>>();
-			
-			if(subjects != null) {
-				subjects.removeAll(Collections.singleton(null));
-				for(Subject subject : subjects) {
-					List<Lecture> lectureBySubject;
+			List<Course> courses = redu.getCoursesByEnvironment(mEnvironment.path);
+			if(courses != null) {
+				for(Course course : courses) {
+					List<Space> spacesByCourse;
 					try {
-						lectureBySubject = redu.getLecturesBySubject(subject.id);
+						spacesByCourse = redu.getSpacesByCourse(course.id);
 					} catch(OAuthConnectionException e) {
 						// usuario nao matriculado no curso
 						e.printStackTrace();
-						lectureBySubject = null;
+						spacesByCourse = null;
 					}
 
-					if(lectureBySubject != null) {
-						mEnrollmentedSubjects.add(subject);
-						mLecture.add(lectureBySubject);
+					if(spacesByCourse != null) {
+						mEnrollmentedCourses.add(course);
+						mSpaces.add(spacesByCourse);
 					}
 				}
-			}*/
+			}
 			return null;
 		}
 
 		protected void onPostExecute(Void result) {
-			if (getActivity() != null) {
-				/*mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
-				mExpListView.setAdapter(mAdapter);
-				mExpListView.setVisibility(View.VISIBLE);
-				mProgressBar.setVisibility(View.GONE);*/
+			if (getActivity() != null){
+				mTvEnvironment.setText(mEnvironment.name);
+				mTvEnvironment.setVisibility(View.VISIBLE);
+				
+				mIvThumbnail.setImageUrl(mEnvironment.getThumbnailUrl());
+				mIvThumbnail.setVisibility(View.VISIBLE);
+				
+				if(mEnrollmentedCourses.isEmpty()) {
+					mTvEmptyList.setVisibility(View.VISIBLE);
+				} else {
+					mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
+					mListView.setAdapter(mAdapter);
+				}
 			}
+			
+			mProgressBar.setVisibility(View.GONE);
 		};
+
 	}
+	
+//    class EnrollmentTask extends AsyncTask<Void, Void, Void> {
+//		
+//		protected Void doInBackground(Void... params) {
+//			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+//			
+//			/*mEnrollment = new ArrayList<Subject>();
+//			List<Subject> subjects = redu.getSubjectsBySpace(mSpace.id);
+//			
+//			mLecture = new ArrayList<List<Lecture>>();
+//			
+//			if(subjects != null) {
+//				subjects.removeAll(Collections.singleton(null));
+//				for(Subject subject : subjects) {
+//					List<Lecture> lectureBySubject;
+//					try {
+//						lectureBySubject = redu.getLecturesBySubject(subject.id);
+//					} catch(OAuthConnectionException e) {
+//						// usuario nao matriculado no curso
+//						e.printStackTrace();
+//						lectureBySubject = null;
+//					}
+//
+//					if(lectureBySubject != null) {
+//						mEnrollmentedSubjects.add(subject);
+//						mLecture.add(lectureBySubject);
+//					}
+//				}
+//			}*/
+//			return null;
+//		}
+//
+//		protected void onPostExecute(Void result) {
+//			if (getActivity() != null) {
+//				/*mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
+//				mExpListView.setAdapter(mAdapter);
+//				mExpListView.setVisibility(View.VISIBLE);
+//				mProgressBar.setVisibility(View.GONE);*/
+//			}
+//		};
+//	}
 
 }

@@ -54,6 +54,11 @@ public class LastSeenFragment extends StatusListFragment {
 	}
 	
 	@Override
+	public void onNoConnectionAlertClicked() {
+		// ignoring...
+	}
+	
+	@Override
 	protected long getOldestStatusTimestamp() {
 		int count = mAdapter.getCount();
 		if(count == 0) {

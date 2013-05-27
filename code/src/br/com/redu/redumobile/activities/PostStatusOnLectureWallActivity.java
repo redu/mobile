@@ -1,5 +1,7 @@
 package br.com.redu.redumobile.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -96,9 +98,20 @@ public class PostStatusOnLectureWallActivity extends BaseActivity {
 				Toast.makeText(PostStatusOnLectureWallActivity.this, "Não foi possível enviar seu comentário.", Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(PostStatusOnLectureWallActivity.this, "Comentário enviado com sucesso.", Toast.LENGTH_SHORT).show();
+				
+				Intent data = new Intent();
+				data.putExtra(LectureWallActivity.EXTRA_STATUS_RESULT, result);
+				setResult(Activity.RESULT_OK, data);
+				
 				finish();
 			}
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		setResult(Activity.RESULT_CANCELED);
+		super.onBackPressed();
 	}
 	
 	private String getStatusType() {

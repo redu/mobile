@@ -46,7 +46,7 @@ public class SpaceWallFragment extends StatusListFragment {
 			public void onClick(View v) {
 				Intent i = new Intent(getActivity(), PostStatusOnSpaceWallActivity.class);
 				i.putExtra(PostStatusOnSpaceWallActivity.EXTRAS_SPACE, mSpace);
-				startActivity(i);
+				startActivityForResult(i, 0);
 			}
 		});
 		
@@ -91,6 +91,10 @@ public class SpaceWallFragment extends StatusListFragment {
 	@Override
 	public String getTitle() {
 		return null;
+	}
+	
+	public void addStatus(Status status) {
+		mAdapter.add(status, false);
 	}
 	
 	@Override

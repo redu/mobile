@@ -32,10 +32,6 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 	private Enrollment mEnrollment;
 	private Context mContext = this;
 	
-	ProgressDialog mProgressDialog;
-
-	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_environment);
@@ -61,16 +57,18 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 
 	@Override
 	public void onSpaceSelected(Space space, Course course) {
-		mProgressDialog = ProgressDialog.show(this, "Redu",
-				"Aguarde...", false, true);
-		mProgressDialog.setIcon(R.drawable.ic_launcher);
-		mProgressDialog.setCancelable(false);
-		
+
 		mSpace = space;
 		mCourse = course;
 		
 		new AsyncTask<Void, Void, Void>() {
 
+			private ProgressDialog mProgressDialog;
+
+			protected void onPreExecute() {
+				mProgressDialog = showProgressDialog("Aguarde…", false);
+			};
+			
 			@Override
 			protected Void doInBackground(Void... params) {
 				try {
@@ -86,8 +84,8 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 
 			@Override
 			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
 				mProgressDialog.dismiss();
+	
 				Intent it = new Intent(EnvironmentActivity.this, SpaceActivity.class);
 				it.putExtra(SpaceActivity.EXTRAS_SPACE, mSpace);
 				it.putExtra(Course.class.getName(), mCourse);

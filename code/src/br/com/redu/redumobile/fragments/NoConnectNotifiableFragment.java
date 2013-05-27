@@ -6,36 +6,42 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.util.ImageUtils;
 import br.com.redu.redumobile.widgets.VerticalAnimation;
 
-public class BaseFragment extends Fragment {
+public abstract class NoConnectNotifiableFragment extends Fragment {
 
 	private View mNoConnectionView;
+	private int mFinishedHeight;
 
+	public abstract void onNoConnectionAlertClicked();
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		ViewGroup vg = (ViewGroup) getActivity().findViewById(R.id.no_connection_container);
-		if(vg != null) {
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		FrameLayout noConnectionContainer = (FrameLayout) view.findViewById(R.id.no_connection_container);
+		if(noConnectionContainer != null) {
 			mNoConnectionView = LayoutInflater.from(getActivity()).inflate(R.layout.no_connection, null);
 			mNoConnectionView.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					hideNoConnectionAlert();
+					animateNoConnectionAlert(false);
+					onNoConnectionAlertClicked();
 				}
 			});
 
-			//vg.addView(mNoConnectionView);
+			noConnectionContainer.addView(mNoConnectionView, new LayoutParams(LayoutParams.MATCH_PARENT, mFinishedHeight));
+			
+			view.invalidate();
 		}
 	}
 	
+	
 	private void animateNoConnectionAlert(boolean isToShow) {
-		if(getActivity() != null) {
+		if(getActivity() != null && mNoConnectionView != null) {
 			
-			int expandedHeightDip = 50;
+			int expandedHeightDip = 38;
 			int collapsedHeightDip = 0;
 			int duration = 500;
 			Resources res = getResources();
@@ -52,23 +58,18 @@ public class BaseFragment extends Fragment {
 			}
 	
 			final int startHeight = mNoConnectionView.getHeight();
-			int finishHeight;
 			
 			if (isToShow) {
-				finishHeight = expandedHeight;
+				mFinishedHeight = expandedHeight;
 			} else {
-				finishHeight = collapsedHeight;
+				mFinishedHeight = collapsedHeight;
 			}
 	
-			mNoConnectionView.startAnimation(new VerticalAnimation(mNoConnectionView, startHeight, finishHeight, duration));
+			mNoConnectionView.startAnimation(new VerticalAnimation(mNoConnectionView, startHeight, mFinishedHeight, duration));
 		}	
 	}
 	
 	public void showNoConnectionAlert() {
 		animateNoConnectionAlert(true);
-	}
-	
-	public void hideNoConnectionAlert() {
-		animateNoConnectionAlert(false);
 	}
 }

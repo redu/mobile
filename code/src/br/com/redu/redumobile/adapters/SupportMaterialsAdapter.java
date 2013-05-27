@@ -16,13 +16,13 @@ import br.com.redu.redumobile.R;
 public class SupportMaterialsAdapter extends BaseAdapter {
 
 	final private LayoutInflater mInflater;
-	final private Context mContext;
+//	final private Context mContext;
 	
 	private List<Folder> mFolders;
 	private List<File> mFiles;
 	
 	public SupportMaterialsAdapter(Context context, List<Folder> folders, List<File> files) {
-		mContext = context;
+//		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		mFolders = folders; 
 		mFiles = files;

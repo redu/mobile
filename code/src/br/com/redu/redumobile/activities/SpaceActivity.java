@@ -4,21 +4,20 @@ import java.util.ArrayList;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import br.com.developer.redu.DefaultReduClient;
-import br.com.developer.redu.models.Course;
-import br.com.developer.redu.models.Enrollment;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
+import br.com.developer.redu.models.Status;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.fragments.space.MorphologyFragment;
@@ -34,6 +33,8 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	    void onSwitchToNextFragment(Folder folder);
 	    void onBackToPreviousFragment(Folder folder);
 	}
+
+	public static final String EXTRA_STATUS_RESULT = "RESULT_STATUS";
 
 	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
 	
@@ -56,10 +57,10 @@ public class SpaceActivity extends DbHelperHolderActivity {
     
     private Environment mEnvironment;
     private Space mSpace;
-    private Enrollment mEnrollment;
-
-	private Course mCourse;
-	private Context mContext;
+//    private Enrollment mEnrollment;
+//
+//	private Course mCourse;
+//	private Context mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,12 +68,8 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		
 		final Bundle extras = getIntent().getExtras();
 		mSpace = (Space) extras.get(EXTRAS_SPACE);
-		mCourse = (Course) extras.get(Course.class.getName());
-		mEnrollment = (Enrollment) extras.get(Enrollment.class.getName());
-		Log.i("SPACE", mSpace.name);
-		Log.i("COURSE", mCourse.name);
-		Log.i("ENROLLMENT", mEnrollment.role);
-		
+//		mCourse = (Course) extras.get(Course.class.getName());
+//		mEnrollment = (Enrollment) extras.get(Enrollment.class.getName());
 		
 		// Se foi passado um objeto, é pq está na navegação normal, caso contrário, está no up
 		if (mSpace != null) {
@@ -197,6 +194,10 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			((SupportMaterialFragment) items[ITEM_SUPPORT_MATERIAL]).setListener(smfl);
 		}
 
+		public void addStatusOnWall(Status status) {
+			((SpaceWallFragment) items[ITEM_WALL]).addStatus(status);
+		}
+		
 		@Override
 		public CharSequence getPageTitle(int position) {
 			return titles[position];
@@ -232,6 +233,14 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			}
 		} else {
 			super.onBackPressed();
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode == Activity.RESULT_OK) {
+			Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
+			mAdapter.addStatusOnWall(status);
 		}
 	}
 }

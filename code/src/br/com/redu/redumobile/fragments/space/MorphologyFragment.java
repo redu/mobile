@@ -9,7 +9,6 @@ import org.scribe.exceptions.OAuthConnectionException;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,11 +25,11 @@ import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.NewModuleActivity;
-import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
+import br.com.redu.redumobile.fragments.NoConnectNotifiableFragment;
 import br.com.redu.redumobile.util.UserHelper;
 
-public class MorphologyFragment extends Fragment {
+public class MorphologyFragment extends NoConnectNotifiableFragment {
 
 	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
 
@@ -44,7 +43,7 @@ public class MorphologyFragment extends Fragment {
 
 	private ProgressBar mProgressBar;
 	private TextView mTvEmpytMsg;
-	
+
 	public MorphologyFragment() {
 
 	}
@@ -63,15 +62,16 @@ public class MorphologyFragment extends Fragment {
 
 				@Override
 				public void onClick(View v) {
-					Intent it = new Intent(getActivity(), NewModuleActivity.class);
+					Intent it = new Intent(getActivity(),
+							NewModuleActivity.class);
 					it.putExtra(Space.class.getName(), mSpace);
 					startActivity(it);
 				}
 			});
-		} 
+		}
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
-		mTvEmpytMsg = (TextView)v.findViewById(R.id.elv_subject_empyt);
-		
+		mTvEmpytMsg = (TextView) v.findViewById(R.id.elv_subject_empyt);
+
 		mSpace = (Space) getArguments().get(EXTRAS_SPACE);
 
 		mExpListView = (ExpandableListView) v.findViewById(R.id.elvSubject);
@@ -120,7 +120,8 @@ public class MorphologyFragment extends Fragment {
 
 		protected Void doInBackground(Void... params) {
 			try {
-				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+				DefaultReduClient redu = ReduApplication
+						.getReduClient(getActivity());
 
 				mEnrollmentedSubjects = new ArrayList<Subject>();
 				List<Subject> subjects = redu.getSubjectsBySpace(mSpace.id);
@@ -159,16 +160,22 @@ public class MorphologyFragment extends Fragment {
 				mExpListView.setAdapter(mAdapter);
 				mExpListView.setVisibility(View.VISIBLE);
 				mProgressBar.setVisibility(View.GONE);
-				mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
-				if (mAdapter.getGroupCount() != 0){
+				mAdapter = new SubjectExpandableListAdapter(getActivity(),
+						mEnrollmentedSubjects, mLecture, mSpace);
+				if (mAdapter.getGroupCount() != 0) {
 					mExpListView.setAdapter(mAdapter);
 					mExpListView.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
-				}else{
+				} else {
 					mTvEmpytMsg.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
 				}
 			}
 		};
+	}
+
+	@Override
+	public void onNoConnectionAlertClicked() {
+		new LoadUserTask().execute();
 	}
 }

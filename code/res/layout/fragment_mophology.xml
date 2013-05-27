@@ -10,21 +10,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_gray"
         android:text="Novo Módulo"
         android:textColor="@color/blue"
-        android:background="@drawable/bg_gray"
-        android:layout_margin="12dp"
         android:visibility="gone" />
-	<View
-                android:layout_width="wrap_content"
-                android:layout_height="2dp"
-                android:background="@drawable/img_divider" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="@drawable/img_divider" />
+
     <ExpandableListView
         android:id="@+id/elvSubject"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#fff"
-        android:divider="@null"
-        android:layout_height="wrap_content" >
+        android:divider="@null" >
     </ExpandableListView>
 
     <View
@@ -33,6 +35,7 @@
         android:background="@drawable/img_divider" />
 
     <FrameLayout
+        android:id="@+id/no_connection_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -42,7 +45,6 @@
             android:layout_height="wrap_content"
             android:background="#fff"
             android:divider="@null"
-            
             android:visibility="gone" >
         </ExpandableListView>
 
@@ -56,13 +58,12 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/gray_light"
             android:visibility="gone" />
-        
+
         <ProgressBar
             android:id="@+id/pb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
-        
     </FrameLayout>
 
 </LinearLayout>

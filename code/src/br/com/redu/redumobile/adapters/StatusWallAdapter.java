@@ -120,25 +120,29 @@ public class StatusWallAdapter extends BaseAdapter {
 		} else if (status.isLogType()) {
 			String action = null;
 			String result = null;
+			String name = null;
 			int icon = 0;
 			
 			if (status.isCourseLogeableType()) {
 				action = " criou o";
 				result = " Curso:";
+				name = status.getCourseName();
 				icon = R.drawable.ic_curso;
 			} else if (status.isLectureLogeableType()) {
 				action = " criou a";
 				result = " Aula:";
+				name = status.getLectureName();
 				icon = R.drawable.ic_aula;
 
 			} else if (status.isSubjectLogeableType()) {
 				action = " criou o";
 				result = " Módulo:";
+				name = status.getSubjectName();
 				icon = R.drawable.ic_modulo;
 			}
 			
 			userActionResultBuffer.append(action).append("<b>").append(result).append("</b>");
-			((TextView) convertView.findViewById(R.id.tv_result_name)).setText("NÃO É POSSÍVEL OBTER O NOME"); // TODO a API não envia o nome do curso criado, seria necessario fazer uma nova requisicao
+			((TextView) convertView.findViewById(R.id.tv_result_name)).setText(name);
 			((TextView) convertView.findViewById(R.id.tv_result_name)).setVisibility(View.VISIBLE);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setImageResource(icon);
 			((ImageView) convertView.findViewById(R.id.iv_icon)).setVisibility(View.VISIBLE);

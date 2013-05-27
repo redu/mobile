@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,6 +91,9 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
+		if(groupPosition >= mLectures.size()) {
+			return 0;
+		}
 		return mLectures.get(groupPosition).size();
 	}
 

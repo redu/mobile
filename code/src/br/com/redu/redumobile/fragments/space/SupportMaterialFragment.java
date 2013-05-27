@@ -17,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -37,7 +36,6 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.File;
 import br.com.developer.redu.models.Folder;
 import br.com.developer.redu.models.Space;
-import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.SpaceActivity;
@@ -45,11 +43,12 @@ import br.com.redu.redumobile.activities.SpaceActivity.SupportMaterialFragmentLi
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadFileFolderActivity;
 import br.com.redu.redumobile.adapters.SupportMaterialsAdapter;
+import br.com.redu.redumobile.fragments.NoConnectNotifiableFragment;
 import br.com.redu.redumobile.util.DownloadHelper;
 import br.com.redu.redumobile.util.UserHelper;
 
 @SuppressLint("ValidFragment")
-public class SupportMaterialFragment extends Fragment {
+public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 	public static final String EXTRAS_FOLDER = "EXTRAS_FOLDER";
 	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
 
@@ -95,7 +94,7 @@ public class SupportMaterialFragment extends Fragment {
 		}
 
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
-		mTvEmpytMsg = (TextView)v.findViewById(R.id.elv_subject_empyt);
+		mTvEmpytMsg = (TextView) v.findViewById(R.id.elv_subject_empyt);
 		mProgressDialog = new ProgressDialog(getActivity());
 		mProgressDialog.setMessage("Aguarde…");
 		mProgressDialog.setIndeterminate(false);
@@ -126,7 +125,7 @@ public class SupportMaterialFragment extends Fragment {
 			ibBack = (ImageButton) v.findViewById(R.id.ibBack);
 			ibBack.setVisibility(View.GONE);
 		}
-		
+
 		String role = UserHelper.getUserRoleInCourse(getActivity());
 		if (role.equals("teacher") || role.equals("environment_admin") || role.equals("tutor")) {
 			mTvEmpytMsg.setText("Esta pasta está vazia, comece adicionando algo nela através do '+' ao lado do seu nome.");
@@ -146,8 +145,8 @@ public class SupportMaterialFragment extends Fragment {
 					startActivity(it);
 				}
 			});
-		} 
-		
+		}
+
 		lvFiles = (ListView) v.findViewById(R.id.lvFiles);
 		registerForContextMenu(lvFiles);
 
@@ -258,7 +257,8 @@ public class SupportMaterialFragment extends Fragment {
 
 		protected Void doInBackground(Void... params) {
 			try {
-				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+				DefaultReduClient redu = ReduApplication
+						.getReduClient(getActivity());
 				String folderRaizID;
 				if (mFolder == null) {
 					folderRaizID = redu.getFolderID(mSpace.id);
@@ -281,11 +281,11 @@ public class SupportMaterialFragment extends Fragment {
 			if (getActivity() != null) {
 				mAdapter = new SupportMaterialsAdapter(getActivity(), folders,
 						files);
-				if (mAdapter.getCount() != 0){
+				if (mAdapter.getCount() != 0) {
 					lvFiles.setAdapter(mAdapter);
 					lvFiles.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
-				}else{
+				} else {
 					mTvEmpytMsg.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
 				}
@@ -415,6 +415,11 @@ public class SupportMaterialFragment extends Fragment {
 			SpaceActivity activity = (SpaceActivity) getActivity();
 			activity.onRestart();
 		};
+	}
+
+	@Override
+	public void onNoConnectionAlertClicked() {
+		new LoadFoldersAndFilesTask().execute();
 	}
 
 }
