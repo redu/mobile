@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="15dp"
-            android:text="Esta pasta está vazia, comece adicionando algo nela através do '+' ao lado do seu nome." 
+            android:text="Esta pasta está vazia." 
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/gray_light"
             android:visibility="gone" />

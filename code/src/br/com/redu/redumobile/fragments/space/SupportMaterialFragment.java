@@ -129,6 +129,7 @@ public class SupportMaterialFragment extends Fragment {
 		
 		String role = UserHelper.getUserRoleInCourse(getActivity());
 		if (role.equals("teacher") || role.equals("environment_admin") || role.equals("tutor")) {
+			mTvEmpytMsg.setText("Esta pasta está vazia, comece adicionando algo nela através do '+' ao lado do seu nome.");
 			ImageButton ibMore = (ImageButton) v.findViewById(R.id.ibMore);
 			ibMore.setVisibility(View.VISIBLE);
 			ibMore.setOnClickListener(new OnClickListener() {

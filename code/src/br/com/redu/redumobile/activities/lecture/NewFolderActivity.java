@@ -60,9 +60,9 @@ public class NewFolderActivity extends BaseActivity{
 		@Override
 		protected void onPreExecute() {
 			if (folder == null)
-				dialog = ProgressDialog.show(mContext,"Redu","Adicionando diretório...", false, true);
+				dialog = ProgressDialog.show(mContext,"Redu","Adicionando Pasta...", false, true);
 			else
-				dialog = ProgressDialog.show(mContext,"Redu","Alterando diretório...", false, true);
+				dialog = ProgressDialog.show(mContext,"Redu","Alterando Pasta...", false, true);
 			dialog.setIcon(R.drawable.ic_launcher);
 			dialog.setCancelable(false);
 			super.onPreExecute();

@@ -22,6 +22,7 @@ import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.LectureActivity;
 import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
+import br.com.redu.redumobile.util.UserHelper;
 
 public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -116,19 +117,23 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_module_row, null);
 		}
 		Subject subject = (Subject)getGroup(groupPosition);
-		ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
-		ibAdd.setTag(subject);
-		ibAdd.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent it = new Intent(mContext, UploadStep1Activity.class);
-				Subject subject = (Subject)v.getTag();
-				it.putExtra(Subject.class.getName(), subject);
-				it.putExtra(Space.class.getName(), mSpace);
-				mContext.startActivity(it);
-			}
-		});
+		String role = UserHelper.getUserRoleInCourse(mContext);
+		if (role.equals("teacher") || role.equals("environment_admin")){
+			ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
+			ibAdd.setVisibility(View.VISIBLE);
+			ibAdd.setTag(subject);
+			ibAdd.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(mContext, UploadStep1Activity.class);
+					Subject subject = (Subject)v.getTag();
+					it.putExtra(Subject.class.getName(), subject);
+					it.putExtra(Space.class.getName(), mSpace);
+					mContext.startActivity(it);
+				}
+			});
+		}
 		
 		ImageView ivHelp = (ImageView) convertView.findViewById(R.id.iv_info);
 		ivHelp.setTag(subject);
