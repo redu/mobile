@@ -87,6 +87,11 @@ public class EnvironmentFragment extends TitlableFragment {
 	
 	class LoadEnvironmentsTask extends AsyncTask<Void, Void, List<Environment>> {
 		@Override
+		protected void onPreExecute() {
+			mProgressBar.setVisibility(View.VISIBLE);
+		}
+		
+		@Override
 		protected List<Environment> doInBackground(Void... params) {
 			try {
 				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
