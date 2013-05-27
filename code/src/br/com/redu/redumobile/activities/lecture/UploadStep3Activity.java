@@ -116,7 +116,7 @@ public class UploadStep3Activity extends Activity {
 		}
 		protected Void doInBackground(Object... obj) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			//TODO fix this: redu.postLecture((Lecture)obj[0], mSubject.id,(java.io.File)obj[1]);
+			redu.postLecture((Lecture)obj[0], mSubject.id,(java.io.File)obj[1]);
 			return null;
 		}
 		@Override

@@ -87,8 +87,18 @@ public class DownloadHelper {
 			it.setDataAndType(path, "image/png");
 		else if (file.getName().endsWith(".TXT") || file.getName().endsWith(".txt"))
 			it.setDataAndType(path, "text/plain");
+		else if (file.getName().endsWith(".MP4") || file.getName().endsWith(".mp4"))
+			it.setDataAndType(path, "video/mp4");
 		else
 			it.setDataAndType(path, "text/plain");
+		return it;
+	}
+	
+	public static Intent loadDocInReader(File file, String mimeType) throws ActivityNotFoundException, Exception {
+		Uri path = Uri.fromFile(file);
+		Intent it = new Intent(Intent.ACTION_VIEW);
+		it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		it.setDataAndType(path, mimeType);
 		return it;
 	}
 	

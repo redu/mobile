@@ -108,13 +108,13 @@ public class UploadStep2Activity extends Activity {
 	        	}
 	        	if (type.equals("video")){
 	        		Uri uriVideo = data.getData();
-	        		Log.i("ARQUIVO", uriVideo.getPath());
+	        		Log.i("ARQUIVO", getPath(uriVideo));
 	        		
 	        		Intent it = new Intent(this, UploadStep3Activity.class);
 			    	it.putExtra(Space.class.getName(), space);
 			    	it.putExtra(Subject.class.getName(), mSubject);
 			    	it.putExtra("id", superId);
-			    	it.putExtra("video", uriVideo.getPath());
+			    	it.putExtra("video", getPath(uriVideo));
 			    	it.putExtra("type", type);
 			    	startActivity(it);
 			    	super.onActivityResult(requestCode, resultCode, data);

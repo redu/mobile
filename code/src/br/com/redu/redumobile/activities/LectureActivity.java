@@ -277,14 +277,42 @@ public class LectureActivity extends BaseActivity {
 			tvMedia.setText(mLecture.name);
 			Button ibMedia = (Button) layoutLecture
 					.findViewById(R.id.ibAcessarMedia);
-			ibMedia.setOnClickListener(new OnClickListener() {
+			if (mLecture.mimetype.equals("video/x-youtube")) {
+				ibMedia.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri
-							.parse(mLecture.getFilePath())));
-				}
-			});
+					@Override
+					public void onClick(View v) {
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri
+								.parse(mLecture.getFilePath())));
+					}
+				});
+			}else{
+				ibMedia.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Lecture[] lecture = { mLecture };
+
+						java.io.File f = new java.io.File(DownloadHelper
+								.getLecturePath(), mLecture.getFileName());
+						if (f.exists()) {
+							Intent it;
+							try {
+								it = DownloadHelper.loadDocInReader(f);
+								startActivity(it);
+							} catch (ActivityNotFoundException e) {
+								e.printStackTrace();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						} else {
+							df = new DownloadFile();
+							df.execute(lecture);
+						}
+					}
+				});
+			}
+			
 			layoutLecture.setVisibility(View.VISIBLE);
 		} else if (mLecture.type.equals(Lecture.TYPE_PAGE)) {
 			layoutLecture = (LinearLayout) findViewById(R.id.llPage);
@@ -407,7 +435,7 @@ public class LectureActivity extends BaseActivity {
 			mProgressDialog.dismiss();
 			if (this != null && file != null) {
 				try {
-					Intent it = DownloadHelper.loadDocInReader(file);
+					Intent it = DownloadHelper.loadDocInReader(file, mLecture.mimetype);
 					startActivity(it);
 				} catch (ActivityNotFoundException e) {
 					e.printStackTrace();

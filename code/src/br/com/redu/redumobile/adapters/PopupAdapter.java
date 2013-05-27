@@ -101,6 +101,7 @@ public class PopupAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					Intent it = new Intent(mContext, UploadStep2Activity.class);
 					it.putExtra(Space.class.getName(), space);
+					it.putExtra(Subject.class.getName(), mSubject);
 					it.putExtra("id", id);
 					it.putExtra("type", "video");
 					mContext.startActivity(it);
