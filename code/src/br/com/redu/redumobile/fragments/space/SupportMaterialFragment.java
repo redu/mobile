@@ -100,6 +100,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		mProgressDialog.setCanceledOnTouchOutside(false);
 
 		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar",
 				new DialogInterface.OnClickListener() {

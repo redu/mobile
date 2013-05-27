@@ -51,7 +51,10 @@ public class UploadStep3Activity extends Activity {
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		if (type.equals("foto")){
-			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"));
+			BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+	        bmpFactoryOptions.inJustDecodeBounds = true;
+	        bmpFactoryOptions.inSampleSize = 4;
+			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
 			drawable = new BitmapDrawable(bitmap);
 			mFile = new File(getIntent().getExtras().getString("foto"));
 		}else if(type.equals("video")){
