@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -214,6 +215,8 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 			return true;
 		case R.id.delete:
 			if (row instanceof Folder) {
+				Folder f = (Folder) row;
+				Log.i("FOLDER", f.id);
 				deleteFolder((Folder) row);
 			}
 			if (row instanceof File) {
@@ -289,6 +292,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 					rlIndice.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
 				} else {
+					rlIndice.setVisibility(View.VISIBLE);
 					mTvEmpytMsg.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
 				}
