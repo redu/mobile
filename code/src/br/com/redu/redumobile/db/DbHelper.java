@@ -334,12 +334,14 @@ public class DbHelper extends SQLiteOpenHelper {
 				new String[] {String.valueOf(status.user.id)}, 
 				null, null, null, null);
 		
-		if(cursor.moveToNext()) {
+		if(cursor.moveToFirst()) {
 			user.id = cursor.getInt(cursor.getColumnIndex(UserTable.COLUMN_ID));
 			user.first_name = cursor.getString(cursor.getColumnIndex(UserTable.COLUMN_FIRST_NAME));
 			user.last_name = cursor.getString(cursor.getColumnIndex(UserTable.COLUMN_LAST_NAME));
 			user.thumbnails = getThumbnails(db, status.user);
     	}
+		
+		cursor.close();
 		
 		return user;
 	}
@@ -360,6 +362,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
 			thumbnails.add(thumbnail);
 		}
+		
+		cursor.close();
 		
 		return thumbnails;
 	}
@@ -382,6 +386,8 @@ public class DbHelper extends SQLiteOpenHelper {
 			
 			links.add(link);
     	}
+		
+		cursor.close();
 		
 		return links;
 	}
