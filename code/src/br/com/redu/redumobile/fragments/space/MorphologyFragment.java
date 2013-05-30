@@ -78,7 +78,7 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 		mExpListView.setEmptyView(getActivity().findViewById(
 				R.id.elv_subject_empyt));
 
-		new LoadUserTask().execute();
+		new LoadSubjectsTask().execute();
 
 		return v;
 	}

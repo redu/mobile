@@ -10,12 +10,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.InputFilter.LengthFilter;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
@@ -34,7 +38,7 @@ public class UploadStep3Activity extends Activity {
 	private Context mContext = this;
 	
 	private String type;
-	private SaveLecture sl;
+	private SaveFile sl;
 	
 	private EditText etTitleLecture;
 	private static final int NUM_MAX_CHARACERS = 250;
@@ -47,12 +51,13 @@ public class UploadStep3Activity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.confirm_inserted_file_or_lecture);
 		superId = getIntent().getExtras().getString("id");
+		Log.i("FolderId", superId);
 		type = getIntent().getExtras().getString("type");
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
+		
 		if (type.equals("foto")){
 			BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-	        bmpFactoryOptions.inJustDecodeBounds = true;
 	        bmpFactoryOptions.inSampleSize = 4;
 			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
 			drawable = new BitmapDrawable(bitmap);
@@ -69,28 +74,55 @@ public class UploadStep3Activity extends Activity {
 		TextView tvWhereLecture = (TextView)findViewById(R.id.tvWhereLecture);
 		etTitleLecture = (EditText)findViewById(R.id.etTitleLecture);
 		
+		tvPreviewName.setText(mFile.getName()+" ("+type+")");
+		
 		Button btAdicionarPreview = (Button)findViewById(R.id.btAdicionarPreview);
 		btAdicionarPreview.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String text = etTitleLecture.getText().toString();
-				Lecture l = new Lecture();
-				l.name = text;
-				if (type.equals("foto")) {
-					l.type = Lecture.TYPE_DOCUMENT;
+				if (mSubject == null) {
+					String[] split = mFile.getName().split("\\.");
+					String extension = split[split.length - 1];
+					String text = etTitleLecture.getText().toString();
+					Log.i("TEXT", text);
+					File newFile = new File(mFile.getParent()+"/"+text+"."+extension);
+					Log.i("NEWFILE", newFile.getAbsolutePath());
+					Log.i("ANTES", mFile.getAbsolutePath());
+					if(!mFile.renameTo(newFile)){
+						Toast toast = Toast.makeText(mContext, "Nome de arquivo inválido.", Toast.LENGTH_LONG);
+						toast.show();
+					}else{
+						mFile = newFile;
+						Log.i("DEPOIS", mFile.getAbsolutePath());
+						Object[] params = {null,mFile};
+						sl = new SaveFile();
+						sl.execute(params);
+					}
+				}else{
+					String text = etTitleLecture.getText().toString();
+					Lecture l = new Lecture();
+					l.name = text;
+					if (type.equals("foto")) {
+						l.type = Lecture.TYPE_DOCUMENT;
+					}
+					if (type.equals("video")) {
+						l.type = Lecture.TYPE_MEDIA;
+					}
+					Object[] params = {l,mFile};
+					sl = new SaveFile();
+					sl.execute(params);
 				}
-				if (type.equals("video")) {
-					l.type = Lecture.TYPE_MEDIA;
-				}
-				Object[] params = {l,mFile};
-				sl = new SaveLecture();
-				sl.execute(params);
 			}
 		});
 		
 		Button btCancelarPreview = (Button)findViewById(R.id.btCancelarPreview);
-		tvWhereLecture.setText("...>"+space.name+">"+mSubject.name);
+		if (mSubject == null) {
+			tvWhereLecture.setText("...>"+space.name);
+		}else{
+			tvWhereLecture.setText(Html.fromHtml("... > "+space.name+" > "+"<b>"+mSubject.name+"</b>"));
+		}
+		
 		btCancelarPreview.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -98,6 +130,7 @@ public class UploadStep3Activity extends Activity {
 				finish();
 			}
 		});
+		
 		
 		if (type.equals("foto"))
 			ivPreview.setBackgroundDrawable(drawable);
@@ -107,19 +140,23 @@ public class UploadStep3Activity extends Activity {
 			ivPreview.setImageResource(R.drawable.ic_audio_big);
 	}
 	
-	class SaveLecture extends AsyncTask<Object, Void, Void> {
+	class SaveFile extends AsyncTask<Object, Void, Void> {
 		
 		
 		@Override
 		protected void onPreExecute() {
-			dialog = ProgressDialog.show(mContext,"Redu","Adicionando Aula...", false, true);
+			dialog = ProgressDialog.show(mContext,"Redu","Adicionando...", false, true);
 			dialog.setIcon(R.drawable.ic_launcher);
 			dialog.setCancelable(false);
 			super.onPreExecute();
 		}
 		protected Void doInBackground(Object... obj) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			redu.postLecture((Lecture)obj[0], mSubject.id,(java.io.File)obj[1]);
+			if (mSubject == null) {
+				redu.postFile(superId, (java.io.File)obj[1]);
+			}else{
+				redu.postLecture((Lecture)obj[0], mSubject.id,(java.io.File)obj[1]);
+			}
 			return null;
 		}
 		@Override

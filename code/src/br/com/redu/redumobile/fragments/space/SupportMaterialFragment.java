@@ -30,6 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
@@ -68,6 +69,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 
 	ListView lvFiles;
 	private SupportMaterialFragmentListener mListener;
+	RelativeLayout rlIndice;
 
 	Dialog dialog;
 
@@ -95,6 +97,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 
 		mProgressBar = (ProgressBar) v.findViewById(R.id.pb);
 		mTvEmpytMsg = (TextView) v.findViewById(R.id.elv_subject_empyt);
+		rlIndice =(RelativeLayout)v.findViewById(R.id.rlIndice);
 		mProgressDialog = new ProgressDialog(getActivity());
 		mProgressDialog.setMessage("Aguarde…");
 		mProgressDialog.setIndeterminate(false);
@@ -260,7 +263,6 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 			try {
 				DefaultReduClient redu = ReduApplication
 						.getReduClient(getActivity());
-				String folderRaizID;
 				if (mFolder == null) {
 					folderRaizID = redu.getFolderID(mSpace.id);
 				} else {
@@ -284,7 +286,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 						files);
 				if (mAdapter.getCount() != 0) {
 					lvFiles.setAdapter(mAdapter);
-					lvFiles.setVisibility(View.VISIBLE);
+					rlIndice.setVisibility(View.VISIBLE);
 					mProgressBar.setVisibility(View.GONE);
 				} else {
 					mTvEmpytMsg.setVisibility(View.VISIBLE);
@@ -393,7 +395,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 		@Override
 		protected void onPreExecute() {
 			mProgressdialogRemove = ProgressDialog.show(getActivity(), "Redu",
-					"Removendo diretório...", false, true);
+					"Removendo Pasta...", false, true);
 			mProgressdialogRemove.setIcon(R.drawable.ic_launcher);
 			mProgressdialogRemove.setCancelable(false);
 			super.onPreExecute();

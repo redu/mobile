@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
-            android:padding="5dp" >
+            android:padding="5dp"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/tvIndice"
@@ -65,7 +66,7 @@
             android:layout_height="wrap_content"
             android:divider="#e7e7e7"
             android:dividerHeight="1dp"
-            android:visibility="gone" >
+            >
         </ListView>
     </LinearLayout>
 	<TextView
