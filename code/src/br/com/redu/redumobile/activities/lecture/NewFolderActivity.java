@@ -53,31 +53,41 @@ public class NewFolderActivity extends BaseActivity{
 	}
 	
 	class SaveFolder extends AsyncTask<String, Void, Void> {
-		
-		
+		private boolean mError;
 		@Override
 		protected void onPreExecute() {
-			if (folder == null)
-				dialog = ProgressDialog.show(mContext,"Redu","Adicionando Pasta...", false, true);
-			else
-				dialog = ProgressDialog.show(mContext,"Redu","Alterando Pasta...", false, true);
-			dialog.setIcon(R.drawable.ic_launcher);
-			dialog.setCancelable(false);
-			super.onPreExecute();
-		}
-		protected Void doInBackground(String... text) {
-			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			if (folder == null)
-				redu.postFolder(text[0], superFolderId);
-			else
-				redu.editFolder(text[0], folder.id);
-			return null;
+			String text;
+			if (folder == null) {
+				text = "Adicionando Pasta...";
+			} else {
+				text = "Alterando Pasta...";
+			}
+			showProgressDialog(text, false);
 		}
 		@Override
+		protected Void doInBackground(String... text) {
+			try {
+				DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+				if (folder == null)
+					redu.postFolder(text[0], superFolderId);
+				else
+					redu.editFolder(text[0], folder.id);
+			} catch (Exception e) {
+				e.printStackTrace();
+				mError = true;
+			}
+			return null;
+		}
+		
+		@Override
 		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			dialog.dismiss();
-			finish();
+			dismissProgressDialog();
+
+			if(mError) {
+				showAlertDialog(NewFolderActivity.this, "Não foi possível completar a ação. Tente novamente em isntantes.", null);
+			} else {
+				finish();
+			}
 		};
 	}
 	
