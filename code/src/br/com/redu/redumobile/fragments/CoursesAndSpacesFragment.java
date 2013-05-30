@@ -108,46 +108,50 @@ public class CoursesAndSpacesFragment extends NoConnectNotifiableFragment {
 	}
     
 	class LoadSpacesTask extends AsyncTask<Void, Void, Void> {
+		
+		private boolean mError;
+		
 		protected Void doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
-
 			mEnrollmentedCourses = new ArrayList<Course>();
 			mSpaces = new ArrayList<List<Space>>();
 			
-			List<Course> courses = redu.getCoursesByEnvironment(mEnvironment.path);
-			if(courses != null) {
-				for(Course course : courses) {
-					List<Space> spacesByCourse;
-					try {
-						spacesByCourse = redu.getSpacesByCourse(course.id);
-					} catch(OAuthConnectionException e) {
-						// usuario nao matriculado no curso
-						e.printStackTrace();
-						spacesByCourse = null;
-					}
-
-					if(spacesByCourse != null) {
-						mEnrollmentedCourses.add(course);
-						mSpaces.add(spacesByCourse);
+			try {
+				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+				List<Course> courses = redu.getCoursesByEnvironment(mEnvironment.path);
+				if(courses != null) {
+					for(Course course : courses) {
+						List<Space> spacesByCourse = redu.getSpacesByCourse(course.id);
+	
+						if(spacesByCourse != null) {
+							mEnrollmentedCourses.add(course);
+							mSpaces.add(spacesByCourse);
+						}
 					}
 				}
+			} catch(OAuthConnectionException e) {
+				e.printStackTrace();
+				mError = true;
 			}
 			return null;
 		}
 
 		protected void onPostExecute(Void result) {
-			if (getActivity() != null){
-				mTvEnvironment.setText(mEnvironment.name);
-				mTvEnvironment.setVisibility(View.VISIBLE);
-				
-				mIvThumbnail.setImageUrl(mEnvironment.getThumbnailUrl());
-				mIvThumbnail.setVisibility(View.VISIBLE);
-				
-				if(mEnrollmentedCourses.isEmpty()) {
-					mTvEmptyList.setVisibility(View.VISIBLE);
-				} else {
-					mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
-					mListView.setAdapter(mAdapter);
+			if(mError) {
+				showNoConnectionAlert();
+			} else {
+				if (getActivity() != null){
+					mTvEnvironment.setText(mEnvironment.name);
+					mTvEnvironment.setVisibility(View.VISIBLE);
+					
+					mIvThumbnail.setImageUrl(mEnvironment.getThumbnailUrl());
+					mIvThumbnail.setVisibility(View.VISIBLE);
+					
+					if(mEnrollmentedCourses.isEmpty()) {
+						mTvEmptyList.setVisibility(View.VISIBLE);
+					} else {
+						mAdapter = new CoursesExpandableListAdapter(getActivity(), mEnrollmentedCourses, mSpaces);
+						mListView.setAdapter(mAdapter);
+					}
 				}
 			}
 			

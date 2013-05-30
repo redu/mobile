@@ -72,7 +72,6 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			public void onError(Exception e) {
 				if(isWaitingNotification) {
 					isWaitingNotification = false;
-					// TODO show a error message
 					getActivity().runOnUiThread(new Runnable() {
 						@Override
 						public void run() {

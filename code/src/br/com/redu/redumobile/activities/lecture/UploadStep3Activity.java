@@ -2,8 +2,6 @@ package br.com.redu.redumobile.activities.lecture;
 
 import java.io.File;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,24 +24,23 @@ import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
+import br.com.redu.redumobile.activities.BaseActivity;
 
-public class UploadStep3Activity extends Activity {
-
+public class UploadStep3Activity extends BaseActivity {
 
 	private String superId;
 	private Space space;
 	private Bitmap bitmap;
 	private BitmapDrawable drawable;
-	
+
 	private Context mContext = this;
-	
+
 	private String type;
 	private SaveFile sl;
 	
 	private EditText etTitleLecture;
 	private static final int NUM_MAX_CHARACERS = 250;
 	private File mFile;
-	public ProgressDialog dialog;
 	private Subject mSubject;
 
 	@Override
@@ -62,7 +59,7 @@ public class UploadStep3Activity extends Activity {
 			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
 			drawable = new BitmapDrawable(bitmap);
 			mFile = new File(getIntent().getExtras().getString("foto"));
-		}else if(type.equals("video")){
+		} else if (type.equals("video")) {
 			mFile = new File(getIntent().getExtras().getString("video"));
 		}
 		superId = getIntent().getExtras().getString("id");
@@ -77,8 +74,9 @@ public class UploadStep3Activity extends Activity {
 		tvPreviewName.setText(mFile.getName()+" ("+type+")");
 		
 		Button btAdicionarPreview = (Button)findViewById(R.id.btAdicionarPreview);
+
 		btAdicionarPreview.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				if (mSubject == null) {
@@ -124,14 +122,12 @@ public class UploadStep3Activity extends Activity {
 		}
 		
 		btCancelarPreview.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		
-		
+
 		if (type.equals("foto"))
 			ivPreview.setBackgroundDrawable(drawable);
 		if (type.equals("video"))
@@ -142,14 +138,15 @@ public class UploadStep3Activity extends Activity {
 	
 	class SaveFile extends AsyncTask<Object, Void, Void> {
 		
+		private boolean mError;
 		
 		@Override
 		protected void onPreExecute() {
-			dialog = ProgressDialog.show(mContext,"Redu","Adicionando...", false, true);
-			dialog.setIcon(R.drawable.ic_launcher);
-			dialog.setCancelable(false);
+			showProgressDialog("Adicionando Aula...", false);
 			super.onPreExecute();
+
 		}
+
 		protected Void doInBackground(Object... obj) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
 			if (mSubject == null) {
@@ -159,12 +156,15 @@ public class UploadStep3Activity extends Activity {
 			}
 			return null;
 		}
+
 		@Override
 		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			dialog.dismiss();
-			finish();
+			dismissProgressDialog();
+			if (mError) {
+				showAlertDialog(UploadStep3Activity.this, "Houve um problema ao adicionar a aula. Verifique sua conexão com a internet e tente novamente.", null);
+			} else {
+				finish();
+			}
 		};
 	}
 }
-
