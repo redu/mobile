@@ -97,7 +97,13 @@ public class PostStatusOnLectureWallActivity extends BaseActivity {
 			if(result == null) {
 				Toast.makeText(PostStatusOnLectureWallActivity.this, "Não foi possível enviar seu comentário.", Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(PostStatusOnLectureWallActivity.this, "Comentário enviado com sucesso.", Toast.LENGTH_SHORT).show();
+				String message;
+				if(mStatusIsHelpType) {
+					message = "Pedido de Ajuda enviado com sucesso.";
+				} else {
+					message = "Comentário enviado com sucesso.";
+				}
+				Toast.makeText(PostStatusOnLectureWallActivity.this, message, Toast.LENGTH_SHORT).show();
 				
 				Intent data = new Intent();
 				data.putExtra(LectureWallActivity.EXTRA_STATUS_RESULT, result);
