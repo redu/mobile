@@ -3,8 +3,6 @@ package br.com.redu.redumobile.fragments.home;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scribe.exceptions.OAuthConnectionException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -96,7 +94,7 @@ public class EnvironmentFragment extends TitlableFragment {
 			try {
 				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 				return redu.getEnvironments();
-			} catch (OAuthConnectionException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}

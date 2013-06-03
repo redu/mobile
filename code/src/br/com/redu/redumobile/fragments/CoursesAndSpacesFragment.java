@@ -3,8 +3,6 @@ package br.com.redu.redumobile.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scribe.exceptions.OAuthConnectionException;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -111,6 +109,12 @@ public class CoursesAndSpacesFragment extends NoConnectNotifiableFragment {
 		
 		private boolean mError;
 		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			mProgressBar.setVisibility(View.VISIBLE);
+		}
+		
 		protected Void doInBackground(Void... params) {
 			mEnrollmentedCourses = new ArrayList<Course>();
 			mSpaces = new ArrayList<List<Space>>();
@@ -128,7 +132,7 @@ public class CoursesAndSpacesFragment extends NoConnectNotifiableFragment {
 						}
 					}
 				}
-			} catch(OAuthConnectionException e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 				mError = true;
 			}
@@ -159,46 +163,5 @@ public class CoursesAndSpacesFragment extends NoConnectNotifiableFragment {
 		};
 
 	}
-	
-//    class EnrollmentTask extends AsyncTask<Void, Void, Void> {
-//		
-//		protected Void doInBackground(Void... params) {
-//			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
-//			
-//			/*mEnrollment = new ArrayList<Subject>();
-//			List<Subject> subjects = redu.getSubjectsBySpace(mSpace.id);
-//			
-//			mLecture = new ArrayList<List<Lecture>>();
-//			
-//			if(subjects != null) {
-//				subjects.removeAll(Collections.singleton(null));
-//				for(Subject subject : subjects) {
-//					List<Lecture> lectureBySubject;
-//					try {
-//						lectureBySubject = redu.getLecturesBySubject(subject.id);
-//					} catch(OAuthConnectionException e) {
-//						// usuario nao matriculado no curso
-//						e.printStackTrace();
-//						lectureBySubject = null;
-//					}
-//
-//					if(lectureBySubject != null) {
-//						mEnrollmentedSubjects.add(subject);
-//						mLecture.add(lectureBySubject);
-//					}
-//				}
-//			}*/
-//			return null;
-//		}
-//
-//		protected void onPostExecute(Void result) {
-//			if (getActivity() != null) {
-//				/*mAdapter = new SubjectExpandableListAdapter(getActivity(), mEnrollmentedSubjects, mLecture, mSpace);
-//				mExpListView.setAdapter(mAdapter);
-//				mExpListView.setVisibility(View.VISIBLE);
-//				mProgressBar.setVisibility(View.GONE);*/
-//			}
-//		};
-//	}
 
 }
