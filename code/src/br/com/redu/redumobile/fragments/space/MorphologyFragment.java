@@ -21,7 +21,6 @@ import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
-import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.NewModuleActivity;
@@ -78,27 +77,27 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 		mExpListView.setEmptyView(getActivity().findViewById(
 				R.id.elv_subject_empyt));
 
-		new LoadUserTask().execute();
+//		new LoadUserTask().execute();
+		new LoadSubjectsTask().execute();
 
 		return v;
 	}
 
-	class LoadUserTask extends AsyncTask<Void, Void, User> {
-		@Override
-		protected User doInBackground(Void... params) {
-			DefaultReduClient redu = ReduApplication
-					.getReduClient(getActivity());
-			return redu.getMe();
-		}
-
-		protected void onPostExecute(User user) {
-			// ((TextView) v.findViewById(R.id.details)).setText(user.first_name
-			// + " " + user.last_name + ", ");
-			// mUser = user;
-
-			new LoadSubjectsTask().execute();
-		};
-	}
+//	class LoadUserTask extends AsyncTask<Void, Void, User> {
+//		@Override
+//		protected User doInBackground(Void... params) {
+//			DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
+//			return redu.getMe();
+//		}
+//
+//		protected void onPostExecute(User user) {
+//			// ((TextView) v.findViewById(R.id.details)).setText(user.first_name
+//			// + " " + user.last_name + ", ");
+//			// mUser = user;
+//
+//			new LoadSubjectsTask().execute();
+//		};
+//	}
 
 	/*
 	 * class LoadCoursesTask extends AsyncTask<Void, Void,
@@ -120,8 +119,7 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 
 		protected Void doInBackground(Void... params) {
 			try {
-				DefaultReduClient redu = ReduApplication
-						.getReduClient(getActivity());
+				DefaultReduClient redu = ReduApplication.getReduClient(getActivity());
 
 				mEnrollmentedSubjects = new ArrayList<Subject>();
 				List<Subject> subjects = redu.getSubjectsBySpace(mSpace.id);
@@ -176,6 +174,7 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 
 	@Override
 	public void onNoConnectionAlertClicked() {
-		new LoadUserTask().execute();
+//		new LoadUserTask().execute();
+		new LoadSubjectsTask().execute();
 	}
 }

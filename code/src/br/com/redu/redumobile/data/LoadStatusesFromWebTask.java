@@ -1,6 +1,6 @@
 package br.com.redu.redumobile.data;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -196,24 +196,24 @@ public class LoadStatusesFromWebTask implements Task {
 	
 	private static class LoadStatusesFromWebManager {
 
-		private static boolean mIsWorking;
-		private static final List<SoftReference<OnLoadStatusesFromWebListener>> mListeners = new ArrayList<SoftReference<OnLoadStatusesFromWebListener>>();
+		private static boolean mIsWorking; 
+		private static final List<WeakReference<OnLoadStatusesFromWebListener>> mListeners = new ArrayList<WeakReference<OnLoadStatusesFromWebListener>>();
 
 		public static void run(Context context) {
-			if(!mIsWorking) {		
-				SchedulerManager.getInstance().runNow(context, LoadStatusesFromWebTask.class, 0);
+			if(!isWorking()) {		
 				SchedulerManager.getInstance().saveTask(context, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
+				SchedulerManager.getInstance().runNow(context, LoadStatusesFromWebTask.class, 0);
 //				SchedulerManager.getInstance().restart(context, LoadStatusesFromWebTask.class);
 			}
 		}
 		
 		public static void add(OnLoadStatusesFromWebListener listener) {
-			mListeners.add(new SoftReference<OnLoadStatusesFromWebListener>(listener));
+			mListeners.add(new WeakReference<OnLoadStatusesFromWebListener>(listener));
 		}
 
 		public static void notifyOnStart() {
 			mIsWorking = true;
-			for (SoftReference<OnLoadStatusesFromWebListener> reference : mListeners) {
+			for (WeakReference<OnLoadStatusesFromWebListener> reference : mListeners) {
 				if(!reference.isEnqueued() && reference.get() != null) {
 					reference.get().onStart();
 				}
@@ -222,7 +222,7 @@ public class LoadStatusesFromWebTask implements Task {
 
 		public static void notifyOnComplete() {
 			mIsWorking = false;
-			for (SoftReference<OnLoadStatusesFromWebListener> reference : mListeners) {
+			for (WeakReference<OnLoadStatusesFromWebListener> reference : mListeners) {
 				if(!reference.isEnqueued() && reference.get() != null) {
 					reference.get().onComplete();
 				}
@@ -231,7 +231,7 @@ public class LoadStatusesFromWebTask implements Task {
 
 		public static void notifyOnError(Exception e) {
 			mIsWorking = false;
-			for (SoftReference<OnLoadStatusesFromWebListener> reference : mListeners) {
+			for (WeakReference<OnLoadStatusesFromWebListener> reference : mListeners) {
 				if(!reference.isEnqueued() && reference.get() != null) {
 					reference.get().onError(e);
 				}
