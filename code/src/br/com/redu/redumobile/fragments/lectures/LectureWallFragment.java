@@ -62,10 +62,6 @@ public class LectureWallFragment extends StatusListFragment {
 		return v;
 	}
 	
-	public void addStatus(Status status) {
-		mAdapter.add(status, false);
-	}
-	
 	@Override
 	public void onStatusInserted() {
 		updateStatusesFromDb(false);

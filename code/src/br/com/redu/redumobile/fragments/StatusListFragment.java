@@ -54,6 +54,45 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	protected abstract long getEarliestStatusTimestamp();
 	protected abstract List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan);
 
+	private OnLoadStatusesFromWebListener onLoadStatusesFromWebListener = new OnLoadStatusesFromWebListener() {
+		@Override
+		public void onStart() {
+			// do nothing
+		}
+		
+		@Override
+		public void onError(Exception e) {
+			if(isWaitingNotification) {
+				isWaitingNotification = false;
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if(mRefreshView != null) {
+							mRefreshView.onRefreshComplete();
+							showNoConnectionAlert();
+						}
+					}
+				});
+			}
+		}
+		
+		@Override
+		public void onComplete() {
+			if(isWaitingNotification) {
+				isWaitingNotification = false;
+				updateStatusesFromDb(false);
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if(mRefreshView != null) {
+							mRefreshView.onRefreshComplete();
+						}
+					}
+				});
+			}
+		}
+	};
+	
 	public StatusListFragment() {
 
 	}
@@ -61,45 +100,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		LoadStatusesFromWebTask.addOnLoadStatusesFromWebListener(new OnLoadStatusesFromWebListener() {
-			@Override
-			public void onStart() {
-			
-			}
-			
-			@Override
-			public void onError(Exception e) {
-				if(isWaitingNotification) {
-					isWaitingNotification = false;
-					getActivity().runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if(mRefreshView != null) {
-								mRefreshView.onRefreshComplete();
-								showNoConnectionAlert();
-							}
-						}
-					});
-				}
-			}
-			
-			@Override
-			public void onComplete() {
-				if(isWaitingNotification) {
-					isWaitingNotification = false;
-					updateStatusesFromDb(false);
-					getActivity().runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if(mRefreshView != null) {
-								mRefreshView.onRefreshComplete();
-							}
-						}
-					});
-				}
-			}
-		});
+		LoadStatusesFromWebTask.addOnLoadStatusesFromWebListener(onLoadStatusesFromWebListener);
 	}
 	
 	@Override
@@ -231,6 +232,15 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		mLlNewStatus.setVisibility(View.VISIBLE);
 	}
 
+	public void addStatus(Status status) {
+		mAdapter.add(status, false);
+		mAdapter.notifyDataSetChanged();
+		
+		if(!mAdapter.isEmpty()) {
+			hideEmptyListMessage();
+		}
+	}
+	
 	@Override
 	public void onNoConnectionAlertClicked() {
 		updateStatusesFromWeb();
