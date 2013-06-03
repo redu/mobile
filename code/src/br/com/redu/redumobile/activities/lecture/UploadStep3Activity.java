@@ -8,12 +8,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.InputFilter.LengthFilter;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
@@ -32,8 +36,8 @@ public class UploadStep3Activity extends BaseActivity {
 	private Context mContext = this;
 
 	private String type;
-	private SaveLecture sl;
-
+	private SaveFile sl;
+	
 	private EditText etTitleLecture;
 	private static final int NUM_MAX_CHARACERS = 250;
 	private File mFile;
@@ -44,13 +48,14 @@ public class UploadStep3Activity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.confirm_inserted_file_or_lecture);
 		superId = getIntent().getExtras().getString("id");
+		Log.i("FolderId", superId);
 		type = getIntent().getExtras().getString("type");
-		space = (Space) getIntent().getExtras().get(Space.class.getName());
-		mSubject = (Subject) getIntent().getExtras().get(Subject.class.getName());
-		if (type.equals("foto")) {
+		space = (Space)getIntent().getExtras().get(Space.class.getName());
+		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
+		
+		if (type.equals("foto")){
 			BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-			bmpFactoryOptions.inJustDecodeBounds = true;
-			bmpFactoryOptions.inSampleSize = 4;
+	        bmpFactoryOptions.inSampleSize = 4;
 			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
 			drawable = new BitmapDrawable(bitmap);
 			mFile = new File(getIntent().getExtras().getString("foto"));
@@ -58,35 +63,64 @@ public class UploadStep3Activity extends BaseActivity {
 			mFile = new File(getIntent().getExtras().getString("video"));
 		}
 		superId = getIntent().getExtras().getString("id");
-		space = (Space) getIntent().getExtras().get(Space.class.getName());
+		space = (Space)getIntent().getExtras().get(Space.class.getName());
+		
+		
+		ImageView ivPreview = (ImageView)findViewById(R.id.camera_preview);
+		TextView tvPreviewName = (TextView)findViewById(R.id.tvImageName);
+		TextView tvWhereLecture = (TextView)findViewById(R.id.tvWhereLecture);
+		etTitleLecture = (EditText)findViewById(R.id.etTitleLecture);
+		
+		tvPreviewName.setText(mFile.getName()+" ("+type+")");
+		
+		Button btAdicionarPreview = (Button)findViewById(R.id.btAdicionarPreview);
 
-		ImageView ivPreview = (ImageView) findViewById(R.id.camera_preview);
-		TextView tvPreviewName = (TextView) findViewById(R.id.tvImageName);
-		TextView tvWhereLecture = (TextView) findViewById(R.id.tvWhereLecture);
-		etTitleLecture = (EditText) findViewById(R.id.etTitleLecture);
-
-		Button btAdicionarPreview = (Button) findViewById(R.id.btAdicionarPreview);
 		btAdicionarPreview.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				String text = etTitleLecture.getText().toString();
-				Lecture l = new Lecture();
-				l.name = text;
-				if (type.equals("foto")) {
-					l.type = Lecture.TYPE_DOCUMENT;
+				if (mSubject == null) {
+					String[] split = mFile.getName().split("\\.");
+					String extension = split[split.length - 1];
+					String text = etTitleLecture.getText().toString();
+					Log.i("TEXT", text);
+					File newFile = new File(mFile.getParent()+"/"+text+"."+extension);
+					Log.i("NEWFILE", newFile.getAbsolutePath());
+					Log.i("ANTES", mFile.getAbsolutePath());
+					if(!mFile.renameTo(newFile)){
+						Toast toast = Toast.makeText(mContext, "Nome de arquivo inválido.", Toast.LENGTH_LONG);
+						toast.show();
+					}else{
+						mFile = newFile;
+						Log.i("DEPOIS", mFile.getAbsolutePath());
+						Object[] params = {null,mFile};
+						sl = new SaveFile();
+						sl.execute(params);
+					}
+				}else{
+					String text = etTitleLecture.getText().toString();
+					Lecture l = new Lecture();
+					l.name = text;
+					if (type.equals("foto")) {
+						l.type = Lecture.TYPE_DOCUMENT;
+					}
+					if (type.equals("video")) {
+						l.type = Lecture.TYPE_MEDIA;
+					}
+					Object[] params = {l,mFile};
+					sl = new SaveFile();
+					sl.execute(params);
 				}
-				if (type.equals("video")) {
-					l.type = Lecture.TYPE_MEDIA;
-				}
-				Object[] params = { l, mFile };
-				sl = new SaveLecture();
-				sl.execute(params);
 			}
 		});
-
-		Button btCancelarPreview = (Button) findViewById(R.id.btCancelarPreview);
-		tvWhereLecture.setText("...>" + space.name + ">" + mSubject.name);
+		
+		Button btCancelarPreview = (Button)findViewById(R.id.btCancelarPreview);
+		if (mSubject == null) {
+			tvWhereLecture.setText("...>"+space.name);
+		}else{
+			tvWhereLecture.setText(Html.fromHtml("... > "+space.name+" > "+"<b>"+mSubject.name+"</b>"));
+		}
+		
 		btCancelarPreview.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -101,23 +135,24 @@ public class UploadStep3Activity extends BaseActivity {
 		if (type.equals("audio"))
 			ivPreview.setImageResource(R.drawable.ic_audio_big);
 	}
-
-	class SaveLecture extends AsyncTask<Object, Void, Void> {
-
+	
+	class SaveFile extends AsyncTask<Object, Void, Void> {
+		
 		private boolean mError;
-
+		
 		@Override
 		protected void onPreExecute() {
 			showProgressDialog("Adicionando Aula...", false);
+			super.onPreExecute();
+
 		}
 
 		protected Void doInBackground(Object... obj) {
-			try {
-				DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-				redu.postLecture((Lecture) obj[0], mSubject.id, (java.io.File) obj[1]);
-			} catch (Exception e) {
-				e.printStackTrace();
-				mError = true;
+			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+			if (mSubject == null) {
+				redu.postFile(superId, (java.io.File)obj[1]);
+			}else{
+				redu.postLecture((Lecture)obj[0], mSubject.id,(java.io.File)obj[1]);
 			}
 			return null;
 		}

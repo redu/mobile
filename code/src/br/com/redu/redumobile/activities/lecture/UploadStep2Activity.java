@@ -38,7 +38,11 @@ public class UploadStep2Activity extends Activity {
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
 		String[] str = {"Camera","Escolher da Galeria"};
-		lv.setAdapter(new PopupAdapter(this, str,superId, space));
+		if (mSubject != null) {
+			lv.setAdapter(new PopupAdapter(this, str, space, mSubject));
+		}else{
+			lv.setAdapter(new PopupAdapter(this, str, superId, space));
+		}
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

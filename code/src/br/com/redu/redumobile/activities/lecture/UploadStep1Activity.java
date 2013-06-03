@@ -24,7 +24,12 @@ public class UploadStep1Activity extends Activity{
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
 		String[] str = {"Foto","Vídeo","Áudio"};
-		lv.setAdapter(new PopupAdapter(this, str, space, subject));
+		if (subject != null) {
+			lv.setAdapter(new PopupAdapter(this, str, space, subject));
+		}else{
+			lv.setAdapter(new PopupAdapter(this, str, superId, space));
+		}
+		
 	}
 	
 	@Override
