@@ -93,10 +93,6 @@ public class SpaceWallFragment extends StatusListFragment {
 		return null;
 	}
 	
-	public void addStatus(Status status) {
-		mAdapter.add(status, false);
-	}
-	
 	@Override
 	protected long getOldestStatusTimestamp() {
 		int count = mAdapter.getCount();

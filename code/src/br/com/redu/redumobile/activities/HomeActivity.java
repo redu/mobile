@@ -119,7 +119,7 @@ public class HomeActivity extends DbHelperHolderActivity {
 					break;
 				case 3:
 					i = new Intent(getApplicationContext(), LoginWebViewActivity.class);
-					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					PinCodeHelper.clearPinCode(getApplicationContext());
 					CookieSyncManager.createInstance(HomeActivity.this);
 //					CookieManager.getInstance().setCookie("redu.com.br", "");
