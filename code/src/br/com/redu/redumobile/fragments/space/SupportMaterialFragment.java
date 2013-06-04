@@ -209,9 +209,6 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 			if (row instanceof Folder) {
 				editFolder((Folder) row);
 			}
-			if (row instanceof File) {
-				editFile((File) row);
-			}
 			return true;
 		case R.id.delete:
 			if (row instanceof Folder) {
@@ -232,7 +229,12 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		getActivity().getMenuInflater().inflate(R.drawable.menu, menu);
+		/*Object obj = lvFiles.getAdapter().getItem(((ListView)v).getSelectedItemPosition());
+		if (obj instanceof Folder) {*/
+			getActivity().getMenuInflater().inflate(R.drawable.menu, menu);
+		/*}else{
+			getActivity().getMenuInflater().inflate(R.drawable.menu_file, menu);
+		}*/
 	}
 
 	private void editFile(File file) {

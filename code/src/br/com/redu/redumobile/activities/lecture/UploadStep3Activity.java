@@ -48,7 +48,6 @@ public class UploadStep3Activity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.confirm_inserted_file_or_lecture);
 		superId = getIntent().getExtras().getString("id");
-		Log.i("FolderId", superId);
 		type = getIntent().getExtras().getString("type");
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
