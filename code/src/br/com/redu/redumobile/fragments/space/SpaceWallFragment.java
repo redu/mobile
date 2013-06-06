@@ -85,7 +85,7 @@ public class SpaceWallFragment extends StatusListFragment {
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp,
 			boolean olderThan) {
-		return dbHelper.getStatusBySpace(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, mSpace.id);
+		return dbHelper.getStatusesBySpace(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, mSpace.id);
 	}
 
 	@Override
