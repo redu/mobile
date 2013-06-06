@@ -23,7 +23,7 @@ public class LoginWebViewActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if(PinCodeHelper.hasPinCode(this)) {
+		if(PinCodeHelper.has(this)) {
 			startActivity(new Intent(this, HomeActivity.class));
 			finish();
 		} else {
@@ -76,7 +76,7 @@ public class LoginWebViewActivity extends BaseActivity {
 				}
 			}.execute();
 			
-			PinCodeHelper.setPinCode(getApplicationContext(), pinCode);
+			PinCodeHelper.set(getApplicationContext(), pinCode);
 			
 			Intent it = new Intent(LoginWebViewActivity.this, HomeActivity.class);
 			startActivity(it);

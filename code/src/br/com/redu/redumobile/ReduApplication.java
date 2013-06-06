@@ -11,11 +11,6 @@ import br.com.redu.redumobile.util.PinCodeHelper;
 
 public class ReduApplication extends Application {
 
-	private static final String CONSUMER_KEY = "YzbH0ulBcOjXSPtmhJuEHNFFf6eZGiamQeOBQhU1";
-	private static final String CONSUMER_SECRET_KEY = "kUdQsrimVZqgS7u1JuCnMGvARWhmiLWcbrZKwYO8";
-
-//	private static final String USER_PIN = "hxEhgW4RY2WOI0q8Gcfh";
-
 	static private DefaultReduClient reduClientInitialized;
 	static private User user;
 
@@ -24,9 +19,12 @@ public class ReduApplication extends Application {
 			return reduClientInitialized;
 		}
 		
-		DefaultReduClient reduClient = new DefaultReduClient(CONSUMER_KEY, CONSUMER_SECRET_KEY);
+		String consumerKey = context.getString(R.string.CONSUMER_KEY);
+		String consumerSecretKey = context.getString(R.string.CONSUMER_SECRET_KEY);
+		
+		DefaultReduClient reduClient = new DefaultReduClient(consumerKey, consumerSecretKey);
 			
-		String pinCode = PinCodeHelper.getPinCode(context);
+		String pinCode = PinCodeHelper.get(context);
 		if(pinCode != null) {
 			reduClient.initClient(pinCode);
 			reduClientInitialized = reduClient;
@@ -40,5 +38,11 @@ public class ReduApplication extends Application {
 			user = getReduClient(context).getMe();
 		}
 		return user;
+	}
+	
+	static public void clear(Context context) {
+		PinCodeHelper.clear(context);
+		reduClientInitialized = null;
+		user = null;
 	}
 }
