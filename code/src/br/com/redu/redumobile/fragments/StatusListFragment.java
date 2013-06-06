@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.fragments;
 
+import java.text.ParseException;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,7 +19,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import br.com.developer.redu.models.Status;
+import br.com.developer.redu.models.User;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.DbHelperHolderActivity;
 import br.com.redu.redumobile.activities.LectureActivity;
 import br.com.redu.redumobile.activities.SpaceActivity;
@@ -28,6 +31,7 @@ import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.db.DbHelperListener;
+import br.com.redu.redumobile.util.DateUtil;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -232,13 +236,42 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		mLlNewStatus.setVisibility(View.VISIBLE);
 	}
 
-	public void addStatus(Status status) {
+	/**
+	 * Run on a AsyncTask, because this method access the db.
+	 * @param status Status to be inserted
+	 * @param appUserId Id of the user.
+	 */
+	public void addPostedStatus(final Status status) {
+		try {
+			status.createdAtInMillis = DateUtil.dfIn.parse(status.created_at).getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		status.ignorableInSync = true;
+		status.lastSeen = true;
+		status.lastSeenAtInMillis = status.createdAtInMillis;
+		
 		mAdapter.add(status, false);
 		mAdapter.notifyDataSetChanged();
 		
-		if(!mAdapter.isEmpty()) {
-			hideEmptyListMessage();
-		}
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				Activity activity = getActivity();
+				if (activity != null && activity instanceof DbHelperHolderActivity) {
+					status.ignorableInSync = true;
+					try {
+						User user = ReduApplication.getUser(activity);
+						DbHelper dbHelper = ((DbHelperHolderActivity) activity).getDbHelper();
+						dbHelper.putStatus(status, String.valueOf(String.valueOf(user.id)));	
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				return null;
+			}
+		}.execute();
+		
 	}
 	
 	@Override
@@ -258,8 +291,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		}
 	}
 	
-	class LoadStatusesFromDbTask extends
-			AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
+	class LoadStatusesFromDbTask extends AsyncTask<Void, Void, List<br.com.developer.redu.models.Status>> {
 
 		boolean mOlderThan;
 
@@ -267,8 +299,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			mOlderThan = olderThan;
 		}
 
-		protected List<br.com.developer.redu.models.Status> doInBackground(
-				Void... params) {
+		protected List<br.com.developer.redu.models.Status> doInBackground(Void... params) {
 			List<br.com.developer.redu.models.Status> statuses = null;
 
 			Activity activity = getActivity();
@@ -282,8 +313,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			return statuses;
 		}
 
-		protected void onPostExecute(
-				List<br.com.developer.redu.models.Status> statuses) {
+		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
 			if (getActivity() != null) {
 				if (statuses != null && statuses.size() > 0) {
 					mAdapter.addAll(statuses, mOlderThan);

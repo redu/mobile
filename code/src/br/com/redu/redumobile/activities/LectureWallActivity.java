@@ -47,8 +47,7 @@ public class LectureWallActivity extends DbHelperHolderActivity {
 				@Override
 				protected Void doInBackground(Void... params) {
 					try {
-						DefaultReduClient redu = ReduApplication
-								.getReduClient(LectureWallActivity.this);
+						DefaultReduClient redu = ReduApplication.getReduClient(LectureWallActivity.this);
 						mLecture = redu.getLecture(lectureId);
 						return null;
 					} catch (OAuthConnectionException e) {
@@ -88,15 +87,14 @@ public class LectureWallActivity extends DbHelperHolderActivity {
 		mFragment = new LectureWallFragment();
 		mFragment.setArguments(args);
 
-		getSupportFragmentManager().beginTransaction()
-				.add(R.id.fragment_container, mFragment).commit();
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mFragment).commit();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
 			Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
-			mFragment.addStatus(status);
+			mFragment.addPostedStatus(status);
 		}
 	}
 }
