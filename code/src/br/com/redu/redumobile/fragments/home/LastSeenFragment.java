@@ -40,7 +40,7 @@ public class LastSeenFragment extends StatusListFragment {
 
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getLastSeenStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+		return dbHelper.getLastSeenStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
 	}
 
 	@Override

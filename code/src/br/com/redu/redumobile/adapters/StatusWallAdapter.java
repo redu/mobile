@@ -50,22 +50,58 @@ public class StatusWallAdapter extends BaseAdapter {
 			mStatuses = new ArrayList<Status>();
 		}
 
-		if(olderThan) {
+		if(mStatuses.isEmpty()) {
 			mStatuses.add(status);
 		} else {
-			mStatuses.add(0, status);
+			if(olderThan) {
+				addFromEnd(status);
+			} else {
+				addFromBegin(status);
+			}
+		}
+	}
+	
+	private void addFromBegin(Status statusToAdd) {
+		int size = mStatuses.size();
+		
+		int i;
+		for(i = 0; i < size; i++) {
+			Status status = mStatuses.get(i);
+			
+			if(statusToAdd.id.equals(status.id)) {
+				break;
+			} else if(statusToAdd.createdAtInMillis >= status.createdAtInMillis) {
+				mStatuses.add(i, statusToAdd);
+				break;
+			}
+		}
+		
+		if(i == size) {
+			mStatuses.add(statusToAdd);
+		}
+	}
+	
+	private void addFromEnd(Status statusToAdd) {
+		int i;
+		for(i = mStatuses.size() - 1; i >= 0; i--) {
+			Status status = mStatuses.get(i);
+			
+			if(statusToAdd.id.equals(status.id)) {
+				break;
+			} else if(statusToAdd.createdAtInMillis <= status.createdAtInMillis) {
+				mStatuses.add(i, statusToAdd);
+				break;
+			}
+		}
+		
+		if(i == -1) {
+			mStatuses.add(0, statusToAdd);
 		}
 	}
 
 	public void addAll(List<Status> statuses, boolean olderThan) {
-		if(mStatuses == null) {
-			mStatuses = statuses;
-		} else {
-			if(olderThan) {
-				mStatuses.addAll(statuses);
-			} else {
-				mStatuses.addAll(0, statuses);
-			}
+		for(Status status : statuses) {
+			add(status, olderThan);
 		}
 	}
 	

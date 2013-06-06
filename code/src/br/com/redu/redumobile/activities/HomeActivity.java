@@ -23,13 +23,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.fragments.TitlableFragment;
 import br.com.redu.redumobile.fragments.home.EnvironmentFragment;
 import br.com.redu.redumobile.fragments.home.LastSeenFragment;
 import br.com.redu.redumobile.fragments.home.NewLecturesFragment;
 import br.com.redu.redumobile.fragments.home.UserWallFragment;
-import br.com.redu.redumobile.util.PinCodeHelper;
 
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -120,12 +120,15 @@ public class HomeActivity extends DbHelperHolderActivity {
 				case 3:
 					i = new Intent(getApplicationContext(), LoginWebViewActivity.class);
 					i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					PinCodeHelper.clearPinCode(getApplicationContext());
+					
+					ReduApplication.clear(getApplicationContext());
+
 					CookieSyncManager.createInstance(HomeActivity.this);
 //					CookieManager.getInstance().setCookie("redu.com.br", "");
 //					CookieSyncManager.getInstance().sync();
 					CookieManager.getInstance().removeAllCookie();
 					CookieSyncManager.getInstance().sync();
+					
 					break;
 				}
 

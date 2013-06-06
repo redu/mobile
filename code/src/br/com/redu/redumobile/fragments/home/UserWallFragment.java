@@ -20,7 +20,7 @@ public class UserWallFragment extends StatusListFragment {
 	
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getStatus(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+		return dbHelper.getStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
 	}
 
 	@Override

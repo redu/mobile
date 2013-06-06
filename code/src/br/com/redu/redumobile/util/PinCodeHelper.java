@@ -8,19 +8,19 @@ public class PinCodeHelper {
 
 	private static final String REDU_PIN_CODE = "REDU_PIN_CODE";
 	
-	public static boolean hasPinCode(Context context) {
+	public static boolean has(Context context) {
 		return getPrefs(context).contains(REDU_PIN_CODE);
 	}
 	
-	public static String getPinCode(Context context) {
+	public static String get(Context context) {
 		return getPrefs(context).getString(REDU_PIN_CODE, null);
 	}
 	
-	public static boolean setPinCode(Context context, String pinCode) {
+	public static boolean set(Context context, String pinCode) {
 		return getPrefs(context).edit().putString(REDU_PIN_CODE, pinCode).commit();
 	}
 	
-	public static boolean clearPinCode(Context context) {
+	public static boolean clear(Context context) {
 		return getPrefs(context).edit().clear().commit();
 	}
 	

@@ -200,8 +200,8 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			((SupportMaterialFragment) items[ITEM_SUPPORT_MATERIAL]).setListener(smfl);
 		}
 
-		public void addStatusOnWall(Status status) {
-			((SpaceWallFragment) items[ITEM_WALL]).addStatus(status);
+		public void addPostedStatus(Status status) {
+			((SpaceWallFragment) items[ITEM_WALL]).addPostedStatus(status);
 		}
 		
 		@Override
@@ -248,7 +248,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK) {
 			Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
-			mAdapter.addStatusOnWall(status);
+			mAdapter.addPostedStatus(status);
 		}
 	}
 }

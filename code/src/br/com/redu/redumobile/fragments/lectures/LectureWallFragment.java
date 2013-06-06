@@ -80,7 +80,7 @@ public class LectureWallFragment extends StatusListFragment {
 	@Override
 	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp,
 			boolean olderThan) {
-		return dbHelper.getStatusByLecture(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, mLecture.id);
+		return dbHelper.getStatusesByLecture(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, mLecture.id);
 	}
 
 	@Override

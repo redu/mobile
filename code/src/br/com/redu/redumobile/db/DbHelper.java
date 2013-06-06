@@ -52,6 +52,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		public static final String COLUMN_TEXT = "text";
 		public static final String COLUMN_LECTURE_ALREADY_SEEN = "lecture_already_seen";
 		public static final String COLUMN_LAST_SEEN = "last_seen";
+		public static final String COLUMN_IGNORABLE_IN_SYNC = "ignorable_in_sync";
 		
 		public static final String CREATE = "CREATE TABLE "
 				+ NAME + "(" 
@@ -66,6 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ COLUMN_LAST_SEEN + " INTEGER, "
 				+ COLUMN_LAST_SEEN_AT_IN_MILLIS + " INTEGER, "
 				+ COLUMN_TEXT + " TEXT NOT NULL, "
+				+ COLUMN_IGNORABLE_IN_SYNC + " INTEGER, "
 				+ "FOREIGN KEY(" + COLUMN_APP_USER_ID + ") REFERENCES " + AppUserTable.NAME + "(" + AppUserTable.COLUMN_ID + "), "
 				+ "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + UserTable.NAME + "(" + UserTable.COLUMN_ID + "));";
 	}
@@ -164,7 +166,27 @@ public class DbHelper extends SQLiteOpenHelper {
 		mListeners.add(new WeakReference<DbHelperListener>(listener));
 	}
 	
-	synchronized public List<Status> getStatus(long timestamp, boolean olderThan, int count) {
+	synchronized public Status getStatus(String id) {
+		Status status = null;
+		
+		SQLiteDatabase db = this.getReadableDatabase();  
+	
+		Cursor cursor;  
+		cursor = db.query(StatusTable.NAME, null, 
+				StatusTable.COLUMN_ID + " = ?", new String[]{id}, 
+				null, null, null, null);
+		
+		if(cursor.moveToFirst()) {			
+			status = getStatus(db, cursor);
+		}
+		
+		cursor.close();
+		db.close();
+		
+		return status;
+	}
+	
+	synchronized public List<Status> getStatuses(long timestamp, boolean olderThan, int count) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -178,9 +200,7 @@ public class DbHelper extends SQLiteOpenHelper {
         		String.valueOf(count));  
   
     	while(cursor.moveToNext()) {
-			Status status = getCurrentStatusInCursor(cursor);
-			status.user = getUser(db, status);
-			status.links = getLinks(db, status);
+			Status status = getStatus(db, cursor);
 			statuses.add(status);
     	}
         
@@ -190,7 +210,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return statuses;  
 	}
 	
-	synchronized public List<Status> getNewLecturesStatus(long timestamp, boolean olderThan, int count) {
+	synchronized public List<Status> getNewLecturesStatuses(long timestamp, boolean olderThan, int count) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -204,9 +224,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
-			Status status = getCurrentStatusInCursor(cursor);
-			status.user = getUser(db, status);
-			status.links = getLinks(db, status);
+			Status status = getStatus(db, cursor);
 			statuses.add(status);
 		}
 		
@@ -216,7 +234,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getLastSeenStatus(long timestamp, boolean olderThan, int count) {
+	synchronized public List<Status> getLastSeenStatuses(long timestamp, boolean olderThan, int count) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -230,9 +248,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				String.valueOf(count));  
 		
 		while(cursor.moveToNext()) {
-			Status status = getCurrentStatusInCursor(cursor);
-			status.user = getUser(db, status);
-			status.links = getLinks(db, status);
+			Status status = getStatus(db, cursor);
 			statuses.add(status);
 		}
 		
@@ -242,7 +258,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getStatusBySpace(long timestamp, boolean olderThan, int count, String spaceId) {
+	synchronized public List<Status> getStatusesBySpace(long timestamp, boolean olderThan, int count, String spaceId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -260,9 +276,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		cursor = db.rawQuery(query, null);
 		
 		while(cursor.moveToNext()) {
-			Status status = getCurrentStatusInCursor(cursor);
-			status.user = getUser(db, status);
-			status.links = getLinks(db, status);
+			Status status = getStatus(db, cursor);
 			statuses.add(status);
 		}
 		
@@ -272,7 +286,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getStatusByLecture(long timestamp, boolean olderThan, int count, int lectureId) {
+	synchronized public List<Status> getStatusesByLecture(long timestamp, boolean olderThan, int count, int lectureId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -290,9 +304,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		cursor = db.rawQuery(query, null);
 		
 		while(cursor.moveToNext()) {
-			Status status = getCurrentStatusInCursor(cursor);
-			status.user = getUser(db, status);
-			status.links = getLinks(db, status);
+			Status status = getStatus(db, cursor);
 			statuses.add(status);
 		}
 		
@@ -302,7 +314,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	private Status getCurrentStatusInCursor(Cursor cursor) {
+	private Status getStatusInCursor(Cursor cursor) {
 		Status status = new Status();
 
 		status.id = cursor.getString(cursor.getColumnIndex(StatusTable.COLUMN_ID));
@@ -319,9 +331,19 @@ public class DbHelper extends SQLiteOpenHelper {
 		int lastSeen = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_LAST_SEEN));
 		status.lastSeen = (lastSeen != 0);
 		
+		int ignorableInSync = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_IGNORABLE_IN_SYNC));
+		status.ignorableInSync = (ignorableInSync != 0);
+		
 		status.user = new User();
 		status.user.id = cursor.getInt(cursor.getColumnIndex(StatusTable.COLUMN_USER_ID));
 		
+		return status;
+	}
+	
+	private Status getStatus(SQLiteDatabase db, Cursor cursor) {
+		Status status = getStatusInCursor(cursor);
+		status.user = getUser(db, status);
+		status.links = getLinks(db, status);
 		return status;
 	}
 	
@@ -406,15 +428,27 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 	
 	synchronized public long putStatus(Status status, String appUserId) {
-		SQLiteDatabase db = this.getWritableDatabase();  
+		long id = -1;
+		
+		Status storedStatus = getStatus(status.id);
 
-		long id = putStatus(db, status, appUserId);
-        
-        db.close();
-        
-        notifyListenters(true);
-        
-        return id;
+		if(storedStatus == null) {
+			SQLiteDatabase db = this.getWritableDatabase();  
+			id = putStatus(db, status, appUserId);
+			db.close();
+			notifyListenters(true);
+			
+		} else {
+			if (storedStatus.ignorableInSync == true && status.ignorableInSync == false) {
+				id = updateStatusIgnorableInSync(status.id, false);
+			}
+			
+			if (storedStatus.answers_count != status.answers_count) {
+				id = updateStatusAnswersCount(status.id, status.answers_count);
+			}
+		}
+		
+		return id;
 	}
 	
 	synchronized public List<Long> putAllStatuses(List<Status> statuses, String appUserId) {
@@ -463,8 +497,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 		values.put(StatusTable.COLUMN_CREATED_AT_IN_MILLIS, status.createdAtInMillis);
 		
-		values.put(StatusTable.COLUMN_LECTURE_ALREADY_SEEN, status.lectureAreadySeen);
-		values.put(StatusTable.COLUMN_LAST_SEEN , status.lastSeen);
+		values.put(StatusTable.COLUMN_LECTURE_ALREADY_SEEN, (status.lectureAreadySeen ? 1 : 0));
+		values.put(StatusTable.COLUMN_LAST_SEEN , (status.lastSeen ? 1 : 0));
+		values.put(StatusTable.COLUMN_IGNORABLE_IN_SYNC , (status.ignorableInSync ? 1 : 0));
 		
 		long id = db.insertWithOnConflict(StatusTable.NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 		
@@ -541,6 +576,19 @@ public class DbHelper extends SQLiteOpenHelper {
 		return id;
 	}
 	
+	synchronized public long updateStatusIgnorableInSync(String statusId, boolean ignorableInSync) {
+		SQLiteDatabase db = this.getWritableDatabase();  
+		
+		ContentValues values = new ContentValues();
+		values.put(StatusTable.COLUMN_IGNORABLE_IN_SYNC, (ignorableInSync ? 1 : 0));
+		
+		long id = db.update(StatusTable.NAME, values, AppUserTable.COLUMN_ID + " = ?", new String[] {statusId});
+		
+		db.close();
+		
+		return id;
+	}
+	
 	synchronized public long setOldestStatusesWereDownloaded(String appUserId) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 		
@@ -599,7 +647,8 @@ public class DbHelper extends SQLiteOpenHelper {
         String query = new StringBuffer("SELECT MAX(").
         		append(StatusTable.COLUMN_CREATED_AT_IN_MILLIS).
         		append(") FROM ").
-        		append(StatusTable.NAME).
+        			append("( SELECT * FROM ").append(StatusTable.NAME).
+        			append(" WHERE ").append(StatusTable.COLUMN_IGNORABLE_IN_SYNC).append(" = 0 )").
         		toString();
         
         cursor = db.rawQuery(query, null);
