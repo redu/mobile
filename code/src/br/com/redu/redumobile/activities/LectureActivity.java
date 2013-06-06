@@ -12,6 +12,7 @@ import org.scribe.exceptions.OAuthConnectionException;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,7 +50,6 @@ public class LectureActivity extends BaseActivity {
 
 	private TextView mTvSubject;
 	private TextView mTvLecture;
-	private Button mBtEdit;
 	private Button mBtRemove;
 	
 	private Context mContext = this;
@@ -67,6 +67,7 @@ public class LectureActivity extends BaseActivity {
 	DownloadFile df;
 	
 	private Progress mProgress;
+	AlertDialog dialogRemove;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,28 +77,23 @@ public class LectureActivity extends BaseActivity {
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
 		String role = UserHelper.getUserRoleInCourse(this);
 		if (role.equals("teacher") || role.equals("environment_admin")) {
-			mBtEdit = (Button) findViewById(R.id.btEdit);
 			mBtRemove = (Button) findViewById(R.id.btRemove);
-			mBtEdit.setVisibility(View.VISIBLE);
 			mBtRemove.setVisibility(View.VISIBLE);
-			mBtEdit.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-				}
-			});
 
 			mBtRemove.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
+					Builder builder = new AlertDialog.Builder(LectureActivity.this);
+					builder.setMessage("Você tem certeza que deseja remover esta Aula?");
+		        	builder.setCancelable(true);
+		        	builder.setNegativeButton("Não", new CancelOnClickListener());
+		        	builder.setPositiveButton("Sim", new PositiveOnClickListener());
+		        	dialogRemove = builder.create();
+		        	dialogRemove.show();
 				}
 			});
 		}
 		
-		// mIvImage = (ImageView) findViewById(R.id.ivImage);
-		// mTvFileName = (TextView) findViewById(R.id.tvFileName);
-
 		mBtIsDone = (Button) findViewById(R.id.btIsDone);
 		mBtWall = (Button) findViewById(R.id.btWall);
 
@@ -157,6 +153,18 @@ public class LectureActivity extends BaseActivity {
 			}.execute();
 		}
 	}
+	
+	private final class CancelOnClickListener implements DialogInterface.OnClickListener {
+	    public void onClick(DialogInterface dialog, int which) {
+	    	dialog.dismiss();
+	    }
+    }
+	
+	private final class PositiveOnClickListener implements DialogInterface.OnClickListener {
+    	public void onClick(DialogInterface dialog, int which) {
+    		new RemoveLecture().execute();
+    	}
+    }
 
 	private void initDialogs() {
 		mProgressDialog = new ProgressDialog(this);
@@ -496,5 +504,26 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 		super.onPostExecute(result);
 	};
 }
+
+	class RemoveLecture extends AsyncTask<String, Void, Void> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showAlertDialog(LectureActivity.this, "Removendo Aula...", null);
+		}
+		
+		protected Void doInBackground(String... text) {
+			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+			redu.removeLecture(Integer.toString(mLecture.id));
+			return null;
+		}
+	
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			finish();
+		};
+	}
 
 }

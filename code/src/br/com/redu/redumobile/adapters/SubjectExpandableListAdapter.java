@@ -144,16 +144,19 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				Builder builder = new AlertDialog.Builder(mContext);
+				Subject subject = (Subject) v.getTag();
 				View v2 = LayoutInflater.from(mContext).inflate(R.layout.popup_listview_row, null);
 				TextView tvInfo = (TextView)v2.findViewById(R.id.tv_insert_file_folder);
-				Subject subject = (Subject) v.getTag();
-				tvInfo.setText(subject.description);
+				if (subject.description.equals("") || subject.description == null) {
+					tvInfo.setText("Este Módulo não possui nenhuma descrição.");
+				}else{
+					tvInfo.setText(subject.description);
+				}
 				builder.setView(v2);
 				Dialog mDialogInfo = builder.create();
 		    	mDialogInfo.show();
 			}
 		});
-		
 		TextView tv = (TextView) convertView.findViewById(R.id.tvSuject);
 		tv.setText(Html.fromHtml(subject.name+"<br/>"+"<font color=\"#CCCCCC\"><smal>"+getChildrenCount(groupPosition)+" Aulas</small></font>"));
 		return convertView;
