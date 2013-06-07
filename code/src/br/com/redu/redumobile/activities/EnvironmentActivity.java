@@ -66,7 +66,7 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 			private ProgressDialog mProgressDialog;
 
 			protected void onPreExecute() {
-				mProgressDialog = showProgressDialog("Aguarde…", false);
+				mProgressDialog = showProgressDialog("Aguarde…", true);
 			};
 			
 			@Override
@@ -85,7 +85,7 @@ public class EnvironmentActivity extends BaseActivity implements OnSpaceSelected
 			@Override
 			protected void onPostExecute(Void result) {
 				mProgressDialog.dismiss();
-	
+				//TODO VERIFICAR 
 				Intent it = new Intent(EnvironmentActivity.this, SpaceActivity.class);
 				it.putExtra(SpaceActivity.EXTRAS_SPACE, mSpace);
 				it.putExtra(Course.class.getName(), mCourse);

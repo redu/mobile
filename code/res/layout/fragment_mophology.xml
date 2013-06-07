@@ -26,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
-        android:divider="@null" >
+        android:divider="@null"
+        android:visibility="gone" >
     </ExpandableListView>
 
     <View
@@ -37,22 +38,15 @@
     <FrameLayout
         android:id="@+id/no_connection_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <ExpandableListView
-            android:id="@+id/elvSubject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:divider="@null"
-            android:visibility="gone" >
-        </ExpandableListView>
-
+        android:layout_height="match_parent"
+        android:layout_gravity="center" >
+        
         <TextView
             android:id="@+id/elv_subject_empyt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="center"
             android:padding="15dp"
             android:text="Esta Disciplina está vazia, será necessário adicionar o um Novo Módulo antes."
             android:textAppearance="?android:attr/textAppearanceSmall"

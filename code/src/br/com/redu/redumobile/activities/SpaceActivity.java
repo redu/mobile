@@ -137,6 +137,12 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		super.onRestart();
 		mAdapter.notifyDataSetChanged();
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		mAdapter.notifyDataSetChanged();
+	}
 
 	class MainAdapter extends FragmentStatePagerAdapter {
 		private final Fragment[] items;
@@ -218,7 +224,9 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			if (object instanceof SupportMaterialFragment) {
 	            return POSITION_NONE;
 			}
-			
+			/*if (object instanceof MorphologyFragment) {
+	            return POSITION_NONE;
+			}*/
 	        return POSITION_UNCHANGED;
 		}
 	}

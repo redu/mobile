@@ -12,6 +12,7 @@ import org.scribe.exceptions.OAuthConnectionException;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
@@ -49,7 +51,6 @@ public class LectureActivity extends BaseActivity {
 
 	private TextView mTvSubject;
 	private TextView mTvLecture;
-	private Button mBtEdit;
 	private Button mBtRemove;
 	
 	private Context mContext = this;
@@ -67,6 +68,8 @@ public class LectureActivity extends BaseActivity {
 	DownloadFile df;
 	
 	private Progress mProgress;
+	AlertDialog dialogRemove;
+	private ProgressBar pbDone;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,30 +79,27 @@ public class LectureActivity extends BaseActivity {
 		mTvLecture = (TextView) findViewById(R.id.tvLecture);
 		String role = UserHelper.getUserRoleInCourse(this);
 		if (role.equals("teacher") || role.equals("environment_admin")) {
-			mBtEdit = (Button) findViewById(R.id.btEdit);
 			mBtRemove = (Button) findViewById(R.id.btRemove);
-			mBtEdit.setVisibility(View.VISIBLE);
 			mBtRemove.setVisibility(View.VISIBLE);
-			mBtEdit.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-				}
-			});
 
 			mBtRemove.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
+					Builder builder = new AlertDialog.Builder(LectureActivity.this);
+					builder.setMessage("Você tem certeza que deseja remover esta Aula?");
+		        	builder.setCancelable(true);
+		        	builder.setNegativeButton("Não", new CancelOnClickListener());
+		        	builder.setPositiveButton("Sim", new PositiveOnClickListener());
+		        	dialogRemove = builder.create();
+		        	dialogRemove.show();
 				}
 			});
 		}
 		
-		// mIvImage = (ImageView) findViewById(R.id.ivImage);
-		// mTvFileName = (TextView) findViewById(R.id.tvFileName);
-
 		mBtIsDone = (Button) findViewById(R.id.btIsDone);
 		mBtWall = (Button) findViewById(R.id.btWall);
+		
+		pbDone =  (ProgressBar) findViewById(R.id.pbDone);
 
 		Bundle extras = getIntent().getExtras();
 		mLecture = (Lecture) extras.get(EXTRAS_LECTURE);
@@ -157,6 +157,18 @@ public class LectureActivity extends BaseActivity {
 			}.execute();
 		}
 	}
+	
+	private final class CancelOnClickListener implements DialogInterface.OnClickListener {
+	    public void onClick(DialogInterface dialog, int which) {
+	    	dialog.dismiss();
+	    }
+    }
+	
+	private final class PositiveOnClickListener implements DialogInterface.OnClickListener {
+    	public void onClick(DialogInterface dialog, int which) {
+    		new RemoveLecture().execute();
+    	}
+    }
 
 	private void initDialogs() {
 		mProgressDialog = new ProgressDialog(this);
@@ -469,11 +481,14 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 		protected void onPostExecute(Progress progress) {
 			super.onPostExecute(progress);
 			if (mProgress != null){
-				if (mProgress.finalized == null)
-					mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_green);
-				else{
-					mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_gray);
+				if (mProgress.finalized.equals("false"))
+					mBtIsDone.setBackgroundResource(R.drawable.bt_bottom_green);
+				if (mProgress.finalized.equals("true")){ 
+					mBtIsDone.setBackgroundResource(R.drawable.bt_bottom_green_active);
+					mBtIsDone.setText("Aula Finalizada");
 				}
+				pbDone.setVisibility(View.GONE);
+				mBtIsDone.setVisibility(View.VISIBLE);
 			}
 		};
 	}
@@ -482,6 +497,8 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 	
 	@Override
 	protected void onPreExecute() {
+		mBtIsDone.setVisibility(View.GONE);
+		pbDone.setVisibility(View.VISIBLE);
 		super.onPreExecute();
 	}
 	
@@ -494,7 +511,29 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
+		new LoadProgress().execute();
 	};
 }
+
+	class RemoveLecture extends AsyncTask<String, Void, Void> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showProgressDialog("Removendo Aula...", true);
+		}
+		
+		protected Void doInBackground(String... text) {
+			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
+			redu.removeLecture(Integer.toString(mLecture.id));
+			return null;
+		}
+	
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			finish();
+		};
+	}
 
 }

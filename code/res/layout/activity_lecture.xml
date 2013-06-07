@@ -37,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_midia"
                         android:gravity="center_vertical"
-                        android:text="Aula Lipsum"
+                        android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#36ACD5" />
 
@@ -46,17 +46,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:orientation="horizontal" >
-
-                        <Button
-                            android:id="@+id/btEdit"
-                            style="?android:attr/buttonStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/bg_gray"
-                            android:text="Editar"
-                            android:textColor="@color/blue"
-                            android:visibility="gone" />
 
                         <Button
                             android:id="@+id/btRemove"
@@ -277,7 +266,16 @@
                         android:layout_weight="1"
                         android:background="@drawable/bg_bottom_green"
                         android:text="Finalizar Aula"
-                        android:textColor="#fff" />
+                        android:textColor="#fff"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/pbDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:layout_gravity="center"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
