@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:divider="@color/gray_light"
-    android:listSelector="@null"
+    android:listSelector="@drawable/popup_menu_list_selector"
     android:background="#FFF"
+    android:scrollingCache="false"
     android:overScrollMode="never"
     android:dividerHeight="1dip" />

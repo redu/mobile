@@ -2,32 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
+    android:background="@drawable/bg_action_button"
     android:orientation="horizontal"
-    android:background="@drawable/bg_action_button">
-    
-   	<ImageView
-   	    android:id="@+id/iv_insert_file_folder"
-   	    android:layout_width="wrap_content"
-   	    android:layout_height="wrap_content"
-   	    android:background="@drawable/bg_action_button"
-   	     />
+    android:padding="5dp" >
 
-   	<View
-              android:layout_height="fill_parent"
-              android:layout_width="1dp"
-              android:background="@color/cream" />
-   	
-   	<TextView
-   	    android:id="@+id/tv_insert_file_folder"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:padding="10dp"
-	    android:layout_weight="1"
-	    android:text="Arquivo de Apoio"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textColor="#6D6E6F"
-	    android:textSize="12sp"
-	    android:background="@drawable/bg_action_button" />
-	   
+    <ImageView
+        android:id="@+id/iv_insert_file_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_action_button" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="@color/cream" />
+
+    <TextView
+        android:id="@+id/tv_insert_file_folder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/bg_action_button"
+        android:padding="10dp"
+        android:text="Arquivo de Apoio"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#6D6E6F"
+        android:textSize="12sp" />
+
 </LinearLayout>
