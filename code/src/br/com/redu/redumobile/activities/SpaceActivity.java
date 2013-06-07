@@ -224,9 +224,9 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			if (object instanceof SupportMaterialFragment) {
 	            return POSITION_NONE;
 			}
-			if (object instanceof MorphologyFragment) {
+			/*if (object instanceof MorphologyFragment) {
 	            return POSITION_NONE;
-			}
+			}*/
 	        return POSITION_UNCHANGED;
 		}
 	}

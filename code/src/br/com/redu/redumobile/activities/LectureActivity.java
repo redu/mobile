@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Lecture;
@@ -68,6 +69,7 @@ public class LectureActivity extends BaseActivity {
 	
 	private Progress mProgress;
 	AlertDialog dialogRemove;
+	private ProgressBar pbDone;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,8 @@ public class LectureActivity extends BaseActivity {
 		
 		mBtIsDone = (Button) findViewById(R.id.btIsDone);
 		mBtWall = (Button) findViewById(R.id.btWall);
+		
+		pbDone =  (ProgressBar) findViewById(R.id.pbDone);
 
 		Bundle extras = getIntent().getExtras();
 		mLecture = (Lecture) extras.get(EXTRAS_LECTURE);
@@ -477,11 +481,14 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 		protected void onPostExecute(Progress progress) {
 			super.onPostExecute(progress);
 			if (mProgress != null){
-				if (mProgress.finalized == null)
-					mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_green);
-				else{
-					mBtIsDone.setBackgroundResource(R.drawable.bg_bottom_gray);
+				if (mProgress.finalized.equals("false"))
+					mBtIsDone.setBackgroundResource(R.drawable.bt_bottom_green);
+				if (mProgress.finalized.equals("true")){ 
+					mBtIsDone.setBackgroundResource(R.drawable.bt_bottom_green_active);
+					mBtIsDone.setText("Aula Finalizada");
 				}
+				pbDone.setVisibility(View.GONE);
+				mBtIsDone.setVisibility(View.VISIBLE);
 			}
 		};
 	}
@@ -490,6 +497,8 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 	
 	@Override
 	protected void onPreExecute() {
+		mBtIsDone.setVisibility(View.GONE);
+		pbDone.setVisibility(View.VISIBLE);
 		super.onPreExecute();
 	}
 	
@@ -502,6 +511,7 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
+		new LoadProgress().execute();
 	};
 }
 
@@ -510,7 +520,7 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			showAlertDialog(LectureActivity.this, "Removendo Aula...", null);
+			showProgressDialog("Removendo Aula...", true);
 		}
 		
 		protected Void doInBackground(String... text) {
