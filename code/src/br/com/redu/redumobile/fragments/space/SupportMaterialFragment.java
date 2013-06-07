@@ -229,22 +229,17 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		/*Object obj = lvFiles.getAdapter().getItem(((ListView)v).getSelectedItemPosition());
-		if (obj instanceof Folder) {*/
+		AdapterContextMenuInfo ma = (AdapterContextMenuInfo) menuInfo;
+		Object obj = lvFiles.getAdapter().getItem(ma.position);
+		if (obj instanceof Folder) {
 			getActivity().getMenuInflater().inflate(R.drawable.menu, menu);
-		/*}else{
+		}else{
 			getActivity().getMenuInflater().inflate(R.drawable.menu_file, menu);
-		}*/
-	}
-
-	private void editFile(File file) {
-		// TODO Auto-generated method stub
-
+		}
 	}
 
 	private void deleteFile(File file) {
-		// TODO Auto-generated method stub
-
+		new RemoveFile().execute(file.id);
 	}
 
 	private void deleteFolder(Folder folder) {
@@ -412,6 +407,36 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 			DefaultReduClient redu = ReduApplication
 					.getReduClient(getActivity());
 			redu.deleteFolder(text[0]);
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			mProgressdialogRemove.dismiss();
+			mAdapter.notifyDataSetChanged();
+			SpaceActivity activity = (SpaceActivity) getActivity();
+			activity.onRestart();
+		};
+	}
+	
+	class RemoveFile extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			mProgressdialogRemove = ProgressDialog.show(getActivity(), "Redu",
+					"Removendo Arquivo...", false, true);
+			mProgressdialogRemove.setIcon(R.drawable.ic_launcher);
+			mProgressdialogRemove.setCancelable(true);
+			super.onPreExecute();
+		}
+
+		protected Void doInBackground(String... text) {
+
+			DefaultReduClient redu = ReduApplication
+					.getReduClient(getActivity());
+			redu.deleteFile(text[0]);
 
 			return null;
 		}
