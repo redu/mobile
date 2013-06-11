@@ -2,10 +2,10 @@ package br.com.redu.redumobile.adapters;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -20,21 +20,33 @@ import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.LectureActivity;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
 import br.com.redu.redumobile.util.UserHelper;
 
 public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 
-	Context mContext;
+	Activity mActivity;
 	List<Subject> mSubjects;
 	List<List<Lecture>> mLectures;
 	Space mSpace;
 	
-	public SubjectExpandableListAdapter(Context context, List<Subject> subjects, List<List<Lecture>> lectures, Space space) {
-		mContext = context;
+	public SubjectExpandableListAdapter(Activity activity, List<Subject> subjects, List<List<Lecture>> lectures, Space space) {
+		mActivity = activity;
 		mSubjects = subjects;
 		mLectures = lectures;
 		mSpace = space;
+	}
+	
+	public void addLecture(Subject subject, Lecture lecture) {
+		for (int i = 0; i < mSubjects.size(); i++) {
+			Subject s = mSubjects.get(i);
+			if(s.id.equals(subject.id)) {
+				mLectures.get(i).add(lecture);
+				notifyDataSetChanged();
+				break;
+			}
+		}
 	}
 	
 	@Override
@@ -50,7 +62,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_lecture_row, null);
+			convertView = LayoutInflater.from(mActivity).inflate(R.layout.environment_lecture_row, null);
 		}
 		
 		final Lecture lecture = (Lecture) getChild(groupPosition, childPosition);
@@ -79,10 +91,10 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		convertView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(mContext, LectureActivity.class);
+				Intent i = new Intent(mActivity, LectureActivity.class);
 				i.putExtra(LectureActivity.EXTRAS_LECTURE, lecture);
 				i.putExtra(LectureActivity.EXTRAS_SUBJECT, subject);
-				mContext.startActivity(i);	
+				mActivity.startActivity(i);	
 			}
 		});
 		
@@ -116,10 +128,10 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		if(convertView == null) {
-			convertView = LayoutInflater.from(mContext).inflate(R.layout.environment_module_row, null);
+			convertView = LayoutInflater.from(mActivity).inflate(R.layout.environment_module_row, null);
 		}
 		Subject subject = (Subject)getGroup(groupPosition);
-		String role = UserHelper.getUserRoleInCourse(mContext);
+		String role = UserHelper.getUserRoleInCourse(mActivity);
 		if (role.equals("teacher") || role.equals("environment_admin")){
 			ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
 			ibAdd.setVisibility(View.VISIBLE);
@@ -128,11 +140,11 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 				
 				@Override
 				public void onClick(View v) {
-					Intent it = new Intent(mContext, UploadStep1Activity.class);
+					Intent it = new Intent(mActivity, UploadStep1Activity.class);
 					Subject subject = (Subject)v.getTag();
 					it.putExtra(Subject.class.getName(), subject);
 					it.putExtra(Space.class.getName(), mSpace);
-					mContext.startActivity(it);
+					mActivity.startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 				}
 			});
 		}
@@ -143,9 +155,9 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				Builder builder = new AlertDialog.Builder(mContext);
+				Builder builder = new AlertDialog.Builder(mActivity);
 				Subject subject = (Subject) v.getTag();
-				View v2 = LayoutInflater.from(mContext).inflate(R.layout.popup_listview_row, null);
+				View v2 = LayoutInflater.from(mActivity).inflate(R.layout.popup_listview_row, null);
 				TextView tvInfo = (TextView)v2.findViewById(R.id.tv_insert_file_folder);
 				if (subject.description.equals("") || subject.description == null) {
 					tvInfo.setText("Este Módulo não possui nenhuma descrição.");

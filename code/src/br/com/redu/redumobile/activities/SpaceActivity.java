@@ -16,8 +16,10 @@ import android.support.v4.view.ViewPager;
 import br.com.developer.redu.DefaultReduClient;
 import br.com.developer.redu.models.Environment;
 import br.com.developer.redu.models.Folder;
+import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Status;
+import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.fragments.space.MorphologyFragment;
@@ -34,7 +36,13 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	    void onBackToPreviousFragment(Folder folder);
 	}
 
+	public static final int REQUEST_CODE_STATUS = 0;
+	public static final int REQUEST_CODE_LECTURE = 1;
+	public static final int REQUEST_CODE_MATERIALS = 2;
+	
 	public static final String EXTRA_STATUS_RESULT = "RESULT_STATUS";
+	public static final String EXTRA_LECTURE_RESULT = "EXTRA_LECTURE_RESULT";
+	public static final String EXTRA_SUBJECT_RESULT = "EXTRA_SUBJECT_RESULT";
 
 	public static final String EXTRAS_SPACE = "EXTRAS_SPACE";
 	
@@ -199,6 +207,10 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			
 			((SupportMaterialFragment) items[ITEM_SUPPORT_MATERIAL]).setListener(smfl);
 		}
+		
+		public void addLecture(Lecture lecture, Subject subject) {
+			((MorphologyFragment) items[ITEM_MORPHOLOGY]).addLecture(lecture, subject);
+		}
 
 		public void addPostedStatus(Status status) {
 			((SpaceWallFragment) items[ITEM_WALL]).addPostedStatus(status);
@@ -247,8 +259,16 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK) {
-			Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
-			mAdapter.addPostedStatus(status);
+			if(requestCode == REQUEST_CODE_LECTURE) {
+				Lecture lecture = (Lecture) data.getSerializableExtra(EXTRA_LECTURE_RESULT);
+				Subject subject = (Subject) data.getSerializableExtra(EXTRA_SUBJECT_RESULT);
+				
+				mAdapter.addLecture(lecture, subject);
+				
+			} else {
+				Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
+				mAdapter.addPostedStatus(status);
+			}
 		}
 	}
 }
