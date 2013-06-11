@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,10 +38,11 @@ public class UploadStep3Activity extends BaseActivity {
 	private SaveFile sl;
 	
 	private EditText etTitleLecture;
-	private static final int NUM_MAX_CHARACERS = 250;
+//	private static final int NUM_MAX_CHARACERS = 250;
 	private File mFile;
 	private Subject mSubject;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
