@@ -16,7 +16,6 @@ public class UploadStep1Activity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insert_file_or_lecture);
 		superId = getIntent().getExtras().getString("id");

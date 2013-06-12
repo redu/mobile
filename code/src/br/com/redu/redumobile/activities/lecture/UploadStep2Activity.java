@@ -15,6 +15,7 @@ import android.widget.TextView;
 import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.PopupAdapter;
 
 public class UploadStep2Activity extends Activity {
@@ -27,7 +28,6 @@ public class UploadStep2Activity extends Activity {
 	private Subject mSubject;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insert_file_or_lecture);
 		TextView tvTitle = (TextView)findViewById(R.id.tvTitleUpload2);
@@ -118,7 +118,7 @@ public class UploadStep2Activity extends Activity {
 		    		it.putExtra("id", superId);
 		    		it.putExtra("foto", selectedImagePath);
 		    		it.putExtra("type", type);
-		    		startActivity(it);
+		    		startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 		    		super.onActivityResult(requestCode, resultCode, data);
 	        	}
 	        	if (type.equals("video")){
@@ -131,34 +131,8 @@ public class UploadStep2Activity extends Activity {
 			    	it.putExtra("id", superId);
 			    	it.putExtra("video", getPath(uriVideo));
 			    	it.putExtra("type", type);
-			    	startActivity(it);
+			    	startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 			    	super.onActivityResult(requestCode, resultCode, data);
-	        		
-	        		/*try {
-	        		    AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(data.getData(), "r");
-	        		    FileInputStream fis = videoAsset.createInputStream();
-	        		    Date now = new Date();
-	        		    File tmpFile = new File(DownloadHelper.getLecturePath(),"video_"+now.getDay()+"_"+now.getMonth()+"_"+now.getHours()+"_"+now.getMinutes()+"_"+now.getSeconds()+".3gp"); 
-	        		    FileOutputStream fos = new FileOutputStream(tmpFile);
-
-	        		    byte[] buf = new byte[1024];
-	        		    int len;
-	        		    while ((len = fis.read(buf)) > 0) {
-	        		        fos.write(buf, 0, len);
-	        		    }       
-	        		    fis.close();
-	        		    fos.close();
-	        		    
-	        		    Intent it = new Intent(this, UploadStep3Activity.class);
-			    		it.putExtra(Space.class.getName(), space);
-			    		it.putExtra("id", superId);
-			    		it.putExtra("video", tmpFile);
-			    		it.putExtra("type", type);
-			    		startActivity(it);
-			    		super.onActivityResult(requestCode, resultCode, data);
-	        		    
-	        		  } catch (IOException io_e) {
-	        		  }*/
 	        	}	
 		    	if (type.equals("audio")){
 	        		Uri uriAudio = data.getData();
@@ -170,7 +144,7 @@ public class UploadStep2Activity extends Activity {
 	        		itAudio.putExtra("id", superId);
 	        		itAudio.putExtra("video", getPath(uriAudio));
 	        		itAudio.putExtra("type", type);
-			    	startActivity(itAudio);
+	        		startActivityForResult(itAudio, SpaceActivity.REQUEST_CODE_LECTURE);
 			    	super.onActivityResult(requestCode, resultCode, data);
 		    	}
 	        }
@@ -184,8 +158,6 @@ public class UploadStep2Activity extends Activity {
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         if(cursor!=null)
         {
-            //HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-            //THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
             int column_index = cursor
             .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();

@@ -1,6 +1,6 @@
 package br.com.redu.redumobile.adapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.activities.lecture.NewFolderActivity;
 import br.com.redu.redumobile.activities.lecture.UploadStep1Activity;
 import br.com.redu.redumobile.activities.lecture.UploadStep2Activity;
@@ -20,20 +21,20 @@ import br.com.redu.redumobile.activities.lecture.UploadStep2Activity;
 public class PopupAdapter extends BaseAdapter {
 
 	final private LayoutInflater mInflater;
-	final private Context mContext;
+	final private Activity mContext;
 	private Space space;
 	private Subject mSubject;
 	private String id;
 	private String[] values;
 	
-	public PopupAdapter(Context context, String[] values, String id, Space space) {
+	public PopupAdapter(Activity context, String[] values, String id, Space space) {
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		this.values = values;
 		this.id = id;
 		this.space = space;
 	}
-	public PopupAdapter(Context context, String[] values, Space space, Subject subject) {
+	public PopupAdapter(Activity context, String[] values, Space space, Subject subject) {
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		this.mSubject = subject;
@@ -78,7 +79,7 @@ public class PopupAdapter extends BaseAdapter {
 					Intent it = new Intent(mContext, UploadStep1Activity.class);
 					it.putExtra(Space.class.getName(), space);
 					it.putExtra("id", id);
-					mContext.startActivity(it);
+					mContext.startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 				}
 			});
 		}
@@ -90,7 +91,7 @@ public class PopupAdapter extends BaseAdapter {
 					Intent it = new Intent(mContext, NewFolderActivity.class);
 					it.putExtra(Space.class.getName(), space);
 					it.putExtra("id", id);
-					mContext.startActivity(it);
+					mContext.startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 				}
 			});
 		}
@@ -104,7 +105,7 @@ public class PopupAdapter extends BaseAdapter {
 					it.putExtra(Subject.class.getName(), mSubject);
 					it.putExtra("id", id);
 					it.putExtra("type", "video");
-					mContext.startActivity(it);
+					mContext.startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 				}
 			}); 
 		}
@@ -118,7 +119,7 @@ public class PopupAdapter extends BaseAdapter {
 					it.putExtra(Subject.class.getName(), mSubject);
 					it.putExtra("id", id);
 					it.putExtra("type", "foto");
-					mContext.startActivity(it);
+					mContext.startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 				}
 			});  
 		}
@@ -131,7 +132,7 @@ public class PopupAdapter extends BaseAdapter {
 					it.putExtra(Space.class.getName(), space);
 					it.putExtra("id", id);
 					it.putExtra("type", "audio");
-					mContext.startActivity(it);
+					mContext.startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 				}
 			}); 
 		}
