@@ -2,17 +2,17 @@
 
 Application developed for bring the redu educational social networking to android devices.
 
-# Google play
+# Google Play
 
 Google Play link...
 
 # Bibliotecas
 
 As bibliotecas usadas pelo redu android são:
-- redu-android
-- ViewPageIndicator
-- AndroidPushRequest
-- WebCachedImageView
+- [redu-android](https://github.com/redu/redu-android): Encapsulador da API REST do Redu para aplicações baseadas em JAVA.
+- [ViewPageIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator): Paging indicator widgets that are compatible with the `ViewPager` from the Android Support Library to improve discoverability of content.
+- [AndroidPushRequest](http://hub.buzzbox.com/android-sdk/): Enables you to easily add a scheduler to your App. With few lines of code you can add a background task and app-side notifications.
+- [WebCachedImageView](https://github.com/leocadiotine/WebCachedImageView): An `ImageView` capable of downloading images from the web and caching them for faster and offline access.
 
 # Contributing
 
