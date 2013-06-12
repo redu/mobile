@@ -58,7 +58,7 @@ public class UploadStep3Activity extends BaseActivity {
 			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
 			drawable = new BitmapDrawable(bitmap);
 			mFile = new File(getIntent().getExtras().getString("foto"));
-		} else if (type.equals("video")) {
+		} else if (type.equals("video") || type.equals("audio")){
 			mFile = new File(getIntent().getExtras().getString("video"));
 		}
 		superId = getIntent().getExtras().getString("id");
@@ -103,7 +103,7 @@ public class UploadStep3Activity extends BaseActivity {
 					if (type.equals("foto")) {
 						l.type = Lecture.TYPE_DOCUMENT;
 					}
-					if (type.equals("video")) {
+					if (type.equals("video") || type.equals("audio")) {
 						l.type = Lecture.TYPE_MEDIA;
 					}
 					Object[] params = {l,mFile};

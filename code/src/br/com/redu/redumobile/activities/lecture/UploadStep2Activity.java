@@ -37,7 +37,14 @@ public class UploadStep2Activity extends Activity {
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
-		String[] str = {"Camera","Escolher da Galeria"};
+		String[] str = new String[2];
+		if (type.equals("audio")){
+			str[0] =  "Gravar";
+			str[1] =  "Escolher Áudio";
+		}else{
+			str[0] =  "Camera";
+			str[1] =  "Escolher da Galeria";
+		}
 		if (mSubject != null) {
 			lv.setAdapter(new PopupAdapter(this, str, space, mSubject));
 		}else{
@@ -57,7 +64,8 @@ public class UploadStep2Activity extends Activity {
 						Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 						startActivityForResult(cameraIntent, 2);
 					}else{
-						
+						Intent cameraIntent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+						startActivityForResult(cameraIntent, 2);
 					}
 					
 				}
@@ -73,10 +81,13 @@ public class UploadStep2Activity extends Activity {
 						Intent intent = new Intent();
 						intent.setType("video/*");
 						intent.setAction(Intent.ACTION_GET_CONTENT);
-						startActivityForResult(Intent.createChooser(intent, "Escolha o video"), 2);
+						startActivityForResult(Intent.createChooser(intent, "Escolha o Video"), 2);
 					}
 					if (type.equals("audio")) {
-						
+						Intent intent = new Intent();
+						intent.setType("audio/*");
+						intent.setAction(Intent.ACTION_GET_CONTENT);
+						startActivityForResult(Intent.createChooser(intent, "Escolha o Audio"), 2);
 					}
 				}
 			}
@@ -148,8 +159,20 @@ public class UploadStep2Activity extends Activity {
 	        		    
 	        		  } catch (IOException io_e) {
 	        		  }*/
+	        	}	
+		    	if (type.equals("audio")){
+	        		Uri uriAudio = data.getData();
+	        		Log.i("Audio", getPath(uriAudio));
 	        		
-	        	}
+	        		Intent itAudio = new Intent(this, UploadStep3Activity.class);
+	        		itAudio.putExtra(Space.class.getName(), space);
+	        		itAudio.putExtra(Subject.class.getName(), mSubject);
+	        		itAudio.putExtra("id", superId);
+	        		itAudio.putExtra("video", getPath(uriAudio));
+	        		itAudio.putExtra("type", type);
+			    	startActivity(itAudio);
+			    	super.onActivityResult(requestCode, resultCode, data);
+		    	}
 	        }
 	    }
 	}

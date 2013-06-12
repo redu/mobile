@@ -141,6 +141,12 @@ public class PopupAdapter extends BaseAdapter {
 		if (values[position].equals("Escolher da Galeria")){
 			iv.setImageResource(R.drawable.ic_galery);
 		}
+		if (values[position].equals("Gravar")){
+			iv.setImageResource(R.drawable.ic_midia);
+		}
+		if (values[position].equals("Escolher Áudio")){
+			iv.setImageResource(R.drawable.ic_galery);
+		}
 		return ll;
 	}
 }
