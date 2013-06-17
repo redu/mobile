@@ -114,7 +114,12 @@ public class CacheManager {
 		if (Environment.MEDIA_MOUNTED.equals(externalStorageState)) {
 
 			if (Build.VERSION.SDK_INT > 7) {
-				cacheDirPath = context.getExternalCacheDir().getPath();
+				File externalCacheDir = context.getExternalCacheDir();
+				if(externalCacheDir != null) {
+					cacheDirPath = externalCacheDir.getPath();
+				} else {
+					cacheDirPath = context.getCacheDir().getPath();
+				}
 
 			} else {
 				File externalStorageDir = Environment.getExternalStorageDirectory();
