@@ -24,6 +24,7 @@ import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.activities.NewModuleActivity;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.SubjectExpandableListAdapter;
 import br.com.redu.redumobile.fragments.NoConnectNotifiableFragment;
 import br.com.redu.redumobile.util.UserHelper;
@@ -61,7 +62,7 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 				public void onClick(View v) {
 					Intent it = new Intent(getActivity(), NewModuleActivity.class);
 					it.putExtra(Space.class.getName(), mSpace);
-					startActivity(it);
+					startActivityForResult(it, SpaceActivity.REQUEST_CODE_SUBJECT);
 				}
 			});
 		}

@@ -37,7 +37,7 @@ public class LoginWebViewActivity extends BaseActivity {
 				@Override
 				public void onPageStarted(WebView view, String url, Bitmap favicon) {
 					if (url.equals("http://www.redu.com.br/oauth/authorize")) {
-						showProgressDialog("Aguarde alguns instantes enquanto você é redirecionado ao aplicativo Redu Mobile…", false);
+						showProgressDialog("Aguarde alguns instantes enquanto você é redirecionado ao aplicativo do Redu…", false);
 					}
 				}
 				@Override

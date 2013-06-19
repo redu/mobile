@@ -39,6 +39,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	public static final int REQUEST_CODE_STATUS = 0;
 	public static final int REQUEST_CODE_LECTURE = 1;
 	public static final int REQUEST_CODE_MATERIALS = 2;
+	public static final int REQUEST_CODE_SUBJECT = 3;
 	
 	public static final String EXTRA_STATUS_RESULT = "RESULT_STATUS";
 	public static final String EXTRA_LECTURE_RESULT = "EXTRA_LECTURE_RESULT";
@@ -58,6 +59,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	public static final int ITEM_MORPHOLOGY = 0;
 	public static final int ITEM_WALL = 1;
 	public static final int ITEM_SUPPORT_MATERIAL = 2;
+	
 	
     private PageIndicator mIndicator;
     private MainAdapter mAdapter;
@@ -146,11 +148,11 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		mAdapter.notifyDataSetChanged();
 	}
 	
-	@Override
+	/*@Override
 	public void onResume() {
 		super.onResume();
 		mAdapter.notifyDataSetChanged();
-	}
+	}*/
 
 	class MainAdapter extends FragmentStatePagerAdapter {
 		private final Fragment[] items;

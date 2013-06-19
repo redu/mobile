@@ -94,15 +94,19 @@ public class UploadStep2Activity extends Activity {
 		});
 	}
 	
-	@Override
+	/*@Override
 	protected void onRestart() {
 		super.onRestart();
 		finish();
-	}
+	}*/
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
+			if (requestCode == SpaceActivity.REQUEST_CODE_LECTURE){
+				setResult(Activity.RESULT_OK, data);
+				finish();
+			}
 	        if(requestCode == 2) {
 	        	if (type.equals("foto")){
 	        		Uri selectedImageUri = data.getData();
@@ -119,7 +123,6 @@ public class UploadStep2Activity extends Activity {
 		    		it.putExtra("foto", selectedImagePath);
 		    		it.putExtra("type", type);
 		    		startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
-		    		super.onActivityResult(requestCode, resultCode, data);
 	        	}
 	        	if (type.equals("video")){
 	        		Uri uriVideo = data.getData();
@@ -132,7 +135,6 @@ public class UploadStep2Activity extends Activity {
 			    	it.putExtra("video", getPath(uriVideo));
 			    	it.putExtra("type", type);
 			    	startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
-			    	super.onActivityResult(requestCode, resultCode, data);
 	        	}	
 		    	if (type.equals("audio")){
 	        		Uri uriAudio = data.getData();
@@ -145,7 +147,6 @@ public class UploadStep2Activity extends Activity {
 	        		itAudio.putExtra("video", getPath(uriAudio));
 	        		itAudio.putExtra("type", type);
 	        		startActivityForResult(itAudio, SpaceActivity.REQUEST_CODE_LECTURE);
-			    	super.onActivityResult(requestCode, resultCode, data);
 		    	}
 	        }
 	    }

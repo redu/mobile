@@ -71,7 +71,7 @@ public class UploadStep3Activity extends BaseActivity {
 		TextView tvPreviewName = (TextView) findViewById(R.id.tvImageName);
 		TextView tvWhereLecture = (TextView) findViewById(R.id.tvWhereLecture);
 		etTitleLecture = (EditText) findViewById(R.id.etTitleLecture);
-
+		
 		tvPreviewName.setText(mFile.getName() + " (" + type + ")");
 
 		Button btAdicionarPreview = (Button) findViewById(R.id.btAdicionarPreview);
@@ -89,7 +89,7 @@ public class UploadStep3Activity extends BaseActivity {
 					Log.i("NEWFILE", newFile.getAbsolutePath());
 					Log.i("ANTES", mFile.getAbsolutePath());
 					if (!mFile.renameTo(newFile)) {
-						Toast toast = Toast.makeText(mContext, "Nome de arquivo inválido.", Toast.LENGTH_LONG);
+						Toast toast = Toast.makeText(mContext, "Nome inválido. Digite novamente!", Toast.LENGTH_LONG);
 						toast.show();
 					} else {
 						mFile = newFile;
@@ -118,6 +118,7 @@ public class UploadStep3Activity extends BaseActivity {
 		Button btCancelarPreview = (Button) findViewById(R.id.btCancelarPreview);
 		if (mSubject == null) {
 			tvWhereLecture.setText("...>" + space.name);
+			etTitleLecture.setHint(mFile.getName());
 		} else {
 			tvWhereLecture.setText(Html.fromHtml("... > " + space.name + " > " + "<b>" + mSubject.name + "</b>"));
 		}
@@ -161,6 +162,7 @@ public class UploadStep3Activity extends BaseActivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 				lecture = null;
+				mError = true;
 			}
 			return lecture;
 		}
