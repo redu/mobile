@@ -485,7 +485,7 @@ class LoadProgress extends AsyncTask<String, Void, Progress> {
 					mBtIsDone.setBackgroundResource(R.drawable.bt_bottom_green);
 				if (mProgress.finalized.equals("true")){ 
 					mBtIsDone.setBackgroundResource(R.drawable.bt_bottom_green_active);
-					mBtIsDone.setText("Aula Finalizada");
+					mBtIsDone.setText("Aula finalizada");
 				}
 				pbDone.setVisibility(View.GONE);
 				mBtIsDone.setVisibility(View.VISIBLE);

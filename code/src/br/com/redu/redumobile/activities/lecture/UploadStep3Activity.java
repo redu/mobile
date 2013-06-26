@@ -81,11 +81,11 @@ public class UploadStep3Activity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				if (mSubject == null) {
-					String[] split = mFile.getName().split("\\.");
-					String extension = split[split.length - 1];
+					/*String[] split = mFile.getName().split("\\.");
+					String extension = split[split.length - 1];*/
 					String text = etTitleLecture.getText().toString();
 					Log.i("TEXT", text);
-					File newFile = new File(mFile.getParent() + "/" + text + "." + extension);
+					File newFile = new File(mFile.getParent() + "/" + text);
 					Log.i("NEWFILE", newFile.getAbsolutePath());
 					Log.i("ANTES", mFile.getAbsolutePath());
 					if (!mFile.renameTo(newFile)) {
@@ -118,7 +118,7 @@ public class UploadStep3Activity extends BaseActivity {
 		Button btCancelarPreview = (Button) findViewById(R.id.btCancelarPreview);
 		if (mSubject == null) {
 			tvWhereLecture.setText("...>" + space.name);
-			etTitleLecture.setHint(mFile.getName());
+			etTitleLecture.setText(mFile.getName());
 		} else {
 			tvWhereLecture.setText(Html.fromHtml("... > " + space.name + " > " + "<b>" + mSubject.name + "</b>"));
 		}
@@ -144,7 +144,10 @@ public class UploadStep3Activity extends BaseActivity {
 
 		@Override
 		protected void onPreExecute() {
-			showProgressDialog("Adicionando Aula...", false);
+			if (mSubject == null)
+				showProgressDialog("Adicionando Material de Apoio...", false);
+			else
+				showProgressDialog("Adicionando Aula...", false);
 			super.onPreExecute();
 
 		}
@@ -171,7 +174,7 @@ public class UploadStep3Activity extends BaseActivity {
 		protected void onPostExecute(Lecture lecture) {
 			dismissProgressDialog();
 			if (mError) {
-				showAlertDialog(UploadStep3Activity.this, "Houve um problema ao adicionar a aula. Verifique sua conexão com a internet e tente novamente.", null);
+				showAlertDialog(UploadStep3Activity.this, "Houve um problema ao adicionar. Verifique sua conexão com a internet e tente novamente.", null);
 				setResult(Activity.RESULT_CANCELED);
 			} else {
 				if(lecture != null) {
@@ -179,6 +182,8 @@ public class UploadStep3Activity extends BaseActivity {
 					data.putExtra(SpaceActivity.EXTRA_SUBJECT_RESULT, mSubject);
 					data.putExtra(SpaceActivity.EXTRA_LECTURE_RESULT, lecture);
 					setResult(Activity.RESULT_OK, data);
+				}else{
+					setResult(Activity.RESULT_OK);
 				}
 				finish();
 			}

@@ -32,7 +32,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Digite aqui o nome da aula..."
+            android:hint="Digite aqui o nome da pasta..."
             android:inputType="text"
             android:padding="5dp"
             android:textSize="12sp" >

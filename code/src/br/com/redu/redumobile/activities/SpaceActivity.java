@@ -148,15 +148,17 @@ public class SpaceActivity extends DbHelperHolderActivity {
 		mAdapter.notifyDataSetChanged();
 	}
 	
-	/*@Override
+	@Override
 	public void onResume() {
 		super.onResume();
-		mAdapter.notifyDataSetChanged();
-	}*/
+		if (mAdapter != null)
+			mAdapter.notifyDataSetChanged();
+	}
 
 	class MainAdapter extends FragmentStatePagerAdapter {
 		private final Fragment[] items;
 		private ArrayList<SupportMaterialFragment> materialFragments;
+		private FragmentManager fm;
 
 		public MainAdapter(final FragmentManager fm) {
 			super(fm);
@@ -249,7 +251,9 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	public void onBackPressed() {
 		if (mVp.getCurrentItem() == ITEM_SUPPORT_MATERIAL){
 			if (mAdapter.materialFragments.size() > 1 ) {
-				//NOTHING
+				mAdapter.materialFragments.remove((SupportMaterialFragment)mAdapter.items[ITEM_SUPPORT_MATERIAL]);
+				mAdapter.items[ITEM_SUPPORT_MATERIAL] = mAdapter.materialFragments.get(mAdapter.materialFragments.size()-1);
+				mAdapter.notifyDataSetChanged();
 			}else{
 				super.onBackPressed();
 			}

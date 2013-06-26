@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.activities.lecture;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import br.com.developer.redu.models.Space;
@@ -20,9 +21,15 @@ public class UploadFileFolderActivity extends Activity {
 		lv.setAdapter(new PopupAdapter(this, str, id, space));
 	}
 
-	@Override
+/*	@Override
 	protected void onRestart() {
 		super.onRestart();
+		finish();
+	}*/
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		setResult(Activity.RESULT_OK, data);
 		finish();
 	}
 	
