@@ -589,7 +589,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return id;
 	}
 	
-	synchronized public long setOldestStatusesWereDownloaded(String appUserId) {
+	synchronized public long setAllAncientStatusesWereDownloaded(String appUserId) {
 		SQLiteDatabase db = this.getWritableDatabase();  
 		
 		ContentValues values = new ContentValues();
@@ -602,7 +602,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		return id;
 	}
 	
-	synchronized public boolean getOldestStatusesWereDownloaded(String appUserId) {
+	synchronized public boolean isAllAncientStatusesWereDownloaded(String appUserId) {
 		boolean oledestStatusesWereDownloaded = false;
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -638,7 +638,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	 * Get the millis of the most recent Status saved at the db
 	 * @return the creation time, in millis, of the most recent Status saved at the db. 
 	 */
-	synchronized public long getTimestamp() {
+	synchronized public long getTimeOFMostRecentStatus() {
 		long timestamp = 0l;
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
