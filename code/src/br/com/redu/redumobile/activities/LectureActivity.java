@@ -29,7 +29,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import br.com.developer.redu.DefaultReduClient;
+import br.com.developer.redu.http.DeleteException;
 import br.com.developer.redu.models.Lecture;
 import br.com.developer.redu.models.Progress;
 import br.com.developer.redu.models.Subject;
@@ -516,6 +518,7 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 }
 
 	class RemoveLecture extends AsyncTask<String, Void, Void> {
+		boolean mError = false;
 		
 		@Override
 		protected void onPreExecute() {
@@ -525,14 +528,29 @@ class PutProgress extends AsyncTask<String, Void, Void> {
 		
 		protected Void doInBackground(String... text) {
 			DefaultReduClient redu = ReduApplication.getReduClient(mContext);
-			redu.removeLecture(Integer.toString(mLecture.id));
+			try{
+				redu.removeLecture(Integer.toString(mLecture.id));
+			}catch(DeleteException e){
+				mError = true;
+			}
 			return null;
 		}
 	
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			finish();
+			if (!mError){
+				Intent data = new Intent();
+				data.putExtra(SpaceActivity.EXTRA_SUBJECT_RESULT, mSubject);
+				data.putExtra(SpaceActivity.EXTRA_LECTURE_RESULT, mLecture);
+				setResult(RESULT_OK, data);
+				finish();
+			}else{
+				dismissProgressDialog();
+				Toast toast = Toast.makeText(mContext, "Problema ao remover esta Aula... Tente novamente.", Toast.LENGTH_LONG);
+				toast.show();
+			}
+			
 		};
 	}
 

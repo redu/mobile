@@ -40,6 +40,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	public static final int REQUEST_CODE_LECTURE = 1;
 	public static final int REQUEST_CODE_MATERIALS = 2;
 	public static final int REQUEST_CODE_SUBJECT = 3;
+	public static final int REQUEST_CODE_LECTURE_REMOVE = 4;
 	
 	public static final String EXTRA_STATUS_RESULT = "RESULT_STATUS";
 	public static final String EXTRA_LECTURE_RESULT = "EXTRA_LECTURE_RESULT";
@@ -245,6 +246,10 @@ public class SpaceActivity extends DbHelperHolderActivity {
 			}*/
 	        return POSITION_UNCHANGED;
 		}
+
+		public void removeLecture(Lecture lecture, Subject subject) {
+			((MorphologyFragment) items[ITEM_MORPHOLOGY]).removeLecture(lecture, subject);
+		}
 	}
 	
 	@Override
@@ -265,12 +270,22 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK) {
-			if(requestCode == REQUEST_CODE_LECTURE) {
-				Lecture lecture = (Lecture) data.getSerializableExtra(EXTRA_LECTURE_RESULT);
-				Subject subject = (Subject) data.getSerializableExtra(EXTRA_SUBJECT_RESULT);
-				
-				mAdapter.addLecture(lecture, subject);
-				
+			if(requestCode == REQUEST_CODE_LECTURE || requestCode == REQUEST_CODE_LECTURE_REMOVE || requestCode == REQUEST_CODE_SUBJECT) {
+				if( requestCode == REQUEST_CODE_LECTURE ){
+					Lecture lecture = (Lecture) data.getSerializableExtra(EXTRA_LECTURE_RESULT);
+					Subject subject = (Subject) data.getSerializableExtra(EXTRA_SUBJECT_RESULT);
+					mAdapter.addLecture(lecture, subject);
+				}
+				if( requestCode == REQUEST_CODE_LECTURE_REMOVE ){
+					Lecture lecture = (Lecture) data.getSerializableExtra(EXTRA_LECTURE_RESULT);
+					Subject subject = (Subject) data.getSerializableExtra(EXTRA_SUBJECT_RESULT);
+					mAdapter.removeLecture(lecture,subject);
+				}
+				if( requestCode == REQUEST_CODE_SUBJECT ){
+					Lecture lecture = (Lecture) data.getSerializableExtra(EXTRA_LECTURE_RESULT);
+					Subject subject = (Subject) data.getSerializableExtra(EXTRA_SUBJECT_RESULT);
+					mAdapter.addLecture(lecture, subject);
+				}
 			} else {
 				Status status = (Status) data.getExtras().getSerializable(EXTRA_STATUS_RESULT);
 				mAdapter.addPostedStatus(status);

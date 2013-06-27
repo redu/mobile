@@ -1,5 +1,6 @@
 package br.com.redu.redumobile.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,6 +9,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Intent;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,7 +96,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 				Intent i = new Intent(mActivity, LectureActivity.class);
 				i.putExtra(LectureActivity.EXTRAS_LECTURE, lecture);
 				i.putExtra(LectureActivity.EXTRAS_SUBJECT, subject);
-				mActivity.startActivity(i);	
+				mActivity.startActivityForResult(i, SpaceActivity.REQUEST_CODE_LECTURE_REMOVE);	
 			}
 		});
 		
@@ -182,6 +184,23 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+
+	public void removeLecture(Lecture lecture, Subject subject) {
+		for (int i = 0; i < mSubjects.size(); i++) {
+			Subject s = mSubjects.get(i);
+			if(s.id.equals(subject.id)) {
+				List<Lecture> lectures = mLectures.get(i);
+				for (int j = 0; j < lectures.size(); j++) {
+					if (lectures.get(j).id == lecture.id){
+						lectures.remove(j);
+						break;
+					} 
+				}
+				notifyDataSetChanged();
+				break;
+			}
+		}
 	}
 
 }

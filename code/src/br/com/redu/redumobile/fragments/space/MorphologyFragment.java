@@ -81,7 +81,6 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 	}
 	
 	public void addLecture(Lecture lecture, Subject subject) {
-		int i = 0;
 		mAdapter.addLecture(subject, lecture);
 	}
 
@@ -175,5 +174,9 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 	public void onNoConnectionAlertClicked() {
 		// new LoadUserTask().execute();
 		new LoadSubjectsTask().execute();
+	}
+
+	public void removeLecture(Lecture lecture, Subject subject) {
+		mAdapter.removeLecture(lecture,subject);
 	}
 }
