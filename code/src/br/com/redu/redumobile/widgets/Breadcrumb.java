@@ -40,6 +40,7 @@ public class Breadcrumb extends EllipsizingTextView {
 		} else {
 			String breadcrumbs = composeBreadcrumbs(crumbs);
 			setText(Html.fromHtml(breadcrumbs));
+			setVisibility(View.VISIBLE);
 		}
 	}
 		
