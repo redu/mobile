@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.util.PinCodeHelper;
+import br.com.redu.redumobile.util.WebUtil;
 
 public class LoginWebViewActivity extends BaseActivity {
 
@@ -26,7 +28,8 @@ public class LoginWebViewActivity extends BaseActivity {
 		if(PinCodeHelper.has(this)) {
 			startActivity(new Intent(this, HomeActivity.class));
 			finish();
-		} else {
+			
+		} else if(WebUtil.checkConnection(LoginWebViewActivity.this)) {
 			setContentView(R.layout.activity_login_web);
 	
 			mWebView = (WebView) findViewById(R.id.webview);
@@ -60,6 +63,14 @@ public class LoginWebViewActivity extends BaseActivity {
 					mWebView.loadUrl(authorizeUrl);			
 				}
 			}.execute();
+		
+		} else {
+			showAlertDialog(LoginWebViewActivity.this, "Verifique sua conexão com a Internet e tente novamente.", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
 		}
 	}
 
