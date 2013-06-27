@@ -265,7 +265,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/bg_bottom_green"
-                        android:text="Finalizar Aula"
+                        android:text="Finalizar aula"
                         android:textColor="#fff"
                         android:visibility="gone" />
 

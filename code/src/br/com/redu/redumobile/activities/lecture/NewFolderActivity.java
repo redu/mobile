@@ -41,7 +41,7 @@ public class NewFolderActivity extends BaseActivity{
 		}else{
 			mEtFolder.setText(folder.name);
 		}
-		addActionToActionBar(R.drawable.bt_send_actionbar, new OnClickListener() {
+		addActionToActionBar(R.drawable.bt_send_blue, new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String text = mEtFolder.getText().toString();

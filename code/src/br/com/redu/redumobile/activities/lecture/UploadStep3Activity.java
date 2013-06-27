@@ -61,7 +61,7 @@ public class UploadStep3Activity extends BaseActivity {
 			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
 			drawable = new BitmapDrawable(bitmap);
 			mFile = new File(getIntent().getExtras().getString("foto"));
-		} else if (type.equals("video")) {
+		} else if (type.equals("video") || type.equals("audio")){
 			mFile = new File(getIntent().getExtras().getString("video"));
 		}
 		superId = getIntent().getExtras().getString("id");
@@ -71,7 +71,7 @@ public class UploadStep3Activity extends BaseActivity {
 		TextView tvPreviewName = (TextView) findViewById(R.id.tvImageName);
 		TextView tvWhereLecture = (TextView) findViewById(R.id.tvWhereLecture);
 		etTitleLecture = (EditText) findViewById(R.id.etTitleLecture);
-
+		
 		tvPreviewName.setText(mFile.getName() + " (" + type + ")");
 
 		Button btAdicionarPreview = (Button) findViewById(R.id.btAdicionarPreview);
@@ -81,15 +81,15 @@ public class UploadStep3Activity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				if (mSubject == null) {
-					String[] split = mFile.getName().split("\\.");
-					String extension = split[split.length - 1];
+					/*String[] split = mFile.getName().split("\\.");
+					String extension = split[split.length - 1];*/
 					String text = etTitleLecture.getText().toString();
 					Log.i("TEXT", text);
-					File newFile = new File(mFile.getParent() + "/" + text + "." + extension);
+					File newFile = new File(mFile.getParent() + "/" + text);
 					Log.i("NEWFILE", newFile.getAbsolutePath());
 					Log.i("ANTES", mFile.getAbsolutePath());
 					if (!mFile.renameTo(newFile)) {
-						Toast toast = Toast.makeText(mContext, "Nome de arquivo inválido.", Toast.LENGTH_LONG);
+						Toast toast = Toast.makeText(mContext, "Nome inválido. Digite novamente!", Toast.LENGTH_LONG);
 						toast.show();
 					} else {
 						mFile = newFile;
@@ -105,7 +105,7 @@ public class UploadStep3Activity extends BaseActivity {
 					if (type.equals("foto")) {
 						l.type = Lecture.TYPE_DOCUMENT;
 					}
-					if (type.equals("video")) {
+					if (type.equals("video") || type.equals("audio")) {
 						l.type = Lecture.TYPE_MEDIA;
 					}
 					Object[] params = { l, mFile };
@@ -118,6 +118,7 @@ public class UploadStep3Activity extends BaseActivity {
 		Button btCancelarPreview = (Button) findViewById(R.id.btCancelarPreview);
 		if (mSubject == null) {
 			tvWhereLecture.setText("...>" + space.name);
+			etTitleLecture.setText(mFile.getName());
 		} else {
 			tvWhereLecture.setText(Html.fromHtml("... > " + space.name + " > " + "<b>" + mSubject.name + "</b>"));
 		}
@@ -143,7 +144,10 @@ public class UploadStep3Activity extends BaseActivity {
 
 		@Override
 		protected void onPreExecute() {
-			showProgressDialog("Adicionando Aula...", false);
+			if (mSubject == null)
+				showProgressDialog("Adicionando Material de Apoio...", false);
+			else
+				showProgressDialog("Adicionando Aula...", false);
 			super.onPreExecute();
 
 		}
@@ -161,6 +165,7 @@ public class UploadStep3Activity extends BaseActivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 				lecture = null;
+				mError = true;
 			}
 			return lecture;
 		}
@@ -169,7 +174,7 @@ public class UploadStep3Activity extends BaseActivity {
 		protected void onPostExecute(Lecture lecture) {
 			dismissProgressDialog();
 			if (mError) {
-				showAlertDialog(UploadStep3Activity.this, "Houve um problema ao adicionar a aula. Verifique sua conexão com a internet e tente novamente.", null);
+				showAlertDialog(UploadStep3Activity.this, "Houve um problema ao adicionar. Verifique sua conexão com a internet e tente novamente.", null);
 				setResult(Activity.RESULT_CANCELED);
 			} else {
 				if(lecture != null) {
@@ -177,6 +182,8 @@ public class UploadStep3Activity extends BaseActivity {
 					data.putExtra(SpaceActivity.EXTRA_SUBJECT_RESULT, mSubject);
 					data.putExtra(SpaceActivity.EXTRA_LECTURE_RESULT, lecture);
 					setResult(Activity.RESULT_OK, data);
+				}else{
+					setResult(Activity.RESULT_OK);
 				}
 				finish();
 			}

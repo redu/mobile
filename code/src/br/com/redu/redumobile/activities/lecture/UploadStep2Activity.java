@@ -15,6 +15,7 @@ import android.widget.TextView;
 import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.PopupAdapter;
 
 public class UploadStep2Activity extends Activity {
@@ -27,7 +28,6 @@ public class UploadStep2Activity extends Activity {
 	private Subject mSubject;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insert_file_or_lecture);
 		TextView tvTitle = (TextView)findViewById(R.id.tvTitleUpload2);
@@ -37,7 +37,14 @@ public class UploadStep2Activity extends Activity {
 		space = (Space)getIntent().getExtras().get(Space.class.getName());
 		mSubject = (Subject)getIntent().getExtras().get(Subject.class.getName());
 		ListView lv = (ListView)findViewById(R.id.lvInsertFileFolder);
-		String[] str = {"Camera","Escolher da Galeria"};
+		String[] str = new String[2];
+		if (type.equals("audio")){
+			str[0] =  "Gravar";
+			str[1] =  "Escolher Áudio";
+		}else{
+			str[0] =  "Camera";
+			str[1] =  "Escolher da Galeria";
+		}
 		if (mSubject != null) {
 			lv.setAdapter(new PopupAdapter(this, str, space, mSubject));
 		}else{
@@ -57,7 +64,8 @@ public class UploadStep2Activity extends Activity {
 						Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 						startActivityForResult(cameraIntent, 2);
 					}else{
-						
+						Intent cameraIntent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+						startActivityForResult(cameraIntent, 2);
 					}
 					
 				}
@@ -73,25 +81,32 @@ public class UploadStep2Activity extends Activity {
 						Intent intent = new Intent();
 						intent.setType("video/*");
 						intent.setAction(Intent.ACTION_GET_CONTENT);
-						startActivityForResult(Intent.createChooser(intent, "Escolha o video"), 2);
+						startActivityForResult(Intent.createChooser(intent, "Escolha o Video"), 2);
 					}
 					if (type.equals("audio")) {
-						
+						Intent intent = new Intent();
+						intent.setType("audio/*");
+						intent.setAction(Intent.ACTION_GET_CONTENT);
+						startActivityForResult(Intent.createChooser(intent, "Escolha o Audio"), 2);
 					}
 				}
 			}
 		});
 	}
 	
-	@Override
+	/*@Override
 	protected void onRestart() {
 		super.onRestart();
 		finish();
-	}
+	}*/
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
+			if (requestCode == SpaceActivity.REQUEST_CODE_LECTURE){
+				setResult(Activity.RESULT_OK, data);
+				finish();
+			}
 	        if(requestCode == 2) {
 	        	if (type.equals("foto")){
 	        		Uri selectedImageUri = data.getData();
@@ -107,8 +122,7 @@ public class UploadStep2Activity extends Activity {
 		    		it.putExtra("id", superId);
 		    		it.putExtra("foto", selectedImagePath);
 		    		it.putExtra("type", type);
-		    		startActivity(it);
-		    		super.onActivityResult(requestCode, resultCode, data);
+		    		startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
 	        	}
 	        	if (type.equals("video")){
 	        		Uri uriVideo = data.getData();
@@ -120,36 +134,20 @@ public class UploadStep2Activity extends Activity {
 			    	it.putExtra("id", superId);
 			    	it.putExtra("video", getPath(uriVideo));
 			    	it.putExtra("type", type);
-			    	startActivity(it);
-			    	super.onActivityResult(requestCode, resultCode, data);
+			    	startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
+	        	}	
+		    	if (type.equals("audio")){
+	        		Uri uriAudio = data.getData();
+	        		Log.i("Audio", getPath(uriAudio));
 	        		
-	        		/*try {
-	        		    AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(data.getData(), "r");
-	        		    FileInputStream fis = videoAsset.createInputStream();
-	        		    Date now = new Date();
-	        		    File tmpFile = new File(DownloadHelper.getLecturePath(),"video_"+now.getDay()+"_"+now.getMonth()+"_"+now.getHours()+"_"+now.getMinutes()+"_"+now.getSeconds()+".3gp"); 
-	        		    FileOutputStream fos = new FileOutputStream(tmpFile);
-
-	        		    byte[] buf = new byte[1024];
-	        		    int len;
-	        		    while ((len = fis.read(buf)) > 0) {
-	        		        fos.write(buf, 0, len);
-	        		    }       
-	        		    fis.close();
-	        		    fos.close();
-	        		    
-	        		    Intent it = new Intent(this, UploadStep3Activity.class);
-			    		it.putExtra(Space.class.getName(), space);
-			    		it.putExtra("id", superId);
-			    		it.putExtra("video", tmpFile);
-			    		it.putExtra("type", type);
-			    		startActivity(it);
-			    		super.onActivityResult(requestCode, resultCode, data);
-	        		    
-	        		  } catch (IOException io_e) {
-	        		  }*/
-	        		
-	        	}
+	        		Intent itAudio = new Intent(this, UploadStep3Activity.class);
+	        		itAudio.putExtra(Space.class.getName(), space);
+	        		itAudio.putExtra(Subject.class.getName(), mSubject);
+	        		itAudio.putExtra("id", superId);
+	        		itAudio.putExtra("video", getPath(uriAudio));
+	        		itAudio.putExtra("type", type);
+	        		startActivityForResult(itAudio, SpaceActivity.REQUEST_CODE_LECTURE);
+		    	}
 	        }
 	    }
 	}
@@ -161,8 +159,6 @@ public class UploadStep2Activity extends Activity {
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         if(cursor!=null)
         {
-            //HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-            //THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
             int column_index = cursor
             .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
