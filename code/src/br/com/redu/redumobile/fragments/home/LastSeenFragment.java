@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.widget.ListView;
 import br.com.developer.redu.models.Status;
+import br.com.redu.redumobile.adapters.StatusWallAdapter.StatusWallAdder;
 import br.com.redu.redumobile.db.DbHelper;
 import br.com.redu.redumobile.fragments.StatusListFragment;
 
@@ -12,6 +13,58 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 public class LastSeenFragment extends StatusListFragment {
 
+	private static final StatusWallAdder mLastSeenStatusAdder = new StatusWallAdder() {
+		@Override
+		public void addFromBegin(List<Status> statuses, Status statusToAdd) {
+			removeStatusIfExisting(statuses, statusToAdd);
+			int size = statuses.size();
+			int i;
+			for(i = 0; i < size; i++) {
+				Status status = statuses.get(i);
+				
+				if(statusToAdd.id.equals(status.id)) {
+					break;
+				} else if(statusToAdd.lastSeenAtInMillis >= status.lastSeenAtInMillis) {
+					statuses.add(i, statusToAdd);
+					break;
+				}
+			}
+			if(i == size) {
+				statuses.add(statusToAdd);
+			}
+		}
+		
+		@Override
+		public void addFromEnd(List<Status> statuses, Status statusToAdd) {
+			removeStatusIfExisting(statuses, statusToAdd);
+			int i;
+			for(i = statuses.size() - 1; i >= 0; i--) {
+				Status status = statuses.get(i);
+				
+				if(statusToAdd.id.equals(status.id)) {
+					break;
+				} else if(statusToAdd.lastSeenAtInMillis <= status.lastSeenAtInMillis) {
+					statuses.add(i, statusToAdd);
+					break;
+				}
+			}
+			if(i == -1) {
+				statuses.add(0, statusToAdd);
+			}
+		}
+		
+		private void removeStatusIfExisting(List<Status> statuses, Status statusToAdd) {
+			int size = statuses.size();
+			for(int i = 0; i < size; i++) {
+				Status status = statuses.get(i);
+				if(status.id.equals(statusToAdd.id)) {
+					statuses.remove(i);
+					break;
+				}
+			}
+		}
+	};
+	
 	@Override
 	public void onRefresh(final PullToRefreshBase<ListView> refreshView) {
 		Activity activity = getActivity();
@@ -39,8 +92,8 @@ public class LastSeenFragment extends StatusListFragment {
 	}
 
 	@Override
-	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getLastSeenStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan, String appUserId) {
+		return dbHelper.getLastSeenStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, appUserId);
 	}
 
 	@Override
@@ -80,5 +133,10 @@ public class LastSeenFragment extends StatusListFragment {
 	@Override
 	protected boolean isEnableGoToWallAction() {
 		return true;
+	}
+
+	@Override
+	public StatusWallAdder getStatusWallAdder() {
+		return mLastSeenStatusAdder;
 	}
 }

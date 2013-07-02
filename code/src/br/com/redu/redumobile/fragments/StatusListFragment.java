@@ -27,6 +27,7 @@ import br.com.redu.redumobile.activities.LectureActivity;
 import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.activities.StatusDetailActivity;
 import br.com.redu.redumobile.adapters.StatusWallAdapter;
+import br.com.redu.redumobile.adapters.StatusWallAdapter.StatusWallAdder;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
 import br.com.redu.redumobile.data.OnLoadStatusesFromWebListener;
 import br.com.redu.redumobile.db.DbHelper;
@@ -56,8 +57,48 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	protected abstract String getEmptyListMessage();
 	protected abstract long getOldestStatusTimestamp();
 	protected abstract long getEarliestStatusTimestamp();
-	protected abstract List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan);
+	protected abstract List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan, String appUserId);
 
+	private static final StatusWallAdder mDefaultAdder = new StatusWallAdder() {
+		@Override
+		public void addFromBegin(List<Status> statuses, Status statusToAdd) {
+			int size = statuses.size();
+			
+			int i;
+			for(i = 0; i < size; i++) {
+				Status status = statuses.get(i);
+				
+				if(statusToAdd.id.equals(status.id)) {
+					break;
+				} else if(statusToAdd.createdAtInMillis >= status.createdAtInMillis) {
+					statuses.add(i, statusToAdd);
+					break;
+				}
+			}
+			if(i == size) {
+				statuses.add(statusToAdd);
+			}
+		}
+		
+		@Override
+		public void addFromEnd(List<Status> statuses, Status statusToAdd) {
+			int i;
+			for(i = statuses.size() - 1; i >= 0; i--) {
+				Status status = statuses.get(i);
+				
+				if(statusToAdd.id.equals(status.id)) {
+					break;
+				} else if(statusToAdd.createdAtInMillis <= status.createdAtInMillis) {
+					statuses.add(i, statusToAdd);
+					break;
+				}
+			}
+			if(i == -1) {
+				statuses.add(0, statusToAdd);
+			}
+		}
+	};
+	
 	private OnLoadStatusesFromWebListener onLoadStatusesFromWebListener = new OnLoadStatusesFromWebListener() {
 		@Override
 		public void onStart() {
@@ -251,7 +292,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		status.lastSeen = true;
 		status.lastSeenAtInMillis = status.createdAtInMillis;
 		
-		mAdapter.add(status, false);
+		mAdapter.add(status, false, getStatusWallAdder());
 		mAdapter.notifyDataSetChanged();
 		
 		new AsyncTask<Void, Void, Void>() {
@@ -305,9 +346,10 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			Activity activity = getActivity();
 			if (activity != null && activity instanceof DbHelperHolderActivity) {
 				long timestamp = getTimestamp(mOlderThan);
+				String appUserId = String.valueOf(ReduApplication.getUser(activity).id);
 
 				DbHelper dbHelper = ((DbHelperHolderActivity) activity).getDbHelper();
-				statuses = getStatuses(dbHelper, timestamp, mOlderThan);
+				statuses = getStatuses(dbHelper, timestamp, mOlderThan, appUserId);
 			}
 
 			return statuses;
@@ -316,7 +358,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 		protected void onPostExecute(List<br.com.developer.redu.models.Status> statuses) {
 			if (getActivity() != null) {
 				if (statuses != null && statuses.size() > 0) {
-					mAdapter.addAll(statuses, mOlderThan);
+					mAdapter.addAll(statuses, mOlderThan, getStatusWallAdder());
 					mAdapter.notifyDataSetChanged();
 				}
 				
@@ -333,5 +375,9 @@ public abstract class StatusListFragment extends TitlableFragment implements
 				}
 			}
 		};
+	}
+	
+	public StatusWallAdder getStatusWallAdder() {
+		return mDefaultAdder;
 	}
 }

@@ -22,6 +22,11 @@ public class StatusWallAdapter extends BaseAdapter {
 	final private LayoutInflater mInflater;
 	private List<Status> mStatuses;
 	
+	public interface StatusWallAdder {
+		public void addFromBegin(List<Status> statuses, Status statusToAdd);
+		public void addFromEnd(List<Status> statuses, Status statusToAdd);
+	}
+	
 	public StatusWallAdapter(Context context) {
 		mInflater = LayoutInflater.from(context);
 	}
@@ -45,7 +50,7 @@ public class StatusWallAdapter extends BaseAdapter {
 		return 0;
 	}
 	
-	public void add(Status status, boolean olderThan) {
+	public void add(Status status, boolean olderThan, StatusWallAdder adder) {
 		if(mStatuses == null) {
 			mStatuses = new ArrayList<Status>();
 		}
@@ -54,54 +59,16 @@ public class StatusWallAdapter extends BaseAdapter {
 			mStatuses.add(status);
 		} else {
 			if(olderThan) {
-				addFromEnd(status);
+				adder.addFromEnd(mStatuses, status);
 			} else {
-				addFromBegin(status);
+				adder.addFromBegin(mStatuses, status);
 			}
 		}
 	}
 	
-	private void addFromBegin(Status statusToAdd) {
-		int size = mStatuses.size();
-		
-		int i;
-		for(i = 0; i < size; i++) {
-			Status status = mStatuses.get(i);
-			
-			if(statusToAdd.id.equals(status.id)) {
-				break;
-			} else if(statusToAdd.createdAtInMillis >= status.createdAtInMillis) {
-				mStatuses.add(i, statusToAdd);
-				break;
-			}
-		}
-		
-		if(i == size) {
-			mStatuses.add(statusToAdd);
-		}
-	}
-	
-	private void addFromEnd(Status statusToAdd) {
-		int i;
-		for(i = mStatuses.size() - 1; i >= 0; i--) {
-			Status status = mStatuses.get(i);
-			
-			if(statusToAdd.id.equals(status.id)) {
-				break;
-			} else if(statusToAdd.createdAtInMillis <= status.createdAtInMillis) {
-				mStatuses.add(i, statusToAdd);
-				break;
-			}
-		}
-		
-		if(i == -1) {
-			mStatuses.add(0, statusToAdd);
-		}
-	}
-
-	public void addAll(List<Status> statuses, boolean olderThan) {
+	public void addAll(List<Status> statuses, boolean olderThan, StatusWallAdder adder) {
 		for(Status status : statuses) {
-			add(status, olderThan);
+			add(status, olderThan, adder);
 		}
 	}
 	
