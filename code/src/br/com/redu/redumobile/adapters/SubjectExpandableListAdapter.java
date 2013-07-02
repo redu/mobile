@@ -203,4 +203,9 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 	}
 
+	public void addSubject(Subject subject) {
+		mSubjects.add(subject);
+		notifyDataSetChanged();
+	}
+
 }

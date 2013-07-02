@@ -1,6 +1,9 @@
 package br.com.redu.redumobile.activities.lecture;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,8 +18,10 @@ import android.widget.TextView;
 import br.com.developer.redu.models.Space;
 import br.com.developer.redu.models.Subject;
 import br.com.redu.redumobile.R;
+import br.com.redu.redumobile.activities.LectureActivity;
 import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.PopupAdapter;
+import br.com.redu.redumobile.util.DownloadHelper;
 
 public class UploadStep2Activity extends Activity {
 
@@ -26,6 +31,9 @@ public class UploadStep2Activity extends Activity {
 	private String filemanagerstring;
 	private String selectedImagePath;
 	private Subject mSubject;
+	
+	AlertDialog mDialog;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,7 +95,22 @@ public class UploadStep2Activity extends Activity {
 						Intent intent = new Intent();
 						intent.setType("audio/*");
 						intent.setAction(Intent.ACTION_GET_CONTENT);
-						startActivityForResult(Intent.createChooser(intent, "Escolha o Audio"), 2);
+						try {
+							startActivityForResult(Intent.createChooser(intent, "Escolha o Audio"), 2);
+						} catch (ActivityNotFoundException e) {
+							Builder builder = new AlertDialog.Builder(UploadStep2Activity.this);
+							builder.setMessage("Nenhuma aplicação para Áudio encontrada. Você deve instalar alguma aplicação no seu aparelho capaz de processar Áudio.");
+				        	builder.setCancelable(true);
+				        	mDialog = builder.create();
+				        	mDialog.show();
+						} catch (Exception e) {
+							Builder builder = new AlertDialog.Builder(UploadStep2Activity.this);
+							builder.setMessage("Erro ao tentar gravar Áudio, tente novamente.");
+				        	builder.setCancelable(true);
+				        	mDialog = builder.create();
+				        	mDialog.show();
+						}
+						
 					}
 				}
 			}
@@ -138,7 +161,7 @@ public class UploadStep2Activity extends Activity {
 	        	}	
 		    	if (type.equals("audio")){
 	        		Uri uriAudio = data.getData();
-	        		Log.i("Audio", getPath(uriAudio));
+	        		//Log.i("Audio", getPath(uriAudio));
 	        		
 	        		Intent itAudio = new Intent(this, UploadStep3Activity.class);
 	        		itAudio.putExtra(Space.class.getName(), space);

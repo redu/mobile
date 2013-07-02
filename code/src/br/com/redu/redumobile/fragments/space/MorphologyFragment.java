@@ -179,4 +179,8 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 	public void removeLecture(Lecture lecture, Subject subject) {
 		mAdapter.removeLecture(lecture,subject);
 	}
+
+	public void addSubject(Subject subject) {
+		mAdapter.addSubject(subject);
+	}
 }

@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.scribe.exceptions.OAuthConnectionException;
 
@@ -21,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -224,6 +226,7 @@ public class LectureActivity extends BaseActivity {
 
 		LinearLayout layoutLecture;
 		if (mLecture.type.equals(Lecture.TYPE_CANVAS)) {
+			mTvLecture.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_canvas_mini, 0, 0, 0);
 			layoutLecture = (LinearLayout) findViewById(R.id.llCanvas);
 			Button ibCanvas = (Button) layoutLecture
 					.findViewById(R.id.ibCanvas);
@@ -236,6 +239,7 @@ public class LectureActivity extends BaseActivity {
 			});
 			layoutLecture.setVisibility(View.VISIBLE);
 		} else if (mLecture.type.equals(Lecture.TYPE_EXERCISE)) {
+			mTvLecture.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exercice_mini, 0, 0, 0);
 			layoutLecture = (LinearLayout) findViewById(R.id.llExercice);
 			Button ibAccess = (Button) layoutLecture
 					.findViewById(R.id.btExercice);
@@ -248,6 +252,7 @@ public class LectureActivity extends BaseActivity {
 			});
 			layoutLecture.setVisibility(View.VISIBLE);
 		} else if (mLecture.type.equals(Lecture.TYPE_DOCUMENT)) {
+			mTvLecture.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_doc_mini, 0, 0, 0);
 			layoutLecture = (LinearLayout) findViewById(R.id.llDocument);
 			ImageView ivDocument = (ImageView) layoutLecture
 					.findViewById(R.id.ivDocument);
@@ -283,6 +288,7 @@ public class LectureActivity extends BaseActivity {
 			});
 			layoutLecture.setVisibility(View.VISIBLE);
 		} else if (mLecture.type.equals(Lecture.TYPE_MEDIA)) {
+			mTvLecture.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_midia, 0, 0, 0);
 			layoutLecture = (LinearLayout) findViewById(R.id.llMedia);
 			ImageView ivMedia = (ImageView) layoutLecture
 					.findViewById(R.id.ivMedia);
@@ -334,10 +340,16 @@ public class LectureActivity extends BaseActivity {
 			TextView tvPage = (TextView) layoutLecture
 					.findViewById(R.id.tvPage);
 			tvPage.setText(Html.fromHtml(mLecture.content));
+			String regex = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+			Pattern patt = Pattern.compile(regex);
+			Linkify.addLinks(tvPage, patt, "http://");
+
+			mTvLecture.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_page, 0, 0, 0);
 			layoutLecture.setVisibility(View.VISIBLE);
 		}
 
 		mTvLecture.setText(mLecture.name);
+		
 		mTvSubject.setText(mSubject.name);
 
 		Log.i("Aula", Integer.toString(mLecture.id));

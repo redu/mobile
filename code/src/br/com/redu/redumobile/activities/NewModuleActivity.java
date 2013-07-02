@@ -81,7 +81,7 @@ public class NewModuleActivity extends BaseActivity {
 			try {
 				subject.name = text[0];
 				subject.description = text[1];
-				redu.postSubject(space.id, text[0], text[1]);
+				return redu.postSubject(space.id, text[0], text[1]);
 			} catch (Exception e) {
 				e.printStackTrace();
 				subject = null;

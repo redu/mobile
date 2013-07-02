@@ -56,10 +56,10 @@ public class UploadStep3Activity extends BaseActivity {
 		mSubject = (Subject) getIntent().getExtras().get(Subject.class.getName());
 
 		if (type.equals("foto")) {
-			BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+			/*BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
 			bmpFactoryOptions.inSampleSize = 4;
 			bitmap = BitmapFactory.decodeFile(getIntent().getExtras().getString("foto"), bmpFactoryOptions);
-			drawable = new BitmapDrawable(bitmap);
+			drawable = new BitmapDrawable(bitmap);*/
 			mFile = new File(getIntent().getExtras().getString("foto"));
 		} else if (type.equals("video") || type.equals("audio")){
 			mFile = new File(getIntent().getExtras().getString("video"));
@@ -131,11 +131,17 @@ public class UploadStep3Activity extends BaseActivity {
 		});
 
 		if (type.equals("foto"))
-			ivPreview.setBackgroundDrawable(drawable);
+			//ivPreview.setBackgroundDrawable(drawable);
+			ivPreview.setBackgroundResource(R.drawable.ic_doc_big);
 		if (type.equals("video"))
 			ivPreview.setBackgroundResource(R.drawable.ic_midia_big);
 		if (type.equals("audio"))
 			ivPreview.setImageResource(R.drawable.ic_audio_big);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		finish();
 	}
 
 	class SaveFile extends AsyncTask<Object, Void, Lecture> {
