@@ -19,8 +19,8 @@ public class NewLecturesFragment extends StatusListFragment {
 	}
 
 	@Override
-	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getNewLecturesStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan, String appUserId) {
+		return dbHelper.getNewLecturesStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, appUserId);
 	}
 
 	@Override

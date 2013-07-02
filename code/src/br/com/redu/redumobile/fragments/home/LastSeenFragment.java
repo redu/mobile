@@ -16,8 +16,8 @@ public class LastSeenFragment extends StatusListFragment {
 	private static final StatusWallAdder mLastSeenStatusAdder = new StatusWallAdder() {
 		@Override
 		public void addFromBegin(List<Status> statuses, Status statusToAdd) {
+			removeStatusIfExisting(statuses, statusToAdd);
 			int size = statuses.size();
-			
 			int i;
 			for(i = 0; i < size; i++) {
 				Status status = statuses.get(i);
@@ -36,6 +36,7 @@ public class LastSeenFragment extends StatusListFragment {
 		
 		@Override
 		public void addFromEnd(List<Status> statuses, Status statusToAdd) {
+			removeStatusIfExisting(statuses, statusToAdd);
 			int i;
 			for(i = statuses.size() - 1; i >= 0; i--) {
 				Status status = statuses.get(i);
@@ -49,6 +50,17 @@ public class LastSeenFragment extends StatusListFragment {
 			}
 			if(i == -1) {
 				statuses.add(0, statusToAdd);
+			}
+		}
+		
+		private void removeStatusIfExisting(List<Status> statuses, Status statusToAdd) {
+			int size = statuses.size();
+			for(int i = 0; i < size; i++) {
+				Status status = statuses.get(i);
+				if(status.id.equals(statusToAdd.id)) {
+					statuses.remove(i);
+					break;
+				}
 			}
 		}
 	};
@@ -80,8 +92,8 @@ public class LastSeenFragment extends StatusListFragment {
 	}
 
 	@Override
-	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan) {
-		return dbHelper.getLastSeenStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT);
+	protected List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan, String appUserId) {
+		return dbHelper.getLastSeenStatuses(timestamp, olderThan, NUM_STATUS_BY_PAGE_DEFAULT, appUserId);
 	}
 
 	@Override

@@ -57,7 +57,7 @@ public abstract class StatusListFragment extends TitlableFragment implements
 	protected abstract String getEmptyListMessage();
 	protected abstract long getOldestStatusTimestamp();
 	protected abstract long getEarliestStatusTimestamp();
-	protected abstract List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan);
+	protected abstract List<Status> getStatuses(DbHelper dbHelper, long timestamp, boolean olderThan, String appUserId);
 
 	private static final StatusWallAdder mDefaultAdder = new StatusWallAdder() {
 		@Override
@@ -346,9 +346,10 @@ public abstract class StatusListFragment extends TitlableFragment implements
 			Activity activity = getActivity();
 			if (activity != null && activity instanceof DbHelperHolderActivity) {
 				long timestamp = getTimestamp(mOlderThan);
+				String appUserId = String.valueOf(ReduApplication.getUser(activity).id);
 
 				DbHelper dbHelper = ((DbHelperHolderActivity) activity).getDbHelper();
-				statuses = getStatuses(dbHelper, timestamp, mOlderThan);
+				statuses = getStatuses(dbHelper, timestamp, mOlderThan, appUserId);
 			}
 
 			return statuses;

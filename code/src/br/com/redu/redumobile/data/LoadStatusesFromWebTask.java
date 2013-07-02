@@ -33,7 +33,7 @@ import com.buzzbox.mob.android.scheduler.TaskResult;
 
 public class LoadStatusesFromWebTask implements Task {
 
-	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 1;
+	private static final int DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES = 30;
 
 	@Override
 	public String getTitle() {
@@ -57,9 +57,7 @@ public class LoadStatusesFromWebTask implements Task {
 			return null;
 		}
 		
-		TaskResult taskResult = new TaskResult();
-		
-		List<Status> notifiableStatues = loadStatuses(ctx);
+		loadStatuses(ctx);
 //
 //		if (notifiableStatues != null) {
 //			for (Status status : notifiableStatues) {
@@ -85,7 +83,7 @@ public class LoadStatusesFromWebTask implements Task {
 //			}
 //		}
 
-		return taskResult;
+		return null;
 	}
 
 	private List<Status> loadStatuses(Context context) {
@@ -215,6 +213,8 @@ public class LoadStatusesFromWebTask implements Task {
 
 		private static void runNow(Context context) {
 			if (!isWorking()) {
+				Log.i("Redu Sync", "runNow()");
+				SchedulerManager.getInstance().saveTask(context, "*/" + DELAY_TO_CHECK_NOTIFICATIONS_IN_MINUTES + " * * * *", LoadStatusesFromWebTask.class);
 				SchedulerManager.getInstance().runNow(context, LoadStatusesFromWebTask.class, 0);
 			}
 		}

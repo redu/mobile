@@ -186,15 +186,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		return status;
 	}
 	
-	synchronized public List<Status> getStatuses(long timestamp, boolean olderThan, int count) {
+	synchronized public List<Status> getStatuses(long timestamp, boolean olderThan, int count, String appUserId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 
 		SQLiteDatabase db = this.getReadableDatabase();  
         Cursor cursor;  
   
         cursor = db.query(StatusTable.NAME, null, 
-        		StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + "?", 
-        		new String[] {String.valueOf(timestamp)}, 
+        		StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + "? AND " + StatusTable.COLUMN_APP_USER_ID + "= ?", 
+        		new String[] {String.valueOf(timestamp), appUserId}, 
         		null, null, 
         		StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
         		String.valueOf(count));  
@@ -210,15 +210,15 @@ public class DbHelper extends SQLiteOpenHelper {
         return statuses;  
 	}
 	
-	synchronized public List<Status> getNewLecturesStatuses(long timestamp, boolean olderThan, int count) {
+	synchronized public List<Status> getNewLecturesStatuses(long timestamp, boolean olderThan, int count, String appUserId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
 		cursor = db.query(StatusTable.NAME, null, 
-				StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + " ? AND " + StatusTable.COLUMN_LOGEABLE_TYPE + " = ?", 
-				new String[] {String.valueOf(timestamp), Status.LOGEABLE_TYPE_LECTURE}, 
+				StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + " ? AND " + StatusTable.COLUMN_LOGEABLE_TYPE + " = ? AND " + StatusTable.COLUMN_APP_USER_ID + "= ?", 
+				new String[] {String.valueOf(timestamp), Status.LOGEABLE_TYPE_LECTURE, appUserId}, 
 				null, null, 
 				StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC", 
 				String.valueOf(count));  
@@ -234,15 +234,15 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getLastSeenStatuses(long timestamp, boolean olderThan, int count) {
+	synchronized public List<Status> getLastSeenStatuses(long timestamp, boolean olderThan, int count, String appUserId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
 		cursor = db.query(StatusTable.NAME, null, 
-				StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS + (olderThan ? "<" : ">") + "? AND " + StatusTable.COLUMN_LAST_SEEN + " = 1", 
-				new String[] {String.valueOf(timestamp)}, 
+				StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS + (olderThan ? "<" : ">") + "? AND " + StatusTable.COLUMN_LAST_SEEN + " = 1 AND " + StatusTable.COLUMN_APP_USER_ID + "= ?", 
+				new String[] {String.valueOf(timestamp), appUserId}, 
 				null, null, 
 				StatusTable.COLUMN_LAST_SEEN_AT_IN_MILLIS + " DESC", 
 				String.valueOf(count));  
@@ -258,14 +258,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getStatusesBySpace(long timestamp, boolean olderThan, int count, String spaceId) {
+	synchronized public List<Status> getStatusesBySpace(long timestamp, boolean olderThan, int count, String spaceId, String appUserId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 
 		String query = "SELECT * FROM " + StatusTable.NAME + 
-				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + 
+				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + StatusTable.COLUMN_APP_USER_ID + "=" + appUserId + "AND " + 
 				StatusTable.COLUMN_ID + " IN " + 
 					"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
 						" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_SPACE + "\" AND " + 
@@ -286,14 +286,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		return statuses;  
 	}
 	
-	synchronized public List<Status> getStatusesByLecture(long timestamp, boolean olderThan, int count, int lectureId) {
+	synchronized public List<Status> getStatusesByLecture(long timestamp, boolean olderThan, int count, int lectureId, String appUserId) {
 		List<Status> statuses = new ArrayList<Status>(count);  
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 		
 		String query = "SELECT * FROM " + StatusTable.NAME + 
-				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + 
+				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + StatusTable.COLUMN_APP_USER_ID + "=" + appUserId + "AND " + 
 				StatusTable.COLUMN_ID + " IN " + 
 				"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
 				" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_LECTURE + "\" AND " + 
