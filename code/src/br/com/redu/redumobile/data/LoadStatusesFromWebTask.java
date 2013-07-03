@@ -176,22 +176,24 @@ public class LoadStatusesFromWebTask implements Task {
 	}
 
 	private boolean checkNotifiable(Context ctx, Status status, long timeOfMostRecentStatus) {
-		if (status.createdAtInMillis > timeOfMostRecentStatus) {
-			if (SettingsHelper.get(ctx, SettingsHelper.KEY_ACTIVATED_NOTIFICATIONS)) {
-				if (status.isLogType()) {
-					if (status.isLectureLogeableType() && SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_LECTURES)) {
-						return true;
+		if (timeOfMostRecentStatus == 0 || status.createdAtInMillis <= timeOfMostRecentStatus) {
+			return false;
+		}
+		
+		if (SettingsHelper.get(ctx, SettingsHelper.KEY_ACTIVATED_NOTIFICATIONS)) {
+			if (status.isLogType()) {
+				if (status.isLectureLogeableType() && SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_LECTURES)) {
+					return true;
 
-					} else if (status.isCourseLogeableType() && SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_COURSES)) {
-						return true;
+				} else if (status.isCourseLogeableType() && SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_COURSES)) {
+					return true;
 
-					} else if (status.isSubjectLogeableType() && SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
-						return true;
-					}
-
-				} else if (status.isActivityType() && SettingsHelper.get(ctx, SettingsHelper.KEY_WHEN_ANSWER_ME)) {
+				} else if (status.isSubjectLogeableType() && SettingsHelper.get(ctx, SettingsHelper.KEY_NEW_SUBJECTS)) {
 					return true;
 				}
+
+			} else if (status.isActivityType() && SettingsHelper.get(ctx, SettingsHelper.KEY_WHEN_ANSWER_ME)) {
+				return true;
 			}
 		}
 

@@ -39,22 +39,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.HomeSpaceActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".activities.MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".activities.EnvironmentActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".activities.CoursesActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" >
         </activity>
@@ -64,17 +49,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.SubjectActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".activities.StatusDetailActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".activities.RespondStatusActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" >
         </activity>
