@@ -265,7 +265,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		Cursor cursor;  
 
 		String query = "SELECT * FROM " + StatusTable.NAME + 
-				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + StatusTable.COLUMN_APP_USER_ID + "=" + appUserId + "AND " + 
+				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + StatusTable.COLUMN_APP_USER_ID + "=" + appUserId + " AND " + 
 				StatusTable.COLUMN_ID + " IN " + 
 					"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
 						" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_SPACE + "\" AND " + 
@@ -293,7 +293,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		Cursor cursor;  
 		
 		String query = "SELECT * FROM " + StatusTable.NAME + 
-				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + StatusTable.COLUMN_APP_USER_ID + "=" + appUserId + "AND " + 
+				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + StatusTable.COLUMN_APP_USER_ID + "=" + appUserId + " AND " + 
 				StatusTable.COLUMN_ID + " IN " + 
 				"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
 				" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_LECTURE + "\" AND " + 
