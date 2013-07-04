@@ -44,6 +44,7 @@ public class UploadStep3Activity extends BaseActivity {
 	// private static final int NUM_MAX_CHARACERS = 250;
 	private File mFile;
 	private Subject mSubject;
+	private TextView tvWhereLectureTitle;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -71,6 +72,7 @@ public class UploadStep3Activity extends BaseActivity {
 		TextView tvPreviewName = (TextView) findViewById(R.id.tvImageName);
 		TextView tvWhereLecture = (TextView) findViewById(R.id.tvWhereLecture);
 		etTitleLecture = (EditText) findViewById(R.id.etTitleLecture);
+		tvWhereLectureTitle = (TextView) findViewById(R.id.tvWhereLectureTitle);
 		
 		tvPreviewName.setText(mFile.getName() + " (" + type + ")");
 
@@ -119,6 +121,7 @@ public class UploadStep3Activity extends BaseActivity {
 		if (mSubject == null) {
 			tvWhereLecture.setText("...>" + space.name);
 			etTitleLecture.setText(mFile.getName());
+			tvWhereLectureTitle.setText("Para onde vai este Material de Apoio?");
 		} else {
 			tvWhereLecture.setText(Html.fromHtml("... > " + space.name + " > " + "<b>" + mSubject.name + "</b>"));
 		}

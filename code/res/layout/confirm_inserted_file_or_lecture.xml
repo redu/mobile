@@ -18,7 +18,7 @@
 		    android:layout_width="match_parent"
 		    >
 		    
-		    <android.widget.Button
+		    <Button
 		        android:id="@+id/btCancelarPreview"
 		        android:layout_width="wrap_content"
 	    	    android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
 	    	    android:textColor="@color/blue"
 	    	    android:background="@drawable/bg_gray"
 	    	    android:layout_margin="7dp" />
-		    <android.widget.Button
+		    <Button
 		        android:id="@+id/btAdicionarPreview" 
 		   		android:layout_width="wrap_content"
 		   		android:layout_gravity="right"
@@ -113,6 +113,7 @@
 		    android:padding="5dp">
 	    
 	    	<TextView
+	    	    android:id="@+id/tvWhereLectureTitle"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:padding="7dp"

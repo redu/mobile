@@ -60,9 +60,9 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 
 				@Override
 				public void onClick(View v) {
-					Intent it = new Intent(getActivity(), NewModuleActivity.class);
-					it.putExtra(Space.class.getName(), mSpace);
-					startActivityForResult(it, SpaceActivity.REQUEST_CODE_SUBJECT);
+					Intent ito = new Intent(getActivity(), NewModuleActivity.class);
+					ito.putExtra(Space.class.getName(), mSpace);
+					getActivity().startActivityForResult(ito, SpaceActivity.REQUEST_CODE_SUBJECT);
 				}
 			});
 		}

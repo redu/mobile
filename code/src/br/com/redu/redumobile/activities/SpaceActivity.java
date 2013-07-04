@@ -39,7 +39,7 @@ public class SpaceActivity extends DbHelperHolderActivity {
 	public static final int REQUEST_CODE_STATUS = 0;
 	public static final int REQUEST_CODE_LECTURE = 1;
 	public static final int REQUEST_CODE_MATERIALS = 2;
-	public static final int REQUEST_CODE_SUBJECT = 131075;
+	public static final int REQUEST_CODE_SUBJECT = 6;
 	public static final int REQUEST_CODE_LECTURE_REMOVE = 4;
 	
 	public static final String EXTRA_STATUS_RESULT = "RESULT_STATUS";
