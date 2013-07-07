@@ -132,7 +132,7 @@ public class SupportMaterialFragment extends NoConnectNotifiableFragment {
 		}
 
 		String role = UserHelper.getUserRoleInCourse(getActivity());
-		if (role.equals("teacher") || role.equals("environment_admin") || role.equals("tutor")) {
+		if (role != null && (role.equals("teacher") || role.equals("environment_admin") || role.equals("tutor"))) {
 			mTvEmpytMsg.setText("Está pasta está vazia. Adicione algum arquivo através do \"+\" no canto superior direito.");
 			ImageButton ibMore = (ImageButton) v.findViewById(R.id.ibMore);
 			ibMore.setVisibility(View.VISIBLE);

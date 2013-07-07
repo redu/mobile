@@ -53,7 +53,7 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 
 		final View v = inflater.inflate(R.layout.fragment_mophology, container, false);
 		String role = UserHelper.getUserRoleInCourse(getActivity());
-		if (role.equals("teacher") || role.equals("environment_admin")) {
+		if (role != null && (role.equals("teacher") || role.equals("environment_admin"))) {
 			Button ibModulo = (Button) v.findViewById(R.id.btNovoModulo);
 			ibModulo.setVisibility(View.VISIBLE);
 			ibModulo.setOnClickListener(new OnClickListener() {

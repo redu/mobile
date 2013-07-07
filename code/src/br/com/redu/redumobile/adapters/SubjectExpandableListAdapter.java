@@ -1,6 +1,5 @@
 package br.com.redu.redumobile.adapters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -9,7 +8,6 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Intent;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -134,7 +132,7 @@ public class SubjectExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		Subject subject = (Subject)getGroup(groupPosition);
 		String role = UserHelper.getUserRoleInCourse(mActivity);
-		if (role.equals("teacher") || role.equals("environment_admin")){
+		if (role != null && (role.equals("teacher") || role.equals("environment_admin"))){
 			ImageView ibAdd = (ImageView) convertView.findViewById(R.id.iv_add);
 			ibAdd.setVisibility(View.VISIBLE);
 			ibAdd.setTag(subject);
