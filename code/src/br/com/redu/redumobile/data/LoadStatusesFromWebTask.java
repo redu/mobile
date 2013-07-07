@@ -99,7 +99,7 @@ public class LoadStatusesFromWebTask implements Task {
 			DefaultReduClient redu = ReduApplication.getReduClient(context);
 			String userId = String.valueOf(ReduApplication.getUser(context).id);
 
-			long timeOfMostRecentStatus = dbHelper.getTimeOFMostRecentStatus();
+			long timeOfMostRecentStatus = dbHelper.getTimeOFMostRecentStatus(userId);
 			long timeToStopSync = (dbHelper.isAllAncientStatusesWereDownloaded(userId)) ? timeOfMostRecentStatus : 0;
 
 			boolean loadNextPage = true;

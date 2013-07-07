@@ -638,7 +638,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	 * Get the millis of the most recent Status saved at the db
 	 * @return the creation time, in millis, of the most recent Status saved at the db. 
 	 */
-	synchronized public long getTimeOFMostRecentStatus() {
+	synchronized public long getTimeOFMostRecentStatus(String appUserId) {
 		long timestamp = 0l;
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
@@ -648,7 +648,8 @@ public class DbHelper extends SQLiteOpenHelper {
         		append(StatusTable.COLUMN_CREATED_AT_IN_MILLIS).
         		append(") FROM ").
         			append("( SELECT * FROM ").append(StatusTable.NAME).
-        			append(" WHERE ").append(StatusTable.COLUMN_IGNORABLE_IN_SYNC).append(" = 0 )").
+        			append(" WHERE ").append(StatusTable.COLUMN_IGNORABLE_IN_SYNC).append(" = 0 AND ").
+        			append(StatusTable.COLUMN_APP_USER_ID).append(" = ").append(appUserId).append(" )").
         		toString();
         
         cursor = db.rawQuery(query, null);
