@@ -1,6 +1,7 @@
 package br.com.redu.redumobile.activities.lecture;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 import android.app.Activity;
 import android.content.Context;
@@ -102,6 +103,7 @@ public class UploadStep3Activity extends BaseActivity {
 					}
 				} else {
 					String text = etTitleLecture.getText().toString();
+					Log.i("CHARSET ENCODING: ", Charset.defaultCharset().toString());
 					Lecture l = new Lecture();
 					l.name = text;
 					if (type.equals("foto")) {
@@ -169,7 +171,7 @@ public class UploadStep3Activity extends BaseActivity {
 					redu.postFile(superId, (java.io.File) obj[1]);
 				} else {
 					lecture = (Lecture) obj[0];
-					redu.postLecture(lecture, mSubject.id, (java.io.File) obj[1]);
+					lecture = redu.postLecture(lecture, mSubject.id, (java.io.File) obj[1]);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

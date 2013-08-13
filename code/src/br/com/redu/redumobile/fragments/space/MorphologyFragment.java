@@ -81,7 +81,8 @@ public class MorphologyFragment extends NoConnectNotifiableFragment {
 	}
 	
 	public void addLecture(Lecture lecture, Subject subject) {
-		mAdapter.addLecture(subject, lecture);
+		if (mAdapter != null)
+			mAdapter.addLecture(subject, lecture);
 	}
 
 	// class LoadUserTask extends AsyncTask<Void, Void, User> {

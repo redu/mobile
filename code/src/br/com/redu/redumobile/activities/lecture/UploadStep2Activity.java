@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,18 +23,17 @@ import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.activities.LectureActivity;
 import br.com.redu.redumobile.activities.SpaceActivity;
 import br.com.redu.redumobile.adapters.PopupAdapter;
-import br.com.redu.redumobile.util.DownloadHelper;
 
 public class UploadStep2Activity extends Activity {
 
 	String superId;
 	Space space;
 	String type;
-	private String filemanagerstring;
 	private String selectedImagePath;
 	private Subject mSubject;
 	
 	AlertDialog mDialog;
+	private AlertDialog dialogError;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +71,19 @@ public class UploadStep2Activity extends Activity {
 						startActivityForResult(cameraIntent, 2);
 					}else if(type.equals("video")){
 						Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+						
 						startActivityForResult(cameraIntent, 2);
 					}else{
 						Intent cameraIntent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-						startActivityForResult(cameraIntent, 2);
+						try {
+							startActivityForResult(cameraIntent, 2);
+						} catch (ActivityNotFoundException e) {
+							Builder builder = new AlertDialog.Builder(UploadStep2Activity.this);
+							builder.setMessage("Nenhuma aplicação para Áudio encontrada. Você deve instalar alguma aplicação no seu aparelho capaz de processar Áudio.");
+				        	builder.setCancelable(true);
+				        	mDialog = builder.create();
+				        	mDialog.show();
+						}
 					}
 					
 				}
@@ -134,42 +144,65 @@ public class UploadStep2Activity extends Activity {
 	        	if (type.equals("foto")){
 	        		Uri selectedImageUri = data.getData();
 	                //OI FILE Manager
-	                filemanagerstring = selectedImageUri.getPath();
-	                Log.i("filemanagerstring", filemanagerstring);
-	                //MEDIA GALLERY
-	                selectedImagePath = getPath(selectedImageUri);
-		            /*mRlayoutimage.setBackgroundDrawable(drawable);*/
-		            Intent it = new Intent(this, UploadStep3Activity.class);
-		    		it.putExtra(Space.class.getName(), space);
-		    		it.putExtra(Subject.class.getName(), mSubject);
-		    		it.putExtra("id", superId);
-		    		it.putExtra("foto", selectedImagePath);
-		    		it.putExtra("type", type);
-		    		startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
+	        		if (selectedImageUri == null){
+	        			Builder builder = new AlertDialog.Builder(this);
+						builder.setMessage("Este recurso está desabilitado para seu modelo de aparelho. Tente usar a opção \"Escolher da Galeria\"");
+			        	builder.setCancelable(true);
+			        	dialogError = builder.create();
+			        	dialogError.show();
+	        		}else{
+	        			//MEDIA GALLERY
+		                selectedImagePath = getPath(selectedImageUri);
+			            /*mRlayoutimage.setBackgroundDrawable(drawable);*/
+			            Intent it = new Intent(this, UploadStep3Activity.class);
+			    		it.putExtra(Space.class.getName(), space);
+			    		it.putExtra(Subject.class.getName(), mSubject);
+			    		it.putExtra("id", superId);
+			    		it.putExtra("foto", selectedImagePath);
+			    		it.putExtra("type", type);
+			    		startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
+	        		}
 	        	}
 	        	if (type.equals("video")){
 	        		Uri uriVideo = data.getData();
-	        		Log.i("ARQUIVO", getPath(uriVideo));
 	        		
-	        		Intent it = new Intent(this, UploadStep3Activity.class);
-			    	it.putExtra(Space.class.getName(), space);
-			    	it.putExtra(Subject.class.getName(), mSubject);
-			    	it.putExtra("id", superId);
-			    	it.putExtra("video", getPath(uriVideo));
-			    	it.putExtra("type", type);
-			    	startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
+	        		if (uriVideo == null){
+	        			Builder builder = new AlertDialog.Builder(this);
+						builder.setMessage("Este recurso está desabilitado para seu modelo de aparelho. Tente usar a opção \"Escolher da Galeria\"");
+			        	builder.setCancelable(true);
+			        	dialogError = builder.create();
+			        	dialogError.show();
+	        		}else{
+	        			Log.i("ARQUIVO", getPath(uriVideo));
+		        		
+		        		Intent it = new Intent(this, UploadStep3Activity.class);
+				    	it.putExtra(Space.class.getName(), space);
+				    	it.putExtra(Subject.class.getName(), mSubject);
+				    	it.putExtra("id", superId);
+				    	it.putExtra("video", getPath(uriVideo));
+				    	it.putExtra("type", type);
+				    	startActivityForResult(it, SpaceActivity.REQUEST_CODE_LECTURE);
+	        		}
 	        	}	
 		    	if (type.equals("audio")){
 	        		Uri uriAudio = data.getData();
-	        		//Log.i("Audio", getPath(uriAudio));
-	        		
-	        		Intent itAudio = new Intent(this, UploadStep3Activity.class);
-	        		itAudio.putExtra(Space.class.getName(), space);
-	        		itAudio.putExtra(Subject.class.getName(), mSubject);
-	        		itAudio.putExtra("id", superId);
-	        		itAudio.putExtra("video", getPath(uriAudio));
-	        		itAudio.putExtra("type", type);
-	        		startActivityForResult(itAudio, SpaceActivity.REQUEST_CODE_LECTURE);
+	        		if (uriAudio == null){
+	        			Builder builder = new AlertDialog.Builder(this);
+						builder.setMessage("Este recurso está desabilitado para seu modelo de aparelho. Tente usar a opção \"Escolher da Galeria\"");
+			        	builder.setCancelable(true);
+			        	dialogError = builder.create();
+			        	dialogError.show();
+	        		}else{
+	        			//Log.i("Audio", getPath(uriAudio));
+		        		
+		        		Intent itAudio = new Intent(this, UploadStep3Activity.class);
+		        		itAudio.putExtra(Space.class.getName(), space);
+		        		itAudio.putExtra(Subject.class.getName(), mSubject);
+		        		itAudio.putExtra("id", superId);
+		        		itAudio.putExtra("video", getPath(uriAudio));
+		        		itAudio.putExtra("type", type);
+		        		startActivityForResult(itAudio, SpaceActivity.REQUEST_CODE_LECTURE);
+	        		}
 		    	}
 	        }
 	    }

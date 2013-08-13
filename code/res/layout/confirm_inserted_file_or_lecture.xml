@@ -21,7 +21,7 @@
 		    <Button
 		        android:id="@+id/btCancelarPreview"
 		        android:layout_width="wrap_content"
-	    	    android:layout_height="wrap_content"
+	    	    android:layout_height="40dp"
 	    	    android:layout_gravity="left"
 	    	    android:text="Cancelar"
 	    	    android:textColor="@color/blue"
@@ -31,7 +31,7 @@
 		        android:id="@+id/btAdicionarPreview" 
 		   		android:layout_width="wrap_content"
 		   		android:layout_gravity="right"
-		   	    android:layout_height="wrap_content"
+		   	    android:layout_height="40dp"
 		   	    android:text="Adicionar"
 		   	    android:textColor="@color/blue"
 		   	    android:background="@drawable/bg_gray"
