@@ -8,7 +8,6 @@ Application developed for bring the Redu Educational Social Networking to Androi
 
 # Bibliotecas
 
-As bibliotecas usadas são:
 - [redu-android](https://github.com/redu/redu-android): Encapsulador da API REST do Redu para aplicações baseadas em Java.
 - [ViewPageIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator): Paging indicator widgets that are compatible with the `ViewPager` from the Android Support Library to improve discoverability of content.
 - [AndroidPushRequest](http://hub.buzzbox.com/android-sdk/): Enables you to easily add a scheduler to your App. With few lines of code you can add a background task and app-side notifications.
