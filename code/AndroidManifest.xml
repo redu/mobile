@@ -127,6 +127,6 @@
         </receiver>
 
         <service android:name="com.buzzbox.mob.android.scheduler.ScheduledService" />
+        <!-- BuzzBox -->
     </application>
-
 </manifest>
