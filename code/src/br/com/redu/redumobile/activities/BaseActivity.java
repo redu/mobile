@@ -8,18 +8,22 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.widgets.ActionBar;
 import br.com.redu.redumobile.widgets.ReduProgressDialog;
 
 public abstract class BaseActivity extends FragmentActivity {
-
 	private ActionBar mActionBar;
 	private ReduProgressDialog mDialog;
 
 	protected void onCreate(Bundle savedInstanceState, int layoutResID) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		// TODO: Adicionar tema sem a barra de título, pois em dispositivos lentos com Android acima 
+		// do Honeycomb aparece a ActionBar nativa durante um intervalo pequeno de tempo.
+		
 		super.onCreate(savedInstanceState);
+		
 		setContentView(layoutResID);
 		
 		ActionBar ab = getViewById(R.id.actionBar);
@@ -29,6 +33,10 @@ public abstract class BaseActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// TODO: Adicionar tema sem a barra de título, pois em dispositivos lentos com Android acima 
+		// do Honeycomb aparece a ActionBar nativa durante um intervalo pequeno de tempo.
+		// Essa sobrecarga pode ser removida.
+		
 		super.onCreate(savedInstanceState);
 	}
 
@@ -61,7 +69,6 @@ public abstract class BaseActivity extends FragmentActivity {
 	
 	public void showAlertDialog(final Activity source, String text,
 			DialogInterface.OnClickListener listener) {
-
 		AlertDialog.Builder builder = new AlertDialog.Builder(source);
 		builder.setMessage(text)
 				.setCancelable(false)
@@ -74,9 +81,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	}
 
 	public ReduProgressDialog showProgressDialog(String text, boolean cancelable) {
-
 		if (mDialog == null) {
-
 			String title = getString(R.string.app_name);
 
 			DialogInterface.OnCancelListener cancelListener = null;
@@ -104,7 +109,6 @@ public abstract class BaseActivity extends FragmentActivity {
 			// dialog = ProgressDialog.show(source, title, text, true,
 			// cancelable, cancelListener);
 		} else {
-
 			mDialog.setMessage(text);
 
 			if (!mDialog.isShowing()) {
