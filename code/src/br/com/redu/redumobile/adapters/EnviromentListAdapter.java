@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import android.view.WebCachedImageView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import br.com.developer.redu.models.Environment;
 import br.com.redu.redumobile.R;
 
-public class EnviromentListAdapter extends BaseAdapter {
-
-	final private LayoutInflater mInflater;
-	
+public final class EnviromentListAdapter extends BaseAdapter {
+	private LayoutInflater mInflater;
 	private List<Environment> mEnviroments;
 	
 	public EnviromentListAdapter(Context context, List<Environment> enviroments) {
 		mInflater = LayoutInflater.from(context);
+		
 		mEnviroments = enviroments; 
 	}
 	
@@ -40,7 +40,7 @@ public class EnviromentListAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return 0;
+		return position;
 	}
 	
 //	public void add(TextView status) {
@@ -53,11 +53,15 @@ public class EnviromentListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO: Reutilizar a view e usar o padrão ViewHolder para minimizar overloads.
+		
 		View v = mInflater.inflate(R.layout.enviroment_list_row, null);
+		
 		TextView tvEnvironment = (TextView) v.findViewById(R.id.tv_environment);
+		
 		WebCachedImageView ivThubmnail = (WebCachedImageView) v.findViewById(R.id.iv_thumbnail);
 		
-		Environment environment = mEnviroments.get(position);
+		Environment environment = (Environment) getItem(position);
 		
 		if (environment.courses_count.equals("0")) {
 			tvEnvironment.setText(Html.fromHtml(mEnviroments.get(position).name+"<br/>"+"<font color=\"#CCCCCC\"><small>Ambiente vazio, Não há Cursos</small></font>"));
