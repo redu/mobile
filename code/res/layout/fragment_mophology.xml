@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_margin="12dp"
         android:background="@drawable/bg_gray"
-        android:text="Novo Módulo"
+        android:text="@string/button_new_module"
         android:textColor="@color/blue"
         android:visibility="gone" />
 
@@ -48,7 +48,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="15dp"
-            android:text="Esta Disciplina está vazia, será necessário adicionar o um Novo Módulo antes."
+            android:text="@string/tv_this_discipline_empty_no_modules"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/gray_light"
             android:visibility="gone" />

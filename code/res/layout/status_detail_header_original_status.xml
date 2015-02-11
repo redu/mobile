@@ -42,7 +42,7 @@
                     android:id="@+id/tv_user_action"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fulaninho pediu ajuda"
+                    android:text="@string/tv_user_action_someone_asekd_help"
                     android:textColor="@color/gray_dark" />
 
                 <TextView
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dip"
                     android:layout_weight="1"
-                    android:text="Há dois dias"
+                    android:text="@string/tv_two_days_ago"
                     android:textColor="@color/gray_light" />
             </LinearLayout>
 
@@ -70,7 +70,7 @@
             android:layout_marginTop="15dip"
             android:autoLink="web"
             android:linksClickable="true"
-            android:text="A menina tinha dois olhos ,um nariz e uma boca, mas pra nao ficar cansativo eu vou agora ter jons ahhblhBDA IBIBA IH AFSL BNHAKBHKSCB LAB KLBNibalhbfiab ibaj"
+            android:text="@string/sample_lorem_ipsum"
             android:textColor="#000" />
     </LinearLayout>
 

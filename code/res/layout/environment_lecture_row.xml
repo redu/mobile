@@ -40,7 +40,7 @@
 	    android:padding="10dp"
 	    android:layout_weight="1"
 	    android:layout_gravity="center_vertical"
-	    android:text="Java Modularizado"
+	    android:text="@string/tv_modularised_java"
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textColor="#36ACD5"
 	    android:textSize="14sp" />

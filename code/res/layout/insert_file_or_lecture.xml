@@ -20,7 +20,7 @@
 		    android:layout_height="wrap_content"
 		    android:padding="10dp"
 		    android:gravity="center"
-		    android:text="O que você deseja adicionar?"
+		    android:text="@string/tv_what_you_want_add"
 		    android:textAppearance="?android:attr/textAppearanceLarge"
 		    android:textColor="#999"
 		    android:textSize="12sp" />

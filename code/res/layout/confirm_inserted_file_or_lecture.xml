@@ -23,7 +23,7 @@
 		        android:layout_width="wrap_content"
 	    	    android:layout_height="wrap_content"
 	    	    android:layout_gravity="left"
-	    	    android:text="Cancelar"
+	    	    android:text="@string/button_cancel"
 	    	    android:textColor="@color/blue"
 	    	    android:background="@drawable/bg_gray"
 	    	    android:layout_margin="7dp" />
@@ -32,7 +32,7 @@
 		   		android:layout_width="wrap_content"
 		   		android:layout_gravity="right"
 		   	    android:layout_height="wrap_content"
-		   	    android:text="Adicionar"
+		   	    android:text="@string/button_add"
 		   	    android:textColor="@color/blue"
 		   	    android:background="@drawable/bg_gray"
 		   	    android:layout_margin="7dp"/>
@@ -62,7 +62,7 @@
 				    android:layout_height="wrap_content"
 				    android:padding="10dp"
 				    android:gravity="center"
-				    android:text="Aula 2 (Vídeo)"
+				    android:text="@string/tv_image_name_class_2"
 				    android:textAppearance="?android:attr/textAppearanceLarge"
 				    android:textColor="#999"
 				    android:textSize="10sp" />
@@ -86,7 +86,7 @@
 				    android:layout_height="wrap_content"
 				    android:padding="5dp"
 				    android:layout_gravity="left"
-				    android:text="Título"
+				    android:text="@string/tv_title"
 				    android:textAppearance="?android:attr/textAppearanceLarge"
 				    android:textColor="#999"
 				    android:textSize="12sp" />
@@ -94,7 +94,7 @@
 	        <EditText  
 			    android:id="@+id/etTitleLecture"  
 			    android:layout_height="wrap_content"
-			    android:hint="Digite aqui o nome da aula..."  
+			    android:hint="@string/hint_type_name_class"  
 			    android:inputType="text"  
 			    android:textSize="12sp"
 			    android:layout_weight="1"
