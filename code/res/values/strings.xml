@@ -12,7 +12,7 @@
     <string name="activate_notifications_title">Notifications</string>
     <string name="activate_notifications_summary">Enable/Disable notifications</string>
     <string name="when_answer_me_key">when_answer_me</string>
-    <string name="when_answer_me_title">When I'm answered</string>
+    <string name="when_answer_me_title">When I am answered</string>
     <string name="when_answer_me_summary">Comments and Help Requests</string>
     <string name="new_courses_key">new_courses</string>
     <string name="new_courses_title">New Subjects</string>
