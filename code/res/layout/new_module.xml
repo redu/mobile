@@ -17,7 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Digite aqui o nome do módulo..."
+        android:hint="@string/hint_type_name_module"
         android:inputType="text"
         android:textColor="#B3B3B3"
         android:textSize="12sp" >
@@ -45,7 +45,7 @@
         android:id="@+id/etModuleDesc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Digite aqui sua descrição..."
+        android:hint="@string/hint_type_description"
         android:inputType="text"
         android:maxLength="250"
         android:textColor="#B3B3B3"

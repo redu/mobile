@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/action_bar"
-        app:title="Ambientes" />
+        app:title="@string/pref_category_environment_title" />
 
     <FrameLayout
         android:id="@+id/fragment_container"

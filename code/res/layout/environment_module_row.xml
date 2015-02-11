@@ -24,7 +24,7 @@
 		    android:gravity="top"
 		    android:layout_marginLeft="32dp"
 		    android:padding="10dp"
-		    android:text="Módulo Modularização"
+		    android:text="@string/tv_modularised_java"
 		    android:textAppearance="?android:attr/textAppearanceLarge"
 		    android:textColor="#36ACD5"
 		    android:textSize="16sp" />

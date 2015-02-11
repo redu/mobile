@@ -24,7 +24,7 @@
         android:layout_weight="1"
         android:background="@drawable/bg_action_button"
         android:padding="10dp"
-        android:text="Arquivo de Apoio"
+        android:text="@string/tv_support_file"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#6D6E6F"
         android:textSize="12sp" />

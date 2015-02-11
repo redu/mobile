@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/action_bar"
-        app:title="Redu" />
+        app:title="@string/app_name" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@drawable/bg_gray"
-                            android:text="Remover"
+                            android:text="@string/button_remove"
                             android:textColor="@color/blue"
                             android:visibility="gone" />
                     </LinearLayout>
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
+                        android:text="@string/tv_document_app_device_message"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <Button
@@ -101,7 +101,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="10dp"
                         android:background="@drawable/bg_gray"
-                        android:text="Acessar Aula"
+                        android:text="@string/button_access_class"
                         android:textColor="@color/blue" />
                 </LinearLayout>
 
@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
+                        android:text="@string/tv_document_app_device_message"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <Button
@@ -141,7 +141,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="10dp"
                         android:background="@drawable/bg_gray"
-                        android:text="Acessar Aula"
+                        android:text="@string/button_access_class"
                         android:textColor="@color/blue" />
                 </LinearLayout>
 
@@ -161,7 +161,7 @@
                         android:id="@+id/tvPage"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
+                        android:text="@string/tv_document_app_device_message"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </LinearLayout>
 
@@ -190,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
+                        android:text="@string/tv_document_app_device_message"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <Button
@@ -201,7 +201,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="10dp"
                         android:background="@drawable/bg_gray"
-                        android:text="Acessar Aula"
+                        android:text="@string/button_access_class"
                         android:textColor="@color/blue" />
                 </LinearLayout>
 
@@ -230,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:text="Utilizaremos um aplicativo do seu dispositivo para a visualização desta Aula"
+                        android:text="@string/tv_document_app_device_message"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <Button
@@ -241,7 +241,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="10dp"
                         android:background="@drawable/bg_gray"
-                        android:text="Acessar Aula"
+                        android:text="@string/button_access_class"
                         android:textColor="@color/blue" />
                 </LinearLayout>
 
@@ -256,7 +256,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/bg_bottom_gray"
-                        android:text="Mural"
+                        android:text="@string/button_wall"
                         android:textColor="@color/blue" />
 
                     <Button
@@ -265,7 +265,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/bg_bottom_green"
-                        android:text="Finalizar Aula"
+                        android:text="@string/button_end_class"
                         android:textColor="#fff"
                         android:visibility="gone" />
 

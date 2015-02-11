@@ -11,7 +11,7 @@
         android:layout_gravity="center"
         android:gravity="bottom"
         android:padding="10dip"
-        android:text="Problemas na conexão!"
+        android:text="@string/tv_connection_trouble"
         android:textColor="#FFF"
         android:drawableLeft="@drawable/ic_no_connection"
         android:drawablePadding="10dip"
