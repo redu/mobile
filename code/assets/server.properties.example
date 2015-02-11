@@ -1,0 +1,4 @@
+#Modelo para server.properties. Faça uma cópia deste arquivo no mesmo diretório(assets),
+#renomeie-o para server.properties, e adicione as informações corretas do servidor.
+ip_address=192.168.168.168
+port=3000
