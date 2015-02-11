@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import br.com.developer.redu.http.ServerInfo;
 import br.com.redu.redumobile.R;
 import br.com.redu.redumobile.ReduApplication;
 import br.com.redu.redumobile.data.LoadStatusesFromWebTask;
@@ -110,12 +111,16 @@ public class HomeActivity extends DbHelperHolderActivity {
 				case 1:
 					i = new Intent(getApplicationContext(), WebViewActivity.class);
 					i.putExtra(WebViewActivity.EXTRAS_TITLE, "Termos de Uso");
-					i.putExtra(WebViewActivity.EXTRAS_URL, "http://www.redu.com.br/paginas/termos_uso");
+					i.putExtra(WebViewActivity.EXTRAS_URL, String.format(
+							"http://%s:%s/paginas/termos_uso",
+							ServerInfo.getIpAddress(), ServerInfo.getPort()));
 					break;
 				case 2:
 					i = new Intent(getApplicationContext(), WebViewActivity.class);
 					i.putExtra(WebViewActivity.EXTRAS_TITLE, "Política de Privacidade");
-					i.putExtra(WebViewActivity.EXTRAS_URL, "http://www.redu.com.br/paginas/politica_privacidade");
+					i.putExtra(WebViewActivity.EXTRAS_URL, String.format(
+							"http://%s:%s/paginas/politica_privacidade",
+							ServerInfo.getIpAddress(), ServerInfo.getPort()));
 					break;
 				case 3:
 					i = new Intent(getApplicationContext(), LoginWebViewActivity.class);

@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import br.com.developer.redu.http.ServerInfo;
 import br.com.developer.redu.models.Link;
 import br.com.developer.redu.models.Status;
 import br.com.developer.redu.models.Thumbnail;
@@ -264,14 +265,17 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
 
-		String query = "SELECT * FROM " + StatusTable.NAME + 
-				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + 
-				StatusTable.COLUMN_ID + " IN " + 
-					"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
-						" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_SPACE + "\" AND " + 
-						LinkTable.COLUMN_HREF + " = " + "\"http://www.redu.com.br/api/spaces/" + spaceId + "\")" + 
-				" ORDER BY " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC" +
-				" LIMIT " + count; 
+		String query = "SELECT * FROM " + StatusTable.NAME + " WHERE "
+				+ StatusTable.COLUMN_CREATED_AT_IN_MILLIS
+				+ (olderThan ? "<" : ">") + timestamp + " AND "
+				+ StatusTable.COLUMN_ID + " IN " + "(SELECT "
+				+ LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME
+				+ " WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_SPACE
+				+ "\" AND " + LinkTable.COLUMN_HREF + " = " + "\"http://"
+				+ ServerInfo.getIpAddress() + ":" + ServerInfo.getPort()
+				+ "/api/spaces/" + spaceId + "\")" + " ORDER BY "
+				+ StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC" + " LIMIT "
+				+ count;
 		
 		cursor = db.rawQuery(query, null);
 		
@@ -291,15 +295,18 @@ public class DbHelper extends SQLiteOpenHelper {
 		
 		SQLiteDatabase db = this.getReadableDatabase();  
 		Cursor cursor;  
-		
-		String query = "SELECT * FROM " + StatusTable.NAME + 
-				" WHERE " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + (olderThan ? "<" : ">") + timestamp + " AND " + 
-				StatusTable.COLUMN_ID + " IN " + 
-				"(SELECT " + LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME + 
-				" WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_LECTURE + "\" AND " + 
-				LinkTable.COLUMN_HREF + " LIKE " + "\"http://www.redu.com.br/api/lectures/" + lectureId + "%\")" + 
-				"ORDER BY " + StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC " +
-				"LIMIT " + count; 
+
+		String query = "SELECT * FROM " + StatusTable.NAME + " WHERE "
+				+ StatusTable.COLUMN_CREATED_AT_IN_MILLIS
+				+ (olderThan ? "<" : ">") + timestamp + " AND "
+				+ StatusTable.COLUMN_ID + " IN " + "(SELECT "
+				+ LinkTable.COLUMN_STATUS_ID + " FROM " + LinkTable.NAME
+				+ " WHERE " + LinkTable.COLUMN_REL + " = \"" + Link.REL_LECTURE
+				+ "\" AND " + LinkTable.COLUMN_HREF + " LIKE " + "\"http://"
+				+ ServerInfo.getIpAddress() + ":" + ServerInfo.getPort()
+				+ "/api/lectures/" + lectureId + "%\")" + "ORDER BY "
+				+ StatusTable.COLUMN_CREATED_AT_IN_MILLIS + " DESC " + "LIMIT "
+				+ count;
 		
 		cursor = db.rawQuery(query, null);
 		
